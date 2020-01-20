@@ -1,7 +1,7 @@
 # Frontend
 
 
-### [View website](https://frontend.xhex.uk)
+[View website](https://frontend.xhex.uk)
 
 
 ### Install dependencies
