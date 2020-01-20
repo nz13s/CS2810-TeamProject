@@ -10,6 +10,7 @@ pipeline {
         }
         stage("Build") {
             steps {
+                sh "rm -rf node_modules"
                 sh "npm install && npm run build"
             }
         }
