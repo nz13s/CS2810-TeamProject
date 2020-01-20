@@ -22,5 +22,4 @@ $ npm start
 $ npm run build
 ```
 
-This will create a ```build``` folder which needs to be served to the clients using
-some sort of a web server
+This will create a ```build``` folder which needs to be served to the clients
