@@ -9,18 +9,18 @@ $ npm install
 ```
 
 
-Running a dev server
+### Running a dev server
 
 ```console
 $ npm start
 ```
 
 
-Building a production bundle (mix of static .html, .css and .js files)
+### Building a production bundle
 
 ```console
 $ npm run build
 ```
 
 This will create a ```build``` folder which needs to be served to the clients using
-some sort of a webserver
+some sort of a web server
