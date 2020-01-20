@@ -1,3 +1,5 @@
-# CS2810 Team Project
+# Frontend
 
-Hello guys
+```shell
+$ npm build
+```
