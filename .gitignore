@@ -1,5 +1,6 @@
 node_modules
 build
+.idea
 react-app-env.d.ts
 package-lock.json
 TeamProject2020_17.iml

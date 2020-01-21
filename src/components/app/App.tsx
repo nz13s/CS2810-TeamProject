@@ -15,12 +15,12 @@ export default class App extends React.Component<any, any> {
         <Route exact path="/">
           <AppStyle>
             <Container>
-              <Row id="title" className="d-flex justify-content-center">
+              <Row className="d-flex mb-5 justify-content-center">
                 <h2>
                   Oaxaca Restaurant
                 </h2>
               </Row>
-              <Row id="buttons" className="d-flex justify-content-center">
+              <Row className="d-flex justify-content-center">
                 <Col xs="auto">
                   <Link to="/menu">
                     <Button variant="outline-danger" size="lg">

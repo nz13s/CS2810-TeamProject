@@ -5,10 +5,6 @@ const AppStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  #title {
-    margin-bottom: 10vh;
-  }
 `;
 
 
