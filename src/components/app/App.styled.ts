@@ -7,5 +7,4 @@ const AppStyle = styled.div`
   align-items: center;
 `;
 
-
-export {AppStyle};
+export { AppStyle };

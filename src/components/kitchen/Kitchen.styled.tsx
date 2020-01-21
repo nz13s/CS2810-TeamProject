@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-const MenuStyle = styled.div`
+const KitchenStyle = styled.div`
   display: flex;
 `;
 
-export { MenuStyle };
+export { KitchenStyle };

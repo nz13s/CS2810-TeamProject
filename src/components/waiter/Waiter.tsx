@@ -7,11 +7,6 @@ export default class Waiter extends React.Component<any, any> {
   }
 
   render() {
-    return (
-      <p>
-        Waiter!
-      </p>
-    )
+    return <p>Waiter!</p>;
   }
-
 }

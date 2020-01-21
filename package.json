@@ -3,7 +3,7 @@
   "private": true,
   "main": "dist/src/index.js",
   "scripts": {
-    "lint": "npx eslint . --ext .ts --fix",
+    "lint": "npx eslint . --ext .ts --ext .tsx --fix",
     "prestart": "npm run lint",
     "start": "react-scripts start",
     "build": "react-scripts build"
@@ -39,7 +39,11 @@
     "@types/styled-components": "^4.4.2",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
+    "eslint-plugin-react": "^7.18.0",
     "eslint": "^6.8.0",
+    "prettier": "^1.19.1",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "typescript": "^3.7.5"
   }
 }

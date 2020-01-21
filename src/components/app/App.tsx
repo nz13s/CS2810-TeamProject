@@ -1,9 +1,9 @@
 import React from "react";
-import {Switch, Route, Link} from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 
-import {Button, Col, Container, Row} from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
-import {AppStyle} from "./App.styled";
+import { AppStyle } from "./App.styled";
 import Menu from "../menu/Menu";
 import Waiter from "../waiter/Waiter";
 import Kitchen from "../kitchen/Kitchen";
@@ -16,9 +16,7 @@ export default class App extends React.Component<any, any> {
           <AppStyle>
             <Container>
               <Row className="d-flex mb-5 justify-content-center">
-                <h2>
-                  Oaxaca Restaurant
-                </h2>
+                <h2>Oaxaca Restaurant</h2>
               </Row>
               <Row className="d-flex justify-content-center">
                 <Col xs="auto">
@@ -47,9 +45,9 @@ export default class App extends React.Component<any, any> {
           </AppStyle>
         </Route>
 
-        <Route exact path="/menu" component={Menu}/>
-        <Route exact path="/waiter" component={Waiter}/>
-        <Route exact path="/kitchen" component={Kitchen}/>
+        <Route exact path="/menu" component={Menu} />
+        <Route exact path="/waiter" component={Waiter} />
+        <Route exact path="/kitchen" component={Kitchen} />
       </Switch>
     );
   }
