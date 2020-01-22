@@ -1,3 +1,5 @@
+package entities;
+
 import java.math.BigDecimal;
 
 public class Food {

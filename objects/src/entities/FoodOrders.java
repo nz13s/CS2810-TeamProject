@@ -1,3 +1,5 @@
+package entities;
+
 public class FoodOrders {
   private int orderID;
   private int foodID;

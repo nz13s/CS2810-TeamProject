@@ -1,15 +1,15 @@
-import java.math.BigInteger;
+package entities;
 
 public class Orders {
   private int orderID;
-  private BigInteger timeOrdered;
-  private BigInteger orderConfirmed;
-  private BigInteger orderReady;
-  private BigInteger orderServed;
+  private long timeOrdered;
+  private long orderConfirmed;
+  private long orderReady;
+  private long orderServed;
   private int tableNum;
 
-  public Orders(int orderID, BigInteger timeOrdered, BigInteger orderConfirmed, BigInteger orderReady,
-                BigInteger orderServed, Table table) {
+  public Orders(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
+                long orderServed, Table table) {
     this.orderID = orderID;
     this.timeOrdered = timeOrdered;
     this.orderConfirmed = orderConfirmed;
@@ -26,35 +26,35 @@ public class Orders {
     this.orderID = orderID;
   }
 
-  public BigInteger getTimeOrdered() {
+  public long getTimeOrdered() {
     return timeOrdered;
   }
 
-  public void setTimeOrdered(BigInteger timeOrdered) {
+  public void setTimeOrdered(long timeOrdered) {
     this.timeOrdered = timeOrdered;
   }
 
-  public BigInteger getOrderConfirmed() {
+  public long getOrderConfirmed() {
     return orderConfirmed;
   }
 
-  public void setOrderConfirmed(BigInteger orderConfirmed) {
+  public void setOrderConfirmed(long orderConfirmed) {
     this.orderConfirmed = orderConfirmed;
   }
 
-  public BigInteger getOrderReady() {
+  public long getOrderReady() {
     return orderReady;
   }
 
-  public void setOrderReady(BigInteger orderReady) {
+  public void setOrderReady(long orderReady) {
     this.orderReady = orderReady;
   }
 
-  public BigInteger getOrderServed() {
+  public long getOrderServed() {
     return orderServed;
   }
 
-  public void setOrderServed(BigInteger orderServed) {
+  public void setOrderServed(long orderServed) {
     this.orderServed = orderServed;
   }
 
@@ -67,10 +67,10 @@ public class Orders {
   }
 
   public boolean orderReady() { //this is manually checked in the Kitchen and clicked on the system
-    return !orderReady.equals(BigInteger.ZERO);
+    return orderReady != 0;
   }
 
   public boolean orderServed() { //waiter clicks the Ready button on the system when served
-    return !orderServed.equals(BigInteger.ZERO);
+    return orderServed != 0;
   }
 }

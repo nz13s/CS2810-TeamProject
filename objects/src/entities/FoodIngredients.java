@@ -1,3 +1,5 @@
+package entities;
+
 public class FoodIngredients {
   private int foodID;
   private String ingredients;

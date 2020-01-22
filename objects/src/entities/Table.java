@@ -1,10 +1,12 @@
+package entities;
+
 import java.util.List;
 
 public class Table {
   public int tableNum;
   private int seatsAvailable;
   private boolean occupied;
-  private List<Orders> orders; //orders from this specific Table
+  private List<Orders> orders; //orders from this specific entities.Table
 
   public Table(int tableNum, int seatsAvailable, List<Orders> orders) {
     this.tableNum = tableNum;
