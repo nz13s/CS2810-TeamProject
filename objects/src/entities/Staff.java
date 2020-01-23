@@ -2,17 +2,16 @@ package entities;
 
 import java.util.Objects;
 
-/**
- * Template class for Waiter to test if this stuff commits
- */
 public class Staff {
   private String username;
   private String pwd;
+  private String pwdSalt;
   private Table table;
 
-  public Staff(String username, String pwd, Table table) {
+  public Staff(String username, String pwd, Table table, String pwdSalt) {
     this.username = username;
     this.pwd = pwd;
+    this.pwdSalt = pwdSalt;
     this.table = table;
   }
 
@@ -32,6 +31,14 @@ public class Staff {
     this.pwd = pwd;
   }
 
+  public String getPwdSalt() {
+    return pwdSalt;
+  }
+
+  public void setPwdSalt(String pwdSalt) {
+    this.pwdSalt = pwdSalt;
+  }
+
   public Table getTable() {
     return table;
   }
@@ -47,21 +54,12 @@ public class Staff {
     Staff staff = (Staff) o;
     return Objects.equals(username, staff.username) &&
         Objects.equals(pwd, staff.pwd) &&
+        Objects.equals(pwdSalt, staff.pwdSalt) &&
         Objects.equals(table, staff.table);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, pwd, table);
+    return Objects.hash(username, pwd, pwdSalt, table);
   }
-
-  //template to add a Waiter to the table when he logs in, add him as a row to the table
-  public void waiterLogin(){}
-
-  //remove him from table (as in DB table row, not actual table) when waiter logs out
-  public void waiterLogout(){}
-
-  //gets order from table and sends it to kitchen
-  public void getOrder(){}
-
 }

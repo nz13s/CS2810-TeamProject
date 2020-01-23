@@ -1,17 +1,24 @@
-import queries.Foods;
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Database {
-  private Connection connection;
-  private PreparedStatement preparedStatement;
 
-  public static Foods FOODS;
-
-  public Database(Connection c){
-    connection = c;
-    FOODS = new Foods(c);
+  /**
+   * Template connection method
+   */
+  public static Connection connection() throws SQLException {
+    Connection connection = null;
+    String url = "temp";
+    String username = "temp";
+    String password = "temp";
+    try {
+      connection = DriverManager.getConnection(url, username, password);
+      System.out.println("Connection established");
+    } catch (SQLException e) {
+      System.out.println("Connection failed, see below: ");
+      e.printStackTrace();
+    }
+    return connection;
   }
-
 }
