@@ -130,7 +130,9 @@ export default class Menu extends React.Component<any, State> {
                 )}
                 <ListGroup.Item className="bg-dark text-white">
                   Total: £
-                  {basket.reduce((acc, curr) => acc + curr.price, 0.00).toFixed(2)}
+                  {basket
+                    .reduce((acc, curr) => acc + curr.price, 0.0)
+                    .toFixed(2)}
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -164,7 +166,7 @@ export default class Menu extends React.Component<any, State> {
 
                         <Card.Footer className="d-flex justify-content-end">
                           <Button onClick={() => this.addToBasket(item)}>
-                            Add to order
+                            Add
                           </Button>
                         </Card.Footer>
                       </Card>
