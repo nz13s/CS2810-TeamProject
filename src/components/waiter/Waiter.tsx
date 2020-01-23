@@ -24,7 +24,7 @@ export default class Waiter extends React.Component<any, any> {
               <Button
                 variant="success"
                 size="lg"
-                style={{ width: "40vw", height: "20vh" }}>
+                style={{ height: "20vh", width: "9rem" }}>
                 Take Order
               </Button>
             </Col>
@@ -32,8 +32,8 @@ export default class Waiter extends React.Component<any, any> {
               <Button
                 variant="danger"
                 size="lg"
-                style={{ width: "40vw", height: "20vh" }}>
-                Change Menu
+                style={{ height: "20vh", width: "9rem" }}>
+                Edit Menu
               </Button>
             </Col>
           </Row>
@@ -42,7 +42,7 @@ export default class Waiter extends React.Component<any, any> {
               <Button
                 variant="primary"
                 size="lg"
-                style={{ width: "40vw", height: "20vh" }}>
+                style={{ height: "20vh", width: "9rem" }}>
                 Serve Food
               </Button>
             </Col>
@@ -50,7 +50,7 @@ export default class Waiter extends React.Component<any, any> {
               <Button
                 variant="info"
                 size="lg"
-                style={{ width: "40vw", height: "20vh" }}>
+                style={{ height: "20vh", width: "9rem" }}>
                 Check Bill
               </Button>
             </Col>
