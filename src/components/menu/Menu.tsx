@@ -148,7 +148,7 @@ export default class Menu extends React.Component<any, State> {
                       <Card
                         key={item.id}
                         className="mb-3 bg-dark text-white"
-                        style={{ minWidth: "15vw" }}>
+                        style={{ minWidth: "15vw", maxWidth: "20vw" }}>
                         <Card.Header style={{ whiteSpace: "nowrap" }}>
                           {item.name}
                         </Card.Header>
