@@ -117,24 +117,26 @@ export default class Menu extends React.Component<any, State> {
           </Navbar>
           <Row>
             <Col xs="4">
-              <h2>Your Order</h2>
-              <ListGroup variant="flush">
-                {Object.entries(_.groupBy(basket, x => x.id)).map(
-                  ([, items]) => (
-                    <ListGroup.Item
-                      key={items[0].id}
-                      className="bg-dark text-white">
-                      {items[0].name} x{items.length}
-                    </ListGroup.Item>
-                  )
-                )}
-                <ListGroup.Item className="bg-dark text-white">
-                  Total: £
-                  {basket
-                    .reduce((acc, curr) => acc + curr.price, 0.0)
-                    .toFixed(2)}
-                </ListGroup.Item>
-              </ListGroup>
+              <div className="sticky-top">
+                <h2>Your Order</h2>
+                <ListGroup variant="flush">
+                  {Object.entries(_.groupBy(basket, x => x.id)).map(
+                    ([, items]) => (
+                      <ListGroup.Item
+                        key={items[0].id}
+                        className="bg-dark text-white">
+                        {items[0].name} x{items.length}
+                      </ListGroup.Item>
+                    )
+                  )}
+                  <ListGroup.Item className="bg-dark text-white">
+                    Total: £
+                    {basket
+                      .reduce((acc, curr) => acc + curr.price, 0.0)
+                      .toFixed(2)}
+                  </ListGroup.Item>
+                </ListGroup>
+              </div>
             </Col>
             <Col xs="8">
               {Array.from(menu.entries()).map(([category, items]) => (
