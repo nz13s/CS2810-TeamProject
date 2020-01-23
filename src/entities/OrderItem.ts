@@ -1,11 +1,11 @@
 export default class OrderItem {
   id: number;
   name: string;
-  priority: number;
+  ordered: Date;
 
-  constructor(id: number, name: string, priority: number) {
+  constructor(id: number, name: string, ordered: Date) {
     this.id = id;
     this.name = name;
-    this.priority = priority;
+    this.ordered = ordered;
   }
 }

@@ -25,12 +25,12 @@ export default class Kitchen extends React.Component<any, State> {
 
     const mockOrders = [
       [
-        new OrderItem(1, "Chicken Sandwich", 1),
-        new OrderItem(2, "Chicken Sandwich", 2),
-        new OrderItem(3, "Chicken Sandwich", 3)
+        new OrderItem(1337, "Chicken Sandwich", new Date(1579282200)),
+        new OrderItem(228, "Spicy Soup", new Date(1579283200)),
+        new OrderItem(1234, "Cheese Tacos", new Date(1579284200))
       ],
-      [],
-      []
+      [new OrderItem(1738, "Cheese Tacos", new Date(1579285200))],
+      [new OrderItem(1945, "Jalapeño Burrito", new Date(1579286200))]
     ];
 
     this.state = {
@@ -70,13 +70,15 @@ export default class Kitchen extends React.Component<any, State> {
             <Col>
               <h2>Placed Orders: {placed.length}</h2>
               <ListGroup>
-                {_.sortBy(placed, ["priority"]).map(item => (
+                {_.sortBy(placed, x => x.ordered).map(item => (
                   <ListGroup.Item key={item.id} className="bg-dark text-white">
                     <Card border="danger" className="mb-3 bg-dark text-white">
                       <Card.Header>Order #{item.id}</Card.Header>
                       <Card.Body>
                         <Card.Title>{item.name}</Card.Title>
-                        <Card.Subtitle>Priority: {item.priority}</Card.Subtitle>
+                        <Card.Subtitle>
+                          Time Ordered: {item.ordered.toLocaleTimeString()}
+                        </Card.Subtitle>
                       </Card.Body>
                       <Card.Footer>
                         <Button
@@ -95,13 +97,15 @@ export default class Kitchen extends React.Component<any, State> {
             <Col>
               <h2>Preparing: {preparing.length}</h2>
               <ListGroup>
-                {_.sortBy(preparing, ["priority"]).map(item => (
+                {_.sortBy(preparing, x => x.ordered).map(item => (
                   <ListGroup.Item key={item.id} className="bg-dark text-white">
                     <Card border="warning" className="mb-3 bg-dark text-white">
                       <Card.Header>Order #{item.id}</Card.Header>
                       <Card.Body>
                         <Card.Title>{item.name}</Card.Title>
-                        <Card.Subtitle>Priority: {item.priority}</Card.Subtitle>
+                        <Card.Subtitle>
+                          Time Ordered: {item.ordered.toLocaleTimeString()}
+                        </Card.Subtitle>
                       </Card.Body>
                       <Card.Footer>
                         <ButtonGroup className="d-flex">
@@ -126,13 +130,15 @@ export default class Kitchen extends React.Component<any, State> {
             <Col>
               <h2>Ready: {ready.length}</h2>
               <ListGroup>
-                {_.sortBy(ready, ["priority"]).map(item => (
+                {_.sortBy(ready, x => x.ordered).map(item => (
                   <ListGroup.Item key={item.id} className="bg-dark text-white">
                     <Card border="success" className="mb-3 bg-dark text-white">
                       <Card.Header>Order #{item.id}</Card.Header>
                       <Card.Body>
                         <Card.Title>{item.name}</Card.Title>
-                        <Card.Subtitle>Priority: {item.priority}</Card.Subtitle>
+                        <Card.Subtitle>
+                          Time Ordered: {item.ordered.toLocaleTimeString()}
+                        </Card.Subtitle>
                       </Card.Body>
                       <Card.Footer>
                         <ButtonGroup className="d-flex">
