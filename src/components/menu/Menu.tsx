@@ -129,7 +129,7 @@ export default class Menu extends React.Component<any, State> {
                   )
                 )}
                 <ListGroup.Item className="bg-dark text-white">
-                  Total: £{basket.reduce((acc, curr) => acc + curr.price, 0)}
+                  Total: £{basket.reduce((acc, curr) => acc + curr.price, 0).toFixed(2)}
                 </ListGroup.Item>
               </ListGroup>
             </Col>
