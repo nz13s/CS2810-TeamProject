@@ -1,4 +1,4 @@
-package queries;
+package databaseInit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

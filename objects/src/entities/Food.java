@@ -1,16 +1,14 @@
 package entities;
 
-import java.math.BigDecimal;
-
 public class Food {
   private int foodID;
   private String foodName;
   private String foodDescription;
   private int calories;
-  private BigDecimal price;
+  private long price;
   private boolean available;
 
-  public Food(int foodID, String foodName, String foodDescription, int calories, BigDecimal price,
+  public Food(int foodID, String foodName, String foodDescription, int calories, long price,
               boolean available) {
     this.foodID = foodID;
     this.foodName = foodName;
@@ -52,11 +50,11 @@ public class Food {
     this.calories = calories;
   }
 
-  public BigDecimal getPrice() {
+  public long getPrice() {
     return price;
   }
 
-  public void setPrice(BigDecimal price) {
+  public void setPrice(long price) {
     this.price = price;
   }
 
