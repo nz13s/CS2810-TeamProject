@@ -7,7 +7,8 @@ import {
   Container,
   Navbar,
   Col,
-  ListGroup
+  ListGroup,
+  ButtonGroup
 } from "react-bootstrap";
 import MenuItem from "../../entities/MenuItem";
 import { MenuStyle } from "./Menu.styled";
@@ -103,6 +104,13 @@ export default class Menu extends React.Component<any, State> {
     this.setState({ basket: [...this.state.basket, item] });
   }
 
+  delFromBasket(item: MenuItem) {
+    const basket = [...this.state.basket];
+    const idx = basket.findIndex(x => x.id === item.id);
+    basket.splice(idx, 1);
+    this.setState({ basket: basket });
+  }
+
   render() {
     const { tableID, menu, basket } = this.state;
 
@@ -119,13 +127,28 @@ export default class Menu extends React.Component<any, State> {
             <Col xs="4">
               <div className="sticky-top">
                 <h2>Your Order</h2>
-                <ListGroup variant="flush">
+                <ListGroup variant="flush" className="d-inline-block w-100">
                   {Object.entries(_.groupBy(basket, x => x.id)).map(
                     ([, items]) => (
                       <ListGroup.Item
                         key={items[0].id}
-                        className="bg-dark text-white">
+                        className="bg-dark text-white"
+                        style={{ overflow: "hidden" }}>
                         {items[0].name} x{items.length}
+                        <ButtonGroup
+                          className="ml-2"
+                          style={{ float: "right" }}>
+                          <Button
+                            onClick={() => this.addToBasket(items[0])}
+                            variant="secondary">
+                            +
+                          </Button>
+                          <Button
+                            onClick={() => this.delFromBasket(items[0])}
+                            variant="secondary">
+                            —
+                          </Button>
+                        </ButtonGroup>
                       </ListGroup.Item>
                     )
                   )}
@@ -147,8 +170,7 @@ export default class Menu extends React.Component<any, State> {
                     {items.map(item => (
                       <Card
                         key={item.id}
-                        className="mb-3 bg-dark text-white"
-                        style={{ minWidth: "15vw", maxWidth: "20vw" }}>
+                        className="mb-3 bg-dark text-white menu_item">
                         <Card.Header style={{ whiteSpace: "nowrap" }}>
                           {item.name}
                         </Card.Header>
