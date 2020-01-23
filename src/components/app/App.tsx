@@ -45,9 +45,9 @@ export default class App extends React.Component<any, any> {
           </AppStyle>
         </Route>
 
-        <Route exact path="/menu" component={Menu} />
-        <Route exact path="/waiter" component={Waiter} />
-        <Route exact path="/kitchen" component={Kitchen} />
+        <Route path="/menu" component={Menu} />
+        <Route path="/waiter" component={Waiter} />
+        <Route path="/kitchen" component={Kitchen} />
       </Switch>
     );
   }
