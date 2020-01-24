@@ -25,6 +25,14 @@ public class Orders {
     return orderID;
   }
 
+  public ArrayList<Food> getFoodItems() {
+    return foodItems;
+  }
+
+  public void setFoodItems(ArrayList<Food> foodItems) {
+    this.foodItems = foodItems;
+  }
+
   public void setOrderID(int orderID) {
     this.orderID = orderID;
   }
