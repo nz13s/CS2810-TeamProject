@@ -1,8 +1,8 @@
 package sql;
 
-import databaseInit.Database;
 import entities.Food;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +10,8 @@ import java.sql.SQLException;
 public class Foods {
   private PreparedStatement foodById;
 
-  public Foods(Database db) throws SQLException {
-    foodById = db.connection().prepareStatement(
+  public Foods(Connection connection) throws SQLException {
+    foodById = connection.prepareStatement(
         "SELECT foodid, foodname, fooddescription, calories, price, available "
             + "FROM food "
             + "WHERE foodid = ?");

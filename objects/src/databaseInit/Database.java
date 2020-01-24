@@ -1,6 +1,6 @@
 package databaseInit;
 
-import entities.Food;
+import sql.Foods;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,9 +8,9 @@ import java.sql.SQLException;
 
 public class Database {
 
-  public static Food food;
+  public static Foods FOODS;
 
-  public Connection connection() {
+  public void connection() throws SQLException {
     Connection c = null;
     String url = "jdbc:postgresql://localhost/tomcat/?tcpKeepAlive=true";
     String username = "tomcat";
@@ -22,6 +22,10 @@ public class Database {
       System.out.println("Connection failed, see below: ");
       e.printStackTrace();
     }
-    return c;
+
+    assert c != null;
+    FOODS = new Foods(c);
   }
+
+
 }
