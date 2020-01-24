@@ -1,4 +1,5 @@
 package entities;
+import Food;
 
 public class Orders {
   private int orderID;
@@ -7,15 +8,17 @@ public class Orders {
   private long orderReady;
   private long orderServed;
   private int tableNum;
+  private ArrayList<Food> foodItems;
 
   public Orders(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
-                long orderServed, Table table) {
+                long orderServed, Table table, ArrayList<Food> foodItems) {
     this.orderID = orderID;
     this.timeOrdered = timeOrdered;
     this.orderConfirmed = orderConfirmed;
     this.orderReady = orderReady;
     this.orderServed = orderServed;
     this.tableNum = table.tableNum;
+    this.foodItems = foodItems;
   }
 
   public int getOrderID() {
