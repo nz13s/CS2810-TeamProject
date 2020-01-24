@@ -41,18 +41,22 @@ public class Order {
         }
         return null;
     }
-    public void saveOrder(Order o, ArrayList<Food> foodList){
+    public void saveOrder(Order o){
+        ArrayList<Food> list = o.getFoodItems();
         orderSave.setInt(1, o.getTableNum());
         orderSave.setLong(2, o.getTimeOrdered());
         orderSave.setLong(3, o.getOrderConfirmed());
         orderSave.setBoolean(4, o.orderReady());
         orderSave.setLong(5, o.getOrderServed());
         orderSave.execute();
+        orderSave.close();
 
         for(int i = 0; i < foodList.size; i++){
             foodSave.setInt(1, o.getOrderId);
-            foodSave.setInt(2, foodList.get(i).getFoodID());
-            foodSave.execute();
+            foodSave.setInt(2, list.get(i).getFoodID());
+            foodSave.addBatch;
         }
+        foodSave.executeBatch();
+        foodSave.close();
     }
 }
