@@ -1,3 +1,0 @@
-# Backend
-
-Maybe instructions to build and run ...
