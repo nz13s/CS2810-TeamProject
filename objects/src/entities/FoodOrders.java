@@ -4,9 +4,9 @@ public class FoodOrders {
   private int orderID;
   private int foodID;
 
-  public FoodOrders(Orders order, Food food) {
-    this.orderID = order.getOrderID();
-    this.foodID = food.getFoodID();
+  public FoodOrders(int orderID, int foodID) {
+    this.orderID = orderID;
+    this.foodID = foodID;
   }
 
   public int getOrderID() {

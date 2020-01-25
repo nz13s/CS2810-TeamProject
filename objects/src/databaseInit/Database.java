@@ -1,5 +1,7 @@
 package databaseInit;
 
+import sql.FoodIngredientsSql;
+import sql.FoodOrdersSql;
 import sql.Foods;
 import sql.Orders;
 
@@ -10,6 +12,8 @@ import java.sql.SQLException;
 public class Database {
 
   public static Foods FOODS;
+  public static FoodIngredientsSql FOOD_INGREDIENTS;
+  public static FoodOrdersSql FOOD_ORDERS;
   public static Orders ORDERS;
 
   public void connection() throws SQLException {
@@ -27,6 +31,9 @@ public class Database {
 
     assert c != null;
     FOODS = new Foods(c);
+    FOOD_INGREDIENTS = new FoodIngredientsSql(c);
+    FOOD_ORDERS = new FoodOrdersSql(c);
+    ORDERS = new Orders(c);
   }
 
 

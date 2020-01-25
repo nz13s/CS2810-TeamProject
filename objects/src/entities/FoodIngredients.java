@@ -4,8 +4,8 @@ public class FoodIngredients {
   private int foodID;
   private String ingredients;
 
-  public FoodIngredients(Food food, String ingredients) {
-    this.foodID = food.getFoodID();
+  public FoodIngredients(int foodID, String ingredients) {
+    this.foodID = foodID;
     this.ingredients = ingredients;
   }
 

@@ -13,20 +13,6 @@ public class Queries {
     this.c = c;
   }
 
-  public void getFoodDetails(int orderID) throws SQLException {
-    String query =
-        "SELECT foodid FROM foodorders WHERE orderid = " + orderID + ", "
-        + "SELECT * FROM food WHERE foodid = 'variable', "
-        + "SELECT ingredients FROM foodingredients WHERE foodid = 'variable'";
-    //I am not sure this is correct?
-
-    PreparedStatement preparedStatement = c.prepareStatement(query);
-    ResultSet resultSet = preparedStatement.executeQuery();
-    while (resultSet.next()) {
-      System.out.printf("%d\n", resultSet.getInt("tablenum"));
-    }
-  }
-
   public void getTableNo(int orderID) throws SQLException {
     String query = "SELECT tablenum FROM orders WHERE orderid = " + orderID;
 

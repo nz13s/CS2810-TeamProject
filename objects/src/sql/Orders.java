@@ -37,7 +37,8 @@ public class Orders {
           resultSet.getLong("orderconfirmed"),
           resultSet.getLong("orderready"),
           resultSet.getLong("orderserved"),
-          resultSet.getInt("tablenum"));
+          resultSet.getInt("tablenum"),
+          null);
     }
     return null;
   }

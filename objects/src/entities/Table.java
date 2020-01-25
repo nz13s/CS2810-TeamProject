@@ -6,9 +6,9 @@ public class Table {
   public int tableNum;
   private int seatsAvailable;
   private boolean occupied;
-  private List<Orders> orders; //orders from this specific entities.Table
+  private List<Order> orders; //orders from this specific entities.Table
 
-  public Table(int tableNum, int seatsAvailable, List<Orders> orders) {
+  public Table(int tableNum, int seatsAvailable, List<Order> orders) {
     this.tableNum = tableNum;
     this.seatsAvailable = seatsAvailable;
     this.occupied = false;
@@ -39,11 +39,11 @@ public class Table {
     this.occupied = occupied;
   }
 
-  public List<Orders> getOrders() {
+  public List<Order> getOrders() {
     return orders;
   }
 
-  public void setOrders(List<Orders> orders) {
+  public void setOrders(List<Order> orders) {
     this.orders = orders;
   }
 
