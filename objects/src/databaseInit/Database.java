@@ -1,6 +1,7 @@
 package databaseInit;
 
 import sql.Foods;
+import sql.Orders;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 public class Database {
 
   public static Foods FOODS;
+  public static Orders ORDERS;
 
   public void connection() throws SQLException {
     Connection c = null;

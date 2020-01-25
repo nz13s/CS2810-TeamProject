@@ -1,7 +1,8 @@
 package entities;
-import Food;
 
-public class Orders {
+import java.util.ArrayList;
+
+public class Order {
   private int orderID;
   private long timeOrdered;
   private long orderConfirmed;
@@ -10,15 +11,25 @@ public class Orders {
   private int tableNum;
   private ArrayList<Food> foodItems;
 
-  public Orders(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
-                long orderServed, Table table, ArrayList<Food> foodItems) {
+  public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
+                long orderServed, int tableNum, ArrayList<Food> foodItems) {
     this.orderID = orderID;
     this.timeOrdered = timeOrdered;
     this.orderConfirmed = orderConfirmed;
     this.orderReady = orderReady;
     this.orderServed = orderServed;
-    this.tableNum = table.tableNum;
+    this.tableNum = tableNum;
     this.foodItems = foodItems;
+  }
+
+  public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
+               long orderServed, int tableNum) {
+    this.orderID = orderID;
+    this.timeOrdered = timeOrdered;
+    this.orderConfirmed = orderConfirmed;
+    this.orderReady = orderReady;
+    this.orderServed = orderServed;
+    this.tableNum = tableNum;
   }
 
   public int getOrderID() {
