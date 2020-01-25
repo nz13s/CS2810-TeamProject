@@ -12,9 +12,9 @@ public class Foods {
 
   public Foods(Connection connection) throws SQLException {
     foodById = connection.prepareStatement(
-        "SELECT foodid, foodname, fooddescription, calories, price, available "
+        "SELECT food_id, food_name, food_description, calories, price, available "
             + "FROM food "
-            + "WHERE foodid = ?");
+            + "WHERE food_id = ?");
   }
 
   public Food getFoodByID(int foodID) throws SQLException {

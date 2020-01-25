@@ -14,7 +14,7 @@ public class Queries {
   }
 
   public void getTableNo(int orderID) throws SQLException {
-    String query = "SELECT tablenum FROM orders WHERE orderid = " + orderID;
+    String query = "SELECT table_num FROM orders WHERE order_id = " + orderID;
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
@@ -24,7 +24,7 @@ public class Queries {
   }
 
   public void checkOccupied(int tableNum) throws SQLException {
-    String query = "SELECT occupied FROM table WHERE tablenum = " + tableNum;
+    String query = "SELECT occupied FROM restaurant_table WHERE table_num = " + tableNum;
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
@@ -34,7 +34,7 @@ public class Queries {
   }
 
   public void setOccupied(int tableNum) throws SQLException {
-    String query = "UPDATE table SET occupied WHERE tablenum = " + tableNum;
+    String query = "UPDATE restaurant_table SET occupied WHERE table_num = " + tableNum;
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
@@ -44,8 +44,8 @@ public class Queries {
   }
 
   public void checkOrderConfirmed() throws SQLException {
-    String query = "SELECT orderid, tablenum, timeordered "
-        + "FROM orders WHERE timeordered != 0";
+    String query = "SELECT order_id, table_num, time_ordered "
+        + "FROM orders WHERE time_ordered != 0";
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
@@ -57,8 +57,8 @@ public class Queries {
   }
 
   public void checkOrderReady() throws SQLException {
-    String query = "SELECT orderid, tablenum, timeordered "
-        + "FROM orders WHERE orderready != 0";
+    String query = "SELECT order_id, table_num, time_ordered "
+        + "FROM orders WHERE order_ready != 0";
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
@@ -70,8 +70,8 @@ public class Queries {
   }
 
   public void checkOrderServed() throws SQLException {
-    String query = "SELECT orderid, tablenum, timeordered "
-        + "FROM orders WHERE orderserved != 0";
+    String query = "SELECT order_id, table_num, time_ordered "
+        + "FROM orders WHERE order_served != 0";
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
@@ -83,9 +83,9 @@ public class Queries {
   }
 
   public void checkSeats(int guestsNo) throws SQLException {
-    String query = "SELECT tablenum, seatsavailable "
-        + "FROM table WHERE occupied = 'n'" +
-        "AND seatsavailable >= " + guestsNo;
+    String query = "SELECT table_num, seats_available "
+        + "FROM restaurant_table WHERE occupied = 'n'" +
+        "AND seats_available >= " + guestsNo;
 
     PreparedStatement preparedStatement = c.prepareStatement(query);
     ResultSet resultSet = preparedStatement.executeQuery();
