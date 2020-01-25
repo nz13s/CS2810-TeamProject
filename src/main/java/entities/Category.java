@@ -1,5 +1,7 @@
 package entities;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class Category {
@@ -8,7 +10,7 @@ public class Category {
   private String categoryName;
   private ArrayList<Food> items;
 
-  public Category(int categoryNumber, String categoryName) {
+  public Category(int categoryNumber, @Nonnull String categoryName) {
     items = new ArrayList<Food>();
     this.categoryName = categoryName;
     this.categoryNumber = categoryNumber;
@@ -18,6 +20,7 @@ public class Category {
     return categoryNumber;
   }
 
+  @Nonnull
   public String getCategoryName() {
     return categoryName;
   }
@@ -30,18 +33,25 @@ public class Category {
     return items.size();
   }
 
+  @Nullable
   public Food getFood(int i) {
-    return items.get(i);
+    try {
+      return items.get(i);
+    } catch (IndexOutOfBoundsException ex){
+      return null;
+    }
   }
 
   @Override
   public String toString() {
+    //todo fix this to use a Jackson serialiser
     return "Category{" +
         "name='" + categoryName + '\'' +
         ", category=" + items +
         '}';
   }
 
+  @Nonnull
   public ArrayList<Food> getList() {
     return items;
   }

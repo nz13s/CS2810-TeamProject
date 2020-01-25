@@ -1,5 +1,7 @@
 package entities;
 
+import javax.annotation.Nonnull;
+
 public class Food {
   private int foodID;
   private String foodName;
@@ -8,7 +10,7 @@ public class Food {
   private long price;
   private boolean available;
 
-  public Food(int foodID, String foodName, String foodDescription, int calories, long price,
+  public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, long price,
               boolean available) {
     this.foodID = foodID;
     this.foodName = foodName;
@@ -26,6 +28,7 @@ public class Food {
     this.foodID = foodID;
   }
 
+  @Nonnull
   public String getFoodName() {
     return foodName;
   }
@@ -34,6 +37,7 @@ public class Food {
     this.foodName = foodName;
   }
 
+  @Nonnull
   public String getFoodDescription() {
     return foodDescription;
   }
@@ -68,6 +72,7 @@ public class Food {
 
   @Override
   public String toString() {
+    //todo fix this to use a Jackson serialiser
     return "Food{" +
         "foodName='" + foodName + '\'' +
         '}';

@@ -28,8 +28,7 @@ public class Item{
      * @return Whether the amount is 0 or less, so could be removed
      */
     public boolean remove(){
-        this.amount--;
-        return this.amount <= 0;
+        return remove(1);
     }
 
     /**

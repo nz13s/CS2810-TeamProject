@@ -1,5 +1,8 @@
 package entities;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Table {
@@ -8,7 +11,8 @@ public class Table {
   private boolean occupied;
   private List<Order> orders; //orders from this specific entities.Table
 
-  public Table(int tableNum, int seatsAvailable, List<Order> orders) {
+  public Table(int tableNum, int seatsAvailable, @Nullable List<Order> orders) {
+    if (orders == null) orders = new ArrayList<>();
     this.tableNum = tableNum;
     this.seatsAvailable = seatsAvailable;
     this.occupied = false;
@@ -39,6 +43,7 @@ public class Table {
     this.occupied = occupied;
   }
 
+  @Nonnull
   public List<Order> getOrders() {
     return orders;
   }

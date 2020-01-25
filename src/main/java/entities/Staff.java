@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Staff {
   private String username;
-  private String pwd;
-  private String pwdSalt;
+  private String pwd; //hashed password
+  private String pwdSalt; //salt for the user
   private Table table;
 
   public Staff(String username, String pwd, Table table, String pwdSalt) {

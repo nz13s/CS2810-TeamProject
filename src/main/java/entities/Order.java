@@ -1,5 +1,6 @@
 package entities;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class Order implements IFakeable{
@@ -14,7 +15,7 @@ public class Order implements IFakeable{
   private boolean isFake = true;
 
   public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
-                long orderServed, int tableNum, ArrayList<Item> foodItems) {
+                long orderServed, int tableNum,@Nonnull ArrayList<Item> foodItems) {
     isFake = false; //as we have used the orderID to create this object, it is not fake
     this.orderID = orderID;
     this.timeOrdered = timeOrdered;
@@ -45,15 +46,21 @@ public class Order implements IFakeable{
     return orderID;
   }
 
+  @Nonnull
   public ArrayList<Item> getFoodItems() {
     return foodItems;
   }
 
-  public void addFoodItem(Item item){
+  public void addFoodItem(@Nonnull Item item){
     this.foodItems.add(item);
   }
 
-  public void setFoodItems(ArrayList<Item> foodItems) {
+  /**
+   * Use a constructor with the items instead.
+   * @param foodItems the new item List
+   */
+  @Deprecated
+  public void setFoodItems(@Nonnull ArrayList<Item> foodItems) {
     this.foodItems = foodItems;
   }
 

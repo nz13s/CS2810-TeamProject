@@ -2,6 +2,8 @@ package sql;
 
 import entities.FoodIngredients;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.CheckReturnValue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +19,8 @@ public class FoodIngredientsSql {
         + "WHERE food_id = ?");
   }
 
+  @CheckForNull
+  @CheckReturnValue
   public FoodIngredients getIngredientsById(int foodid) throws SQLException {
     getIngredients.setInt(1, foodid);
     ResultSet resultSet = getIngredients.executeQuery();

@@ -8,6 +8,7 @@ import entities.Basket;
 import entities.Item;
 import entities.serialisers.BasketSerialiser;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -132,6 +133,7 @@ public class AddToBasket extends HttpServlet {
      * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @return The sessions Basket or a newly created empty one
      */
+    @Nonnull
     private Basket getBasket(HttpServletRequest req) {
         Basket basket = (Basket) req.getSession().getAttribute("basket");
         if (basket == null) {
