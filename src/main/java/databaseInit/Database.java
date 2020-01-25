@@ -30,7 +30,7 @@ public class Database implements ServletContextListener {
 
   private void connect() throws SQLException {
     if (instance != this) return; //prevent this from running multiple times
-    String url = "jdbc:postgresql://localhost/tomcat/?tcpKeepAlive=true";
+    String url = "jdbc:postgresql://localhost/tomcat?tcpKeepAlive=true";
     String username = "tomcat";
     String password = "Us17eEXAIkBs2fhZRtQr";
     try {
