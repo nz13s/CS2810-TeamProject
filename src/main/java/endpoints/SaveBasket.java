@@ -1,3 +1,9 @@
+package endpoints;
+
+import databaseInit.Database;
+import entities.Basket;
+import entities.Order;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +32,7 @@ public class SaveBasket extends HttpServlet {
             boolean allGood = true;
             //TODO @Oliver please
             //saveBasket returns boolean
+            Database.ORDERS.saveOrder((Order) basket);
             if (!allGood/*DB.saveBasket(basket)*/) {
                 resp.sendError(500, "Unable to save basket.");
             }

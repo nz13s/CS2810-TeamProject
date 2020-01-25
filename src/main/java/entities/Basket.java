@@ -1,8 +1,18 @@
+package entities;
+
+import databaseInit.Database;
+import entities.Food;
+import entities.Item;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
  * Holds the tables order as they are ordering it.
+ *
+ * This should be moved into {@link Order}
  */
+@Deprecated
 public class Basket {
 
     ArrayList<Item> order;//An ArrayList to store all the current items in the order
@@ -20,15 +30,16 @@ public class Basket {
      * @param ID     The ID of the order as stored in the database
      * @param number The number of that item to add
      */
-    public void addToBasket(int ID, int number) {
+    public void addToBasket(int ID, int number) throws SQLException {
         Item item;
         if ((item = get(ID)) != null) {
             item.add(number);
         } else {
-            //TODO @Oliver vvvvv this bit please
+            //TODONE @Oliver vvvvv this bit please
+            Food food = Database.FOODS.getFoodByID(ID);
             //Database.getItem(ID);
             //if(item.exists()){
-            Item newItem = new Item(ID, "Something", number);
+            Item newItem = new Item(ID, food.getFoodName(), number);
             order.add(newItem);
             //}
         }

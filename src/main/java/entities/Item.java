@@ -1,6 +1,10 @@
+package entities;
+
 /**
  * An item stored in {@link Basket}
  */
+
+//TODO hold a entities.Food object rather than ID+name @cameron
 public class Item{
 
     private int ID;

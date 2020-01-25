@@ -1,8 +1,11 @@
+package endpoints;
+
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import entities.Basket;
+import entities.Item;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 /**
  * Class for handling modification and access to a sessions {@link Basket}
@@ -67,7 +71,11 @@ public class AddToBasket extends HttpServlet {
             return;
         }
         Basket basket = getBasket(req);
-        basket.addToBasket(IDAmount[0], IDAmount[1]);
+        try {
+            basket.addToBasket(IDAmount[0], IDAmount[1]);
+        } catch (SQLException e) {
+            resp.sendError(400, "Item not found");
+        }
     }
 
     /**
