@@ -65,4 +65,11 @@ public class Food {
   public void setAvailable(boolean available) {
     this.available = available;
   }
+
+  @Override
+  public String toString() {
+    return "Food{" +
+        "foodName='" + foodName + '\'' +
+        '}';
+  }
 }
