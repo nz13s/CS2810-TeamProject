@@ -2,17 +2,20 @@ package entities;
 
 import java.util.ArrayList;
 
-public class Order {
+public class Order implements IFakeable{
   private int orderID;
-  private long timeOrdered;
-  private long orderConfirmed;
-  private long orderReady;
-  private long orderServed;
+  private long timeOrdered = 0;
+  private long orderConfirmed = 0;
+  private long orderReady = 0;
+  private long orderServed = 0;
   private int tableNum;
-  private ArrayList<Food> foodItems;
+  private ArrayList<Item> foodItems; //we should make this a Set<Item> as Items are (or, should be) unique
+
+  private boolean isFake = true;
 
   public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
-                long orderServed, int tableNum, ArrayList<Food> foodItems) {
+                long orderServed, int tableNum, ArrayList<Item> foodItems) {
+    isFake = false; //as we have used the orderID to create this object, it is not fake
     this.orderID = orderID;
     this.timeOrdered = timeOrdered;
     this.orderConfirmed = orderConfirmed;
@@ -24,23 +27,33 @@ public class Order {
 
   public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
                long orderServed, int tableNum) {
-    this.orderID = orderID;
+    new Order(orderID, timeOrdered, orderConfirmed, orderReady, orderServed, tableNum, new ArrayList<>());
+    isFake = false;
+  }
+
+  public Order(long timeOrdered, int tableNum, ArrayList<Item> foodItems){
     this.timeOrdered = timeOrdered;
-    this.orderConfirmed = orderConfirmed;
-    this.orderReady = orderReady;
-    this.orderServed = orderServed;
     this.tableNum = tableNum;
+    this.foodItems = foodItems;
+  }
+
+  public Order(long timeOrdered, int tableNum){
+    new Order(timeOrdered, tableNum, new ArrayList<>());
   }
 
   public int getOrderID() {
     return orderID;
   }
 
-  public ArrayList<Food> getFoodItems() {
+  public ArrayList<Item> getFoodItems() {
     return foodItems;
   }
 
-  public void setFoodItems(ArrayList<Food> foodItems) {
+  public void addFoodItem(Item item){
+    this.foodItems.add(item);
+  }
+
+  public void setFoodItems(ArrayList<Item> foodItems) {
     this.foodItems = foodItems;
   }
 
@@ -94,5 +107,10 @@ public class Order {
 
   public boolean orderServed() { //waiter clicks the Ready button on the system when served
     return orderServed != 0;
+  }
+
+  @Override
+  public boolean isFake() {
+    return isFake;
   }
 }

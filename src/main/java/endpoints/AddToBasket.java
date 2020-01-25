@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import entities.Basket;
 import entities.Item;
+import entities.serialisers.BasketSerialiser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

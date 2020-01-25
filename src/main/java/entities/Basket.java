@@ -1,8 +1,6 @@
 package entities;
 
 import databaseInit.Database;
-import entities.Food;
-import entities.Item;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -69,7 +67,7 @@ public class Basket {
      */
     private boolean contains(int ID) {
         for (Item item : order) {
-            if (item.getID() == ID) {
+            if (item.getFoodID() == ID) {
                 return true;
             }
         }
@@ -84,7 +82,7 @@ public class Basket {
      */
     private Item get(int ID) {
         for (Item item : order) {
-            if (item.getID() == ID) {
+            if (item.getFoodID() == ID) {
                 return item;
             }
         }

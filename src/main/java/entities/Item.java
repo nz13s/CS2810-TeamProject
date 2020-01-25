@@ -61,7 +61,7 @@ public class Item{
      * The ID of the item
      * @return The ID of the item as it is stored in the database
      */
-    public int getID(){
+    public int getFoodID(){
         return this.ID;
     }
 

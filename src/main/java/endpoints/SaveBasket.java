@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Class for handling modification and access to a sessions {@link Basket}
@@ -28,16 +29,31 @@ public class SaveBasket extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Basket basket = getBasket(req);
-        if (basket != null) {
-            boolean allGood = true;
-            //TODO @Oliver please
-            //saveBasket returns boolean
-            Database.ORDERS.saveOrder((Order) basket);
-            if (!allGood/*DB.saveBasket(basket)*/) {
-                resp.sendError(500, "Unable to save basket.");
-            }
-        } else {
+        if (basket == null) {
             resp.sendError(500, "No order exists for this session.");
+            return;
+        }
+
+        if (basket.getBasket().isEmpty()){
+            resp.sendError(400, "Basket is empty!");
+        }
+
+        boolean allGood = true;
+        //TODOne @Oliver please
+        //saveBasket returns boolean
+        Order order = new Order(System.currentTimeMillis(), 1); //todo patch tablenum through
+        basket.getBasket().forEach(order::addFoodItem);
+
+        boolean success = false;
+
+        try {
+            success = Database.ORDERS.saveOrder(order);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (!success) {
+            resp.sendError(500, "Unable to save basket.");
         }
     }
 

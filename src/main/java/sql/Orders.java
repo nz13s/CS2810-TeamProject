@@ -1,8 +1,10 @@
 package sql;
 
-import entities.Food;
+import entities.Item;
 import entities.Order;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,16 +19,17 @@ public class Orders {
 
   public Orders(Connection connection) throws SQLException {
     orderById = connection.prepareStatement(
-        "SELECT orderid, timeordered, orderconfirmed, orderready, orderserved, tablenum "
+        "SELECT order_id, time_ordered, order_confirmed, order_ready, order_served, table_num "
             + "FROM orders "
-            + "WHERE orderid = ?");
+            + "WHERE order_id = ?");
     orderSave = connection.prepareStatement(
-        "INSERT INTO orders (orderid, tablenum, timeordered, orderconfirmed, orderready, orderserved) "
-            + "VALUES (?, ?, ?, ?, ?, ?)");
+        "INSERT INTO orders (table_num, time_ordered, order_confirmed, order_ready, order_served) "
+            + "VALUES (?, ?, ?, ?, ?)");
     foodSave = connection.prepareStatement(
-        "INSERT INTO foodorders (orderid, foodid) VALUES (?, ?)");
+        "INSERT INTO food_orders (order_id, food_id) VALUES (?, ?)");
   }
 
+  @Nullable
   public Order getOrderByID(int orderID) throws SQLException {
     orderById.setInt(1, orderID);
     ResultSet resultSet = orderById.executeQuery();
@@ -43,22 +46,34 @@ public class Orders {
     return null;
   }
 
-  public void saveOrder(Order o) throws SQLException {
-    ArrayList<Food> foodList = o.getFoodItems();
+  /**
+   * Saves the order to the database
+   * @param o the order to save
+   * @return false if failure, else true
+   * @throws SQLException if an error occurred
+   */
+  public boolean saveOrder(@Nonnull Order o) throws SQLException {
+    ArrayList<Item> foodList = o.getFoodItems();
     orderSave.setInt(1, o.getTableNum());
     orderSave.setLong(2, o.getTimeOrdered());
     orderSave.setLong(3, o.getOrderConfirmed());
     orderSave.setBoolean(4, o.orderReady());
     orderSave.setLong(5, o.getOrderServed());
     orderSave.execute();
+    ResultSet set = orderSave.getGeneratedKeys();
+    if (!set.first()){
+      return false;
+    }
+    int order_id = set.getInt("food_id");
     orderSave.close();
 
-    for (Food food : foodList) {
-      foodSave.setInt(1, o.getOrderID());
-      foodSave.setInt(2, food.getFoodID());
+    for (Item foodItem : foodList) {
+      foodSave.setInt(1, order_id);
+      foodSave.setInt(2, foodItem.getFoodID());
       foodSave.addBatch();
     }
     foodSave.executeBatch();
     foodSave.close();
+    return true;
   }
 }
