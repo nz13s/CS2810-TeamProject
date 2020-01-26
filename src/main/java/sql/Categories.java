@@ -4,6 +4,8 @@ import entities.Category;
 import entities.Food;
 import entities.Menu;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +35,7 @@ public class Categories {
     }
 
     // makes new Category object based on the category id.
-@Nullable
+    @Nullable
     public entities.Category getCatByID(int categoryID) throws SQLException {
         catById.setInt(1, categoryID);
         ResultSet resultSet = catById.executeQuery();
@@ -42,7 +44,7 @@ public class Categories {
         }
         return null;
     }
-@Nonnull
+    @Nonnull
     public ArrayList<Food> getFoodByCatId(int categoryID) throws SQLException {
         ArrayList<Food> list = new ArrayList<Food>();
 
