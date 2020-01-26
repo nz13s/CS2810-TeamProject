@@ -9,15 +9,17 @@ public class Food {
   private int calories;
   private long price;
   private boolean available;
+  private int categoryID;
 
   public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, long price,
-              boolean available) {
+              boolean available, int categoryID) {
     this.foodID = foodID;
     this.foodName = foodName;
     this.foodDescription = foodDescription;
     this.calories = calories;
     this.price = price;
     this.available = available;
+    this.categoryID = categoryID;
   }
 
   public int getFoodID() {
@@ -69,6 +71,10 @@ public class Food {
   public void setAvailable(boolean available) {
     this.available = available;
   }
+
+  public int getCategoryID() { return categoryID; };
+
+  public void setCategoryID(int categoryID) { this.categoryID = categoryID; }
 
   @Override
   public String toString() {

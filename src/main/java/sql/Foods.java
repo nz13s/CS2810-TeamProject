@@ -11,12 +11,18 @@ import java.sql.SQLException;
 
 public class Foods {
   private PreparedStatement foodById;
+  private PreparedStatement foodByCatId;
 
   public Foods(Connection connection) throws SQLException {
     foodById = connection.prepareStatement(
         "SELECT food_id, food_name, food_description, calories, price, available, category_id "
             + "FROM food "
             + "WHERE food_id = ?");
+
+    foodByCatId = connection.prepareStatement(
+            "SELECT food_id, food_name, food_description, calories, price, available, category_id "
+              + "FROM food "
+              + "WHERE category_id = ?");
   }
 
   @CheckForNull
@@ -31,7 +37,8 @@ public class Foods {
           resultSet.getString("food_description"),
           resultSet.getInt("calories"),
           resultSet.getLong("price"),
-          resultSet.getBoolean("available"));
+          resultSet.getBoolean("available"),
+              resultSet.getInt("category_id"));
     }
     return null;
   }
