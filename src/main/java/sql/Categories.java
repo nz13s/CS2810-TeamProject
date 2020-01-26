@@ -42,7 +42,7 @@ public class Categories {
         }
         return null;
     }
-
+@Nonnull
     public ArrayList<Food> getFoodByCatId(int categoryID) throws SQLException {
         ArrayList<Food> list = new ArrayList<Food>();
 
