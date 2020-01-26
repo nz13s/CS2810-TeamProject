@@ -33,7 +33,7 @@ public class Categories {
     }
 
     // makes new Category object based on the category id.
-
+@Nullable
     public entities.Category getCatByID(int categoryID) throws SQLException {
         catById.setInt(1, categoryID);
         ResultSet resultSet = catById.executeQuery();
