@@ -26,9 +26,9 @@ public class Foods {
     ResultSet resultSet = foodById.executeQuery();
     if (resultSet.next()) {
       return new Food(
-          resultSet.getInt("foodid"),
-          resultSet.getString("foodname"),
-          resultSet.getString("fooddescription"),
+          resultSet.getInt("food_id"),
+          resultSet.getString("food_name"),
+          resultSet.getString("food_description"),
           resultSet.getInt("calories"),
           resultSet.getLong("price"),
           resultSet.getBoolean("available"));

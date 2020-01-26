@@ -29,8 +29,8 @@ public class Basket {
      * @param number The number of that item to add
      */
     public void addToBasket(int ID, int number) throws SQLException {
-        Item item;
-        if ((item = get(ID)) != null) {
+        Item item = get(ID);
+        if (item != null) {
             item.add(number);
         } else {
             //TODONE @Oliver vvvvv this bit please
@@ -50,8 +50,8 @@ public class Basket {
      * @param number The number of the item to remove
      */
     public void removeFromBasket(int ID, int number) {
-        Item item;
-        if ((item = get(ID)) != null) {
+        Item item = get(ID);
+        if (item != null) {
             boolean remove = item.remove(number);
             if (remove) {
                 order.remove(item);

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 
 /**
@@ -76,7 +77,11 @@ public class AddToBasket extends HttpServlet {
         try {
             basket.addToBasket(IDAmount[0], IDAmount[1]);
         } catch (SQLException e) {
+//            StringWriter strW = new StringWriter();
+//            e.printStackTrace(new PrintWriter(strW));
+//            strW.flush();
             resp.sendError(400, "Item not found");
+//            strW.close();
         }
     }
 
