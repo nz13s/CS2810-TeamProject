@@ -32,7 +32,7 @@ public class SaveBasket extends HttpServlet {
             resp.sendError(500, "No Order exists for this session.");
             return;
         }
-        if (order.getFoodItems().isEmpty()){
+        if (order.getFoodItems().isEmpty()) {
             resp.sendError(400, "Order is empty!");
             return;
         }
