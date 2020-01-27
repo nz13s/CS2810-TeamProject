@@ -39,7 +39,7 @@ public class Order implements IFakeable{
   }
 
   public Order(long timeOrdered, int tableNum){
-    new Order(timeOrdered, tableNum, new ArrayList<>());
+    this(timeOrdered, tableNum, new ArrayList<>());
   }
 
   public int getOrderID() {
