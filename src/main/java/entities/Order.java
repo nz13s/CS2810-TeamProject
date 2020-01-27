@@ -1,5 +1,7 @@
 package entities;
 
+import databaseInit.Database;
+
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,6 +63,51 @@ public class Order implements IFakeable{
 
   public void addFoodItem(@Nonnull Item item){
     this.foodItems.add(item);
+  }
+
+  /**
+   * Method to add {@link Food} items to the Order with amounts, deals with duplicates
+   * @param ID The ID of the Food to add, as stored in the database
+   * @param amount The amount of the Food to add to the Order
+   */
+  public void addFoodItem(int ID, int amount){
+    try {
+      Food food = Database.FOODS.getFoodByID(ID);
+      if(alreadyInOrder(food)){
+        Item item = getItem(food);
+        if(item == null){
+          return;
+        }
+        item.add(amount);
+      }else{
+        foodItems.add(new Item(food, amount));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Method to remove {@link Food} Items from the Order with amounts, removes them from the ArrayList if their amount is 0 or less
+   * @param ID The ID of the Food to remove, as stored in the database
+   * @param amount The amount of the Food to remove from the Order
+   */
+  public void removeFoodItem(int ID, int amount){
+    try {
+      Food food = Database.FOODS.getFoodByID(ID);
+      if(alreadyInOrder(food)){
+        Item item = getItem(food);
+        if(item == null){
+          return;
+        }
+        item.remove(amount);
+        if(item.getAmount() <= 0){
+          foodItems.remove(item);
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
