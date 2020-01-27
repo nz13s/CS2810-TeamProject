@@ -10,6 +10,7 @@ import entities.serialisers.MenuSerialiser;
 import sql.Categories;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import java.sql.SQLException;
  * @author Cameron
  */
 
+@WebServlet("/menu")
 public class MenuToFrontend extends HttpServlet {
 
     private ObjectMapper mapper;
@@ -58,7 +60,7 @@ public class MenuToFrontend extends HttpServlet {
     }
 
     /**
-     * Method that POSTs the JSON objects.
+     * Method that GETs the JSON objects.
      *
      * @param req server request.
      * @param resp server response.
@@ -66,7 +68,7 @@ public class MenuToFrontend extends HttpServlet {
      * @throws IOException
      */
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
