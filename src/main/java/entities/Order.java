@@ -1,6 +1,7 @@
 package entities;
 
 import javax.annotation.Nonnull;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Order implements IFakeable{
@@ -60,6 +61,30 @@ public class Order implements IFakeable{
 
   public void addFoodItem(@Nonnull Item item){
     this.foodItems.add(item);
+  }
+
+  /**
+   * Checks to see whether the inputted {@link Food} is already in the current Order
+   * @param food The Food being checked against
+   * @return Whether the Order already contains the given food
+   */
+  private boolean alreadyInOrder(Food food){
+    Item tempItem = new Item(food, 0);
+    return foodItems.contains(tempItem);
+  }
+
+  /**
+   * Gets the inputted {@link Food} item if it is in the Order, null otherwise
+   * @param food The Food to locate in the Order
+   * @return The {@link Item} in the order with the Food, null if it does not exist
+   */
+  private Item getItem(Food food){
+    for (Item item: foodItems){
+      if(item.getFood().getFoodID() == food.getFoodID()){
+        return item;
+      }
+    }
+    return null;
   }
 
   /**
