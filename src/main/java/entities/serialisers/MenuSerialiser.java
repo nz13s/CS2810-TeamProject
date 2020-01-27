@@ -28,7 +28,6 @@ public class MenuSerialiser extends StdSerializer<Menu> {
     public void serialize(Menu varName, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeObjectField("categories", varName.getList());
-        i += 1;
         jsonGenerator.writeEndObject();
     }
 }
