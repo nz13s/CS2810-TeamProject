@@ -1,6 +1,7 @@
 package entities;
 
 import databaseInit.Database;
+import endpoints.AddToOrder;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
@@ -46,7 +47,7 @@ public class Order implements IFakeable {
     }
 
     /**
-     * Constructor for Order, called by the {@link endpoints.AddToBasket} class when creating a new order
+     * Constructor for Order, called by the {@link AddToOrder} class when creating a new order
      */
     public Order() {
         this.foodItems = new ArrayList<>();

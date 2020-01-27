@@ -22,7 +22,7 @@ import java.sql.SQLException;
  * Class for handling modification and access to a sessions {@link Order}
  */
 @WebServlet("/order")
-public class AddToBasket extends HttpServlet {
+public class AddToOrder extends HttpServlet {
 
     //https://www.baeldung.com/jackson-object-mapper-tutorial
     private ObjectMapper om = new ObjectMapper();
