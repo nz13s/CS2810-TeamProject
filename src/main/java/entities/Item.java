@@ -4,7 +4,7 @@ package entities;
  * An item stored in {@link Basket}
  */
 
-//TODODONE hold a entities.Food object rather than ID+name @cameron
+//TODONE hold a entities.Food object rather than ID+name @cameron
 public class Item {
 
     private Food food;
