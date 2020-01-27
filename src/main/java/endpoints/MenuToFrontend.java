@@ -31,14 +31,12 @@ public class MenuToFrontend extends HttpServlet {
 
     public String menuToJSON() throws IOException, SQLException {
 
-        Database db = new Database();
-        Categories cat = db.CATEGORIES;
+        Categories cat = Database.CATEGORIES;
         Menu menu = cat.getMenu();
 
         return mapper.writeValueAsString(menu);
     }
 
-    //NOT SURE IF THIS IS CORRECT
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.reset();
         resp.setContentType("application/json");

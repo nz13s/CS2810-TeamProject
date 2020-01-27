@@ -21,8 +21,8 @@ public class Categories {
     public Categories(Connection connection) throws SQLException {
         catById = connection.prepareStatement(
                 "SELECT category_id, category "
-                + "FROM category "
-                + "WHERE category_id = ?");
+                        + "FROM category "
+                        + "WHERE category_id = ?");
 
         foodByCatId = connection.prepareStatement(
                 "SELECT food_id, food_name, food_description, calories, price, available, category_id "
@@ -44,6 +44,7 @@ public class Categories {
         }
         return null;
     }
+
     @Nonnull
     public ArrayList<Food> getFoodByCatId(int categoryID) throws SQLException {
         ArrayList<Food> list = new ArrayList<Food>();
@@ -51,7 +52,7 @@ public class Categories {
         foodByCatId.setInt(1, categoryID);
         ResultSet resultSet = foodByCatId.executeQuery();
         while (resultSet.next()) {
-            list.add(new Food (
+            list.add(new Food(
                     resultSet.getInt("food_id"),
                     resultSet.getString("food_name"),
                     resultSet.getString("food_description"),
@@ -72,12 +73,12 @@ public class Categories {
 
         Menu menu = new Menu();
 
-        for (int i=0; i<nums.size(); i++) {
+        for (int i = 0; i < nums.size(); i++) {
             Category temp = getCatByID(nums.get(i));
 
             ArrayList<Food> list = getFoodByCatId(nums.get(i));
 
-            for (int j=0; j<list.size(); j++) {
+            for (int j = 0; j < list.size(); j++) {
                 temp.addFood(list.get(j));
             }
 
