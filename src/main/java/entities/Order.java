@@ -71,7 +71,7 @@ public class Order implements IFakeable {
      * @param ID     The ID of the Food to add, as stored in the database
      * @param amount The amount of the Food to add to the Order
      */
-    public void addFoodItem(int ID, int amount) {
+    public void addFoodItem(int ID, int amount) throws SQLException{
         try {
             Food food = Database.FOODS.getFoodByID(ID);
             if (alreadyInOrder(food)) {
@@ -84,7 +84,7 @@ public class Order implements IFakeable {
                 foodItems.add(new Item(food, amount));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SQLException();
         }
     }
 
