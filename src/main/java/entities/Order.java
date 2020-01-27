@@ -42,6 +42,13 @@ public class Order implements IFakeable{
     this(timeOrdered, tableNum, new ArrayList<>());
   }
 
+  /**
+   * Constructor for Order, called by the {@link endpoints.AddToBasket} class when creating a new order
+   */
+  public Order(){
+    this.foodItems = new ArrayList<>();
+  }
+
   public int getOrderID() {
     return orderID;
   }
