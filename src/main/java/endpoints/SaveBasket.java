@@ -1,7 +1,6 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.Basket;
 import entities.Order;
 
 import javax.servlet.ServletException;
@@ -13,13 +12,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Class for handling modification and access to a sessions {@link Basket}
+ * Class for handling the saving of a sessions {@link Order}
  */
 @WebServlet("/save")
 public class SaveBasket extends HttpServlet {
 
     /**
-     * Saves the sessions {@link Basket} to the database
+     * Saves the sessions {@link Order} to the database
      *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
@@ -28,42 +27,37 @@ public class SaveBasket extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Basket basket = getBasket(req);
-        if (basket == null) {
-            resp.sendError(500, "No order exists for this session.");
+        Order order = getOrder(req);
+        if (order == null) {
+            resp.sendError(500, "No Order exists for this session.");
             return;
         }
-
-        if (basket.getBasket().isEmpty()){
-            resp.sendError(400, "Basket is empty!");
+        if (order.getFoodItems().isEmpty()){
+            resp.sendError(400, "Order is empty!");
+            return;
         }
-
-        boolean allGood = true;
         //TODOne @Oliver please
-        //saveBasket returns boolean
-        Order order = new Order(System.currentTimeMillis(), 1); //todo patch tablenum through
-        basket.getBasket().forEach(order::addFoodItem);
-
+        order.setTimeOrdered(System.currentTimeMillis());
+        order.setTableNum(1);//todo patch tablenum through
+        order.getFoodItems().forEach(order::addFoodItem);
         boolean success = false;
-
         try {
             success = Database.ORDERS.saveOrder(order);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         if (!success) {
-            resp.sendError(500, "Unable to save basket.");
+            resp.sendError(500, "Unable to save Order.");
         }
     }
 
     /**
-     * Gets the sessions {@link Basket} returns null if no Basket exists
+     * Gets the sessions {@link Order} returns null if no Order exists
      *
      * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @return The sessions Basket or null if none exists
      */
-    private Basket getBasket(HttpServletRequest req) {
-        return (Basket) req.getSession().getAttribute("basket");
+    private Order getOrder(HttpServletRequest req) {
+        return (Order) req.getSession().getAttribute("order");
     }
 }
