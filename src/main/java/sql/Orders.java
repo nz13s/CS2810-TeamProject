@@ -39,7 +39,7 @@ public class Orders {
         foodSave = connection.prepareStatement(
                 "INSERT INTO food_orders (order_id, food_id) VALUES (?, ?)");
         ordersGet = connection.prepareStatement(
-                "SELECT o.*, i.food_id, i.order_id, f.name, f.amount FROM orders AS o " +
+                "SELECT o.*, i.food_id, i.order_id, f.name, i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
                         "WHERE o.order_ready = ?");
