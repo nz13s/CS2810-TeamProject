@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * Class for handling the saving of a sessions {@link Order}
  */
 @WebServlet("/save")
-public class SaveBasket extends HttpServlet {
+public class SaveOrder extends HttpServlet {
 
     /**
      * Saves the sessions {@link Order} to the database
