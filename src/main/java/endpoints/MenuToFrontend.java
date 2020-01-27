@@ -17,9 +17,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+/**
+ * Class that converts a Menu from a database, to JSON and POSTs it
+ * to the frontend.
+ *
+ * @author Jatin
+ * @author Cameron
+ */
+
 public class MenuToFrontend extends HttpServlet {
 
     private ObjectMapper mapper;
+
+    /**
+     * Constructor that initialises the mapper attribute.
+     */
 
     public MenuToFrontend() {
         mapper = new ObjectMapper();
@@ -29,6 +41,14 @@ public class MenuToFrontend extends HttpServlet {
         mapper.registerModule(module);
     }
 
+    /**
+     * Method that converts the objects in Menu into JSON.
+     *
+     * @return String that represents the Menu in JSON.
+     * @throws IOException
+     * @throws SQLException
+     */
+
     public String menuToJSON() throws IOException, SQLException {
 
         Categories cat = Database.CATEGORIES;
@@ -36,6 +56,15 @@ public class MenuToFrontend extends HttpServlet {
 
         return mapper.writeValueAsString(menu);
     }
+
+    /**
+     * Method that POSTs the JSON objects.
+     *
+     * @param req server request.
+     * @param resp server response.
+     * @throws ServletException
+     * @throws IOException
+     */
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.reset();

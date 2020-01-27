@@ -9,26 +9,50 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class that stores SQL queries related to the food_ingredients table.
+ *
+ * @author Nick
+ */
+
 public class FoodIngredientsSql {
-  private PreparedStatement getIngredients;
+    private PreparedStatement getIngredients;
+    private PreparedStatement s;
 
-  public FoodIngredientsSql(Connection connection) throws SQLException {
-    getIngredients = connection.prepareStatement(
-        "SELECT food_id, ingredients "
-        + "FROM food_ingredients "
-        + "WHERE food_id = ?");
-  }
+    /**
+     * Constructor that holds the SQL queries that are going to be used.
+     *
+     * @param connection connection to the database.
+     * @throws SQLException thrown if sql logic is wrong.
+     * @author Jatin
+     */
 
-  @CheckForNull
-  @CheckReturnValue
-  public FoodIngredients getIngredientsById(int foodid) throws SQLException {
-    getIngredients.setInt(1, foodid);
-    ResultSet resultSet = getIngredients.executeQuery();
-    if (resultSet.next()) {
-      return new FoodIngredients(
-          resultSet.getInt("foodid"),
-          resultSet.getString("ingredients"));
+    public FoodIngredientsSql(Connection connection) throws SQLException {
+
+        getIngredients = connection.prepareStatement(
+                "SELECT ingredient_id, ingredient "
+                        + "FROM ingredients, food "
+                        + "WHERE (ingredients.ingredient_id = food.food_id AND food_id = ?)");
     }
-    return null;
-  }
+
+    /**
+     * Method that gets an ingredient based on the foodID.
+     *
+     * @param foodID foodID of the food.
+     * @return FoodIngredients object, based on the sql query output.
+     * @throws SQLException thrown if sql logic is wrong.
+     */
+
+    @CheckForNull
+    @CheckReturnValue
+    public FoodIngredients getIngredientsById(int foodID) throws SQLException {
+        getIngredients.setInt(1, foodID);
+        ResultSet resultSet = getIngredients.executeQuery();
+        if (resultSet.next()) {
+            return new FoodIngredients(
+                    resultSet.getInt("food_id"),
+                    resultSet.getString("ingredient"));
+        }
+        return null;
+    }
 }

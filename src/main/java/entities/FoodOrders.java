@@ -1,27 +1,38 @@
 package entities;
 
 public class FoodOrders {
-  private int orderID;
-  private int foodID;
 
-  public FoodOrders(int orderID, int foodID) {
-    this.orderID = orderID;
-    this.foodID = foodID;
-  }
+    private int orderID;
+    private int foodID;
+    private int quantity;
 
-  public int getOrderID() {
-    return orderID;
-  }
+    public FoodOrders(int orderID, int foodID, int quantity) {
+        this.orderID = orderID;
+        this.foodID = foodID;
+        this.quantity = quantity;
+    }
 
-  public void setOrderID(int orderID) {
-    this.orderID = orderID;
-  }
+    public int getOrderID() {
+        return orderID;
+    }
 
-  public int getFoodID() {
-    return foodID;
-  }
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
 
-  public void setFoodID(int foodID) {
-    this.foodID = foodID;
-  }
+    public int getFoodID() {
+        return foodID;
+    }
+
+    public void setFoodID(int foodID) {
+        this.foodID = foodID;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

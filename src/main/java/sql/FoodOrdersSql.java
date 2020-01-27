@@ -8,24 +8,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FoodOrdersSql {
-  private PreparedStatement getOrderbyFoodId;
+    private PreparedStatement getOrderbyFoodId;
 
-  public FoodOrdersSql(Connection connection) throws SQLException {
-    getOrderbyFoodId = connection.prepareStatement(
-        "SELECT food_id, order_id "
-            + "FROM food_orders "
-            + "WHERE food_id = ?"
-    );
-  }
-
-  public FoodOrders getOrderByFoodId(int foodid) throws SQLException {
-    getOrderbyFoodId.setInt(1, foodid);
-    ResultSet resultSet = getOrderbyFoodId.executeQuery();
-    if (resultSet.next()) {
-      return new FoodOrders(
-          resultSet.getInt("orderid"),
-          resultSet.getInt("foodid"));
+    public FoodOrdersSql(Connection connection) throws SQLException {
+        getOrderbyFoodId = connection.prepareStatement(
+                "SELECT food_id, order_id, quantity "
+                        + "FROM food_orders "
+                        + "WHERE food_id = ?"
+        );
     }
-    return null;
-  }
+
+    public FoodOrders getOrderByFoodId(int foodID) throws SQLException {
+        getOrderbyFoodId.setInt(1, foodID);
+        ResultSet resultSet = getOrderbyFoodId.executeQuery();
+        if (resultSet.next()) {
+            return new FoodOrders(
+                    resultSet.getInt("order_id"),
+                    resultSet.getInt("food_id"),
+                    resultSet.getInt("quantity"));
+        }
+        return null;
+    }
 }
