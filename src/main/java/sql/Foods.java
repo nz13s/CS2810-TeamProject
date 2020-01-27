@@ -52,7 +52,7 @@ public class Foods {
                     resultSet.getString("food_name"),
                     resultSet.getString("food_description"),
                     resultSet.getInt("calories"),
-                    resultSet.getLong("price"),
+                    resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
                     resultSet.getInt("category_id"));
         }

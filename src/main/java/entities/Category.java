@@ -3,6 +3,7 @@ package entities;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Category {
 
@@ -11,7 +12,7 @@ public class Category {
   private ArrayList<Food> items;
 
   public Category(int categoryNumber, @Nonnull String categoryName) {
-    items = new ArrayList<Food>();
+    items = new ArrayList<>();
     this.categoryName = categoryName;
     this.categoryNumber = categoryNumber;
   }
@@ -54,5 +55,23 @@ public class Category {
   @Nonnull
   public ArrayList<Food> getList() {
     return items;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Category category = (Category) o;
+
+    if (categoryNumber != category.categoryNumber) return false;
+    return Objects.equals(categoryName, category.categoryName);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = categoryNumber;
+    result = 31 * result + (categoryName != null ? categoryName.hashCode() : 0);
+    return result;
   }
 }

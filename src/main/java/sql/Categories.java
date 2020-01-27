@@ -11,6 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class that stores SQL queries related to the categories table.
@@ -23,6 +26,8 @@ public class Categories {
     private PreparedStatement catById;
     private PreparedStatement foodByCatId;
     private PreparedStatement getAllCatId;
+
+    private PreparedStatement fetchMenu;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -45,6 +50,14 @@ public class Categories {
         getAllCatId = connection.prepareStatement(
                 "SELECT category_id "
                         + " FROM category");
+
+        fetchMenu = connection.prepareStatement(
+                "SELECT food_id, food_name, food_description, calories, price, available, category, c.category_id " +
+                        "FROM food " +
+                        "JOIN categories c on food.category_id = c.category_id " +
+                        "WHERE available = TRUE " +
+                        "ORDER BY c.category_id ASC;"
+        );
     }
 
     /**
@@ -85,11 +98,34 @@ public class Categories {
                     resultSet.getString("food_name"),
                     resultSet.getString("food_description"),
                     resultSet.getInt("calories"),
-                    resultSet.getLong("price"),
+                    resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
                     resultSet.getInt("category_id")));
         }
         return list;
+    }
+
+    @Nonnull
+    public Menu fetchMenu() throws SQLException {
+        Menu menu = new Menu();
+        ResultSet resultSet = fetchMenu.executeQuery();
+        Set<Category> categories = new HashSet<>();
+        while (resultSet.next()){
+            Food food = new Food(
+                    resultSet.getInt("food_id"),
+                    resultSet.getString("food_name"),
+                    resultSet.getString("food_description"),
+                    resultSet.getInt("calories"),
+                    resultSet.getBigDecimal("price"),
+                    resultSet.getBoolean("available"),
+                    resultSet.getInt("category_id"));
+            Category c = categories.stream().filter(cat -> cat.getCategoryNumber() == food.getCategoryID()).findFirst()
+                    .orElse(new Category(resultSet.getInt("category_id"), resultSet.getString("category")));
+            c.addFood(food);
+            categories.add(c);
+        }
+        categories.forEach(menu::addCat);
+        return menu;
     }
 
     /**

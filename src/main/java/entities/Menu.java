@@ -8,7 +8,7 @@ public class Menu {
   private ArrayList<Category> menu;
 
   public Menu() {
-    new Menu(new ArrayList<>());
+    this(new ArrayList<>());
   }
 
   public Menu(@Nonnull ArrayList<Category> categories){

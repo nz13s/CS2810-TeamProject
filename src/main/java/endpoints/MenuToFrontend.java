@@ -53,8 +53,7 @@ public class MenuToFrontend extends HttpServlet {
 
     public String menuToJSON() throws IOException, SQLException {
 
-        Categories cat = Database.CATEGORIES;
-        Menu menu = cat.getMenu();
+        Menu menu = Database.CATEGORIES.fetchMenu();
 
         return mapper.writeValueAsString(menu);
     }
