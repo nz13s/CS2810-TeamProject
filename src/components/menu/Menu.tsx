@@ -13,10 +13,12 @@ import {
 import MenuItem from "../../entities/MenuItem";
 import { MenuStyle } from "./Menu.styled";
 import _ from "lodash";
+import axios from "axios";
 
+type MenuType = Map<string, Array<MenuItem>>;
 interface State {
   tableID: number;
-  menu: Map<string, Array<MenuItem>>;
+  menu: MenuType;
   basket: Array<MenuItem>;
 }
 
@@ -98,6 +100,38 @@ export default class Menu extends React.Component<any, State> {
       menu: mockMenu,
       basket: []
     };
+
+    this.fetchMenu().then(menu => this.setState({ menu: menu }));
+  }
+
+  async fetchMenu(): Promise<MenuType> {
+    let response;
+    try {
+      response = await axios.get("https://tomcat.xhex.uk/menutest/menu");
+    } catch (e) {
+      console.log(e);
+      return new Map();
+    }
+
+    const { categories } = response.data;
+
+    const menu = new Map();
+    categories.forEach((e: any) => {
+      const { categoryName, list } = e;
+
+      const items = list.map((item: any) => {
+        return new MenuItem(
+          item.foodID,
+          item.foodName,
+          item.foodDescription,
+          item.price,
+          "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
+        );
+      });
+
+      menu.set(categoryName, items);
+    });
+    return menu;
   }
 
   addToBasket(item: MenuItem) {
@@ -113,6 +147,8 @@ export default class Menu extends React.Component<any, State> {
 
   render() {
     const { tableID, menu, basket } = this.state;
+
+    if (!menu) return <p>Could not load menu</p>;
 
     return (
       <MenuStyle>
@@ -182,13 +218,13 @@ export default class Menu extends React.Component<any, State> {
                         />
 
                         <Card.Body>
-                          <Card.Subtitle className="mb-2 text-muted">
-                            £{item.price}
-                          </Card.Subtitle>
                           <Card.Text>{item.description}</Card.Text>
                         </Card.Body>
 
-                        <Card.Footer className="d-flex justify-content-end">
+                        <Card.Footer className="d-flex justify-content-between">
+                          <Card.Text className="mt-2">
+                            £{item.price.toFixed(2)}
+                          </Card.Text>
                           <Button onClick={() => this.addToBasket(item)}>
                             Add
                           </Button>
