@@ -74,4 +74,20 @@ public class Item {
     public int getAmount() {
         return this.amount;
     }
+
+    /**
+     * Checks whether two Items are the same, compares on {@link Food} ID's as stored in the database
+     * @param o The object being compared to the Item
+     * @return Whether the two Items are the same
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if(!(o instanceof Item)){
+            return false;
+        }
+        return this.food.getFoodID() == ((Item) o).getFood().getFoodID();
+    }
 }
