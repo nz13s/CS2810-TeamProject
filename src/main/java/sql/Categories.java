@@ -34,7 +34,7 @@ public class Categories {
     public Categories(Connection connection) throws SQLException {
         catById = connection.prepareStatement(
                 "SELECT category_id, category "
-                        + "FROM category "
+                        + "FROM categories "
                         + "WHERE category_id = ?");
 
         foodByCatId = connection.prepareStatement(
@@ -44,7 +44,7 @@ public class Categories {
 
         getAllCatId = connection.prepareStatement(
                 "SELECT category_id "
-                        + " FROM category");
+                        + " FROM categories");
     }
 
     /**
@@ -60,7 +60,8 @@ public class Categories {
         catById.setInt(1, categoryID);
         ResultSet resultSet = catById.executeQuery();
         if (resultSet.next()) {
-            return new entities.Category(resultSet.getInt("category_id"), resultSet.getString("category"));
+            //return new entities.Category(resultSet.getInt("category_id"), resultSet.getString("category"));
+            return new Category(1,"error");
         }
         return null;
     }
@@ -110,7 +111,6 @@ public class Categories {
         }
 
         Menu menu = new Menu();
-
 
         // loop through all categoryIDs.
         for (int i = 0; i < nums.size(); i++) {
