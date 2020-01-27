@@ -29,6 +29,7 @@ public class AddToBasket extends HttpServlet {
 
     /**
      * Configures the {@link ObjectMapper} before being used to serialise the {@link Order} for the frontend, uses the {@link OrderSerialiser}
+     *
      * @throws ServletException
      */
     @Override
@@ -42,10 +43,11 @@ public class AddToBasket extends HttpServlet {
 
     /**
      * Returns the sessions {@link Order}
-     * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
      * @throws ServletException
-     * @throws IOException If an input or output exception occurs
+     * @throws IOException      If an input or output exception occurs
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -59,10 +61,11 @@ public class AddToBasket extends HttpServlet {
 
     /**
      * Adds the specified amount of the specified {@link Item} from the sessions {@link Order}
-     * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
      * @throws ServletException
-     * @throws IOException If an input or output exception occurs
+     * @throws IOException      If an input or output exception occurs
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -82,10 +85,11 @@ public class AddToBasket extends HttpServlet {
 
     /**
      * Deletes the specified amount of the specified {@link Item} from the sessions {@link Order}
-     * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
      * @throws ServletException
-     * @throws IOException If an input or output exception occurs
+     * @throws IOException      If an input or output exception occurs
      */
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -101,11 +105,12 @@ public class AddToBasket extends HttpServlet {
 
     /**
      * Gets the ID and amount of the {@link Item} being sent
-     * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
      * @return A 2D array with the ID and the amount of the Item being referenced
      * @throws NumberFormatException If the inputted values are not integers or less than 1
-     * @throws IOException If an input or output exception occurs
+     * @throws IOException           If an input or output exception occurs
      */
     private int[] getIDAmount(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, IOException {
         int ID;
@@ -130,6 +135,7 @@ public class AddToBasket extends HttpServlet {
 
     /**
      * Gets the sessions {@link Order}, if no Order is found an empty one is created
+     *
      * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @return The sessions Order or a newly created empty one
      */
