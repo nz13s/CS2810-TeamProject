@@ -7,6 +7,13 @@ import entities.Menu;
 
 import java.io.IOException;
 
+/**
+ * Class that serialises the Menu objects.
+ *
+ * @author Jatin
+ * @author Cameron
+ */
+
 public class MenuSerialiser extends StdSerializer<Menu> {
 
     public MenuSerialiser() {
