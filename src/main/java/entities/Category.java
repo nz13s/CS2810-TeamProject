@@ -5,11 +5,23 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
+/**
+ * Class that contains all foods that are under the given category name.
+ */
+
 public class Category {
 
   private int categoryNumber;
   private String categoryName;
   private ArrayList<Food> items;
+
+  /**
+   * Initialises the list of foods, the category number and category name.
+   *
+   * @param categoryNumber category_id of the category.
+   * @param categoryName name of the category.
+   */
 
   public Category(int categoryNumber, @Nonnull String categoryName) {
     items = new ArrayList<>();
@@ -17,22 +29,53 @@ public class Category {
     this.categoryNumber = categoryNumber;
   }
 
+  /**
+   * Returns the number of the category.
+   *
+   * @return number of the category.
+   */
+
   public int getCategoryNumber() {
     return categoryNumber;
   }
+
+  /**
+   * Returns the category's name.
+   *
+   * @return category's name.
+   */
 
   @Nonnull
   public String getCategoryName() {
     return categoryName;
   }
 
+  /**
+   * Adds a food to the category.
+   *
+   * @param food Food to be added to the category.
+   */
+
   public void addFood(Food food) {
     items.add(food);
   }
 
+  /**
+   * Returns the size of the category.
+   *
+   * @return size of the category.
+   */
+
   public int size() {
     return items.size();
   }
+
+  /**
+   * Gets a Food object from a given index i.
+   *
+   * @param i index of the Food
+   * @return Food from index i.
+   */
 
   @Nullable
   public Food getFood(int i) {
@@ -42,6 +85,12 @@ public class Category {
       return null;
     }
   }
+
+  /**
+   * Returns all Food objects inside the Category.
+   *
+   * @return Food objects inside the Category.
+   */
 
   @Nonnull
   public ArrayList<Food> getList() {
