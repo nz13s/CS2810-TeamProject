@@ -1,9 +1,10 @@
-// NOT FINAL, JUST FOR TESTING
+// NOT FINAL, JUST FOR TESTING SQL
 
 package endpoints;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import databaseInit.Database;
+import entities.Item;
 import entities.Order;
 import sql.Orders;
 
@@ -31,13 +32,19 @@ public class OrdersToFrontend extends HttpServlet {
         Orders order = Database.ORDERS;
 
         // you can do whatever you want here.
-        ArrayList<Order> list = order.getOrders(true);
+        ArrayList<Order> list = order.getOrders((long) 3);
+        ArrayList<Item> item = new ArrayList<>();
         String a = "";
+        String b = "";
 
-        for (int i=0; i<list.size(); i++) {
-            a += list.get(i).getOrderID() + " ";
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < list.get(i).getFoodItems().size(); j++) {
+                item = list.get(i).getFoodItems();
+                a += item.get(j).getName() + "/ ";
+                b += list.get(i).getOrderID() + " ";
+            }
         }
-        return a;
+        return a + b;
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

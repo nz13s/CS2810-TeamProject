@@ -39,10 +39,10 @@ public class Orders {
         foodSave = connection.prepareStatement(
                 "INSERT INTO food_orders (order_id, food_id) VALUES (?, ?)");
         ordersGet = connection.prepareStatement(
-                "SELECT o.*, i.food_id, i.order_id, f.name, i.quantity FROM orders AS o " +
+                "SELECT o.*, i.food_id, i.order_id, f.food_name, i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_ready = ?");
+                        "WHERE o.order_ready > ?");
     }
 
     /**
@@ -104,17 +104,17 @@ public class Orders {
     /**
      * Selects the completed/uncompleted orders from the database
      *
-     * @param completed order status
+     * @param order_ready order status
      * @return Array of Orders
      * @throws SQLException if an error occurred
      */
-    public ArrayList<Order> getOrders(Boolean completed) throws SQLException {
+    public ArrayList<Order> getOrders(Long order_ready) throws SQLException {
         ArrayList<Order> queue = new ArrayList<>();
-        ordersGet.setBoolean(1, completed);
+        ordersGet.setLong(1, order_ready);
         ResultSet resultSet = ordersGet.executeQuery();
         while (resultSet.next()) {
             ArrayList<Item> l = new ArrayList<>();
-            l.add(new Item(resultSet.getInt("food_id"), resultSet.getString("name"), resultSet.getInt("amount")));
+            l.add(new Item(resultSet.getInt("food_id"), resultSet.getString("food_name"), resultSet.getInt("quantity")));
             queue.add(new Order(
                     resultSet.getInt("order_id"),
                     resultSet.getLong("time_ordered"),
@@ -127,4 +127,6 @@ public class Orders {
         }
         return queue;
     }
+
 }
+
