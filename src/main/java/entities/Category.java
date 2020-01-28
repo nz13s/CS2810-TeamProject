@@ -43,15 +43,6 @@ public class Category {
     }
   }
 
-  @Override
-  public String toString() {
-    //todo fix this to use a Jackson serialiser
-    return "Category{" +
-        "name='" + categoryName + '\'' +
-        ", category=" + items +
-        '}';
-  }
-
   @Nonnull
   public ArrayList<Food> getList() {
     return items;

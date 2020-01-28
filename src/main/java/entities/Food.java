@@ -77,11 +77,4 @@ public class Food {
 
   public void setCategoryID(int categoryID) { this.categoryID = categoryID; }
 
-  @Override
-  public String toString() {
-    //todo fix this to use a Jackson serialiser
-    return "Food{" +
-        "foodName='" + foodName + '\'' +
-        '}';
-  }
 }
