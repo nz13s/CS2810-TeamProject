@@ -1,42 +1,58 @@
 package entities;
 
+import databaseInit.Database;
+
+import java.sql.SQLException;
+
 /**
- * An item stored in {@link Basket}
+ * An item stored in {@link Order}
  */
 
-//TODO hold a entities.Food object rather than ID+name @cameron
-public class Item{
+//TODONE hold a entities.Food object rather than ID+name @cameron
+public class Item {
 
-    private int ID;
-    private String name;
+    private Food food;
     private int amount;
 
     /**
-     * Constructor for an Item to go in the {@link Basket}
-     * @param ID The ID of the item as is in the database
-     * @param name The string name of the item for the user
+     * Constructor for an Item to go in the {@link Order}
+     *
+     * @param food   The {@link Food} item in the order
      * @param amount The number of the item in the order
      */
-    public Item(int ID, String name, int amount){
-        this.ID = ID;
-        this.name = name;
-        this.amount =amount;
+    public Item(Food food, int amount) {
+        this.food = food;
+        this.amount = amount;
+    }
+
+    /**
+     * Constructor for an Item used in the {@link sql.Orders}
+     *
+     * @param ID   The ID of the {@link Food} item in the order as stored in the database
+     * @param amount The number of the item in the order
+     * @throws SQLException If an error occurs with the database
+     */
+    public Item(int ID, int amount) throws SQLException {
+        this.food = Database.FOODS.getFoodByID(ID);
+        this.amount = amount;
     }
 
     /**
      * Removes one from the number of the specified item in the order
+     *
      * @return Whether the amount is 0 or less, so could be removed
      */
-    public boolean remove(){
+    public boolean remove() {
         return remove(1);
     }
 
     /**
      * Removes the inputted amount to the number of the specified item in the order
+     *
      * @param amount The amount to remove from the order
      * @return Whether the amount is 0 or less, so could be removed
      */
-    public boolean remove(int amount){
+    public boolean remove(int amount) {
         this.amount -= amount;
         return this.amount <= 0;
     }
@@ -44,39 +60,50 @@ public class Item{
     /**
      * Adds one to the number of the selected item in the order
      */
-    public void add(){
+    public void add() {
         this.amount++;
     }
 
     /**
      * Adds the inputted amount to the number in the order
+     *
      * @param amount The amount to add to the order amount
      */
-    public void add(int amount){
+    public void add(int amount) {
         this.amount += amount;
     }
 
     /**
-     * The ID of the item
-     * @return The ID of the item as it is stored in the database
+     * The Food item ordered by the suer
+     *
+     * @return The Food item ordered by the user
      */
-    public int getFoodID(){
-        return this.ID;
-    }
-
-    /**
-     * The Name of the item
-     * @return The String mane of the item for the user
-     */
-    public String getName(){
-        return this.name;
+    public Food getFood() {
+        return this.food;
     }
 
     /**
      * Gets the amount of this item in the order
+     *
      * @return The amount of the item in the current order
      */
-    public int getAmount(){
+    public int getAmount() {
         return this.amount;
+    }
+
+    /**
+     * Checks whether two Items are the same, compares on {@link Food} ID's as stored in the database
+     * @param o The object being compared to the Item
+     * @return Whether the two Items are the same
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if(!(o instanceof Item)){
+            return false;
+        }
+        return this.food.getFoodID() == ((Item) o).getFood().getFoodID();
     }
 }

@@ -93,7 +93,7 @@ public class Orders {
 
         for (Item foodItem : foodList) {
             foodSave.setInt(1, order_id);
-            foodSave.setInt(2, foodItem.getFoodID());
+            foodSave.setInt(2, foodItem.getFood().getFoodID());
             foodSave.addBatch();
         }
         foodSave.executeBatch();
@@ -114,7 +114,7 @@ public class Orders {
         ResultSet resultSet = ordersGet.executeQuery();
         while (resultSet.next()) {
             ArrayList<Item> l = new ArrayList<>();
-            l.add(new Item(resultSet.getInt("food_id"), resultSet.getString("name"), resultSet.getInt("amount")));
+            l.add(new Item(resultSet.getInt("food_id"), resultSet.getInt("amount")));
             queue.add(new Order(
                     resultSet.getInt("order_id"),
                     resultSet.getLong("time_ordered"),

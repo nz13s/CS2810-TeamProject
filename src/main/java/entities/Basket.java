@@ -37,7 +37,7 @@ public class Basket {
             Food food = Database.FOODS.getFoodByID(ID);
             //Database.getItem(ID);
             //if(item.exists()){
-            Item newItem = new Item(ID, food.getFoodName(), number);
+            Item newItem = new Item(food, number);
             order.add(newItem);
             //}
         }
@@ -67,7 +67,7 @@ public class Basket {
      */
     private boolean contains(int ID) {
         for (Item item : order) {
-            if (item.getFoodID() == ID) {
+            if (item.getFood().getFoodID() == ID) {
                 return true;
             }
         }
@@ -82,7 +82,7 @@ public class Basket {
      */
     private Item get(int ID) {
         for (Item item : order) {
-            if (item.getFoodID() == ID) {
+            if (item.getFood().getFoodID() == ID) {
                 return item;
             }
         }
