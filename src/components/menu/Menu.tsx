@@ -55,15 +55,16 @@ export default class Menu extends React.Component<any, State> {
     categories.forEach((e: any) => {
       const { categoryName, list } = e;
 
-      const items = list.map((item: any) => {
-        return new MenuItem(
-          item.foodID,
-          item.foodName,
-          item.foodDescription,
-          item.price,
-          "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
-        );
-      });
+      const items = list.map(
+        (item: any) =>
+          new MenuItem(
+            item.foodID,
+            item.foodName,
+            item.foodDescription,
+            item.price,
+            "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
+          )
+      );
 
       menu.set(categoryName, items);
     });
@@ -145,7 +146,6 @@ export default class Menu extends React.Component<any, State> {
 
   render() {
     const { tableID, menu, basket, errors } = this.state;
-    console.log(errors);
 
     return (
       <MenuStyle>
