@@ -19,8 +19,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
- * Class that converts a Menu from a database, to JSON and POSTs it
- * to the frontend.
+ * Class that converts a Menu from a database to JSON, and allows it to be acquired by the frontend.
  *
  * @author Jatin
  * @author Cameron
@@ -75,7 +74,6 @@ public class MenuToFrontend extends HttpServlet {
         try {
             pw.println(m.menuToJSON());
         } catch (SQLException e) {
-            e.printStackTrace();
             pw.println(e.getMessage());
         }
         pw.flush();
