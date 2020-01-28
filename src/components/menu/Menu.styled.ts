@@ -5,7 +5,7 @@ const MenuStyle = styled.div`
 
   .menu_item {
     min-width: 29%;
-    max-width: 42%;
+    max-width: 45%;
   }
 
   @media only screen and (max-device-width: 812px) {

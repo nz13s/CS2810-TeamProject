@@ -8,7 +8,8 @@ import {
   Navbar,
   Col,
   ListGroup,
-  ButtonGroup
+  ButtonGroup,
+  Toast
 } from "react-bootstrap";
 import MenuItem from "../../entities/MenuItem";
 import { MenuStyle } from "./Menu.styled";
@@ -16,91 +17,26 @@ import _ from "lodash";
 import axios from "axios";
 
 type MenuType = Map<string, Array<MenuItem>>;
+type BasketType = Array<MenuItem>;
 interface State {
   tableID: number;
   menu: MenuType;
-  basket: Array<MenuItem>;
+  basket: BasketType;
+  errors: Array<React.ReactNode>;
 }
 
 export default class Menu extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
 
-    const mockMenu = new Map();
-    mockMenu.set("Chicken", [
-      new MenuItem(
-        1,
-        "Chicken Breast",
-        "100% chicken breast meat.",
-        8,
-        "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
-      ),
-      new MenuItem(
-        2,
-        "Chicken Burrito",
-        "100% chicken breast meat.",
-        7,
-        "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
-      ),
-      new MenuItem(
-        3,
-        "Chicken Chipotle",
-        "100% chicken breast meat.",
-        5.5,
-        "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
-      ),
-      new MenuItem(
-        4,
-        "Cheese Risotto",
-        "You’re in for a spicy kick with our Chicken Tikka Sub.",
-        7.75,
-        "https://d1ralsognjng37.cloudfront.net/7fd17376-3a89-4265-8462-bafa40f31306.jpeg"
-      ),
-      new MenuItem(
-        5,
-        "Very Tasty Dish",
-        "You’re in for a spicy kick with our Chicken Tikka Sub.",
-        10,
-        "https://d1ralsognjng37.cloudfront.net/7fd17376-3a89-4265-8462-bafa40f31306.jpeg"
-      ),
-      new MenuItem(
-        6,
-        "Tikka Sub",
-        "You’re in for a spicy kick with our Chicken Tikka Sub.",
-        3.25,
-        "https://d1ralsognjng37.cloudfront.net/7fd17376-3a89-4265-8462-bafa40f31306.jpeg"
-      )
-    ]);
-    mockMenu.set("Asian Fusion", [
-      new MenuItem(
-        7,
-        "Salmon Sushi",
-        "Salmon, avocado, masago,wasabi, and soy sauce sachet.",
-        12,
-        "https://d1ralsognjng37.cloudfront.net/8d9b7b17-9701-4338-9144-757b7670f169"
-      ),
-      new MenuItem(
-        8,
-        "Best Rolls",
-        "Marinated fried tofu with teriyaki sauce, brown sushi rice, sesame oil",
-        13.5,
-        "https://d1ralsognjng37.cloudfront.net/9b187fb4-2980-49a6-a6ad-39d3fbf7ed4f"
-      ),
-      new MenuItem(
-        9,
-        "Bento Box",
-        "Marinated fried tofu with teriyaki sauce, brown sushi rice, sesame oil",
-        12.99,
-        "https://d1ralsognjng37.cloudfront.net/9b187fb4-2980-49a6-a6ad-39d3fbf7ed4f"
-      )
-    ]);
-
     this.state = {
       tableID: 1337,
-      menu: mockMenu,
-      basket: []
+      menu: new Map(),
+      basket: [],
+      errors: []
     };
 
+    this.fetchBasket().then(basket => this.setState({ basket: basket }));
     this.fetchMenu().then(menu => this.setState({ menu: menu }));
   }
 
@@ -109,7 +45,7 @@ export default class Menu extends React.Component<any, State> {
     try {
       response = await axios.get("https://tomcat.xhex.uk/menutest/menu");
     } catch (e) {
-      console.log(e);
+      this.addError(`${e.message}: Couldn't fetch menu from server`);
       return new Map();
     }
 
@@ -134,28 +70,94 @@ export default class Menu extends React.Component<any, State> {
     return menu;
   }
 
-  addToBasket(item: MenuItem) {
-    this.setState({ basket: [...this.state.basket, item] });
+  async fetchBasket(): Promise<BasketType> {
+    let response;
+    try {
+      response = await axios.get("https://tomcat.xhex.uk/backendtest/order");
+    } catch (e) {
+      this.addError(`${e.message}: Couldn't fetch order from server`);
+      return [];
+    }
+
+    const { items } = response.data;
+
+    return items.map((item: any) => {
+      return new MenuItem(
+        item.foodID,
+        item.foodName,
+        item.foodDescription,
+        item.price,
+        ""
+      );
+    });
   }
 
-  delFromBasket(item: MenuItem) {
-    const basket = [...this.state.basket];
-    const idx = basket.findIndex(x => x.id === item.id);
-    basket.splice(idx, 1);
+  async addToBasket(item: MenuItem) {
+    try {
+      await axios.post(
+        `https://tomcat.xhex.uk/backendtest/order?item=${item.id}&count=1`
+      );
+    } catch (e) {
+      this.addError(`${e.message}: Couldn't add item to order`);
+      return;
+    }
+
+    const basket = await this.fetchBasket();
     this.setState({ basket: basket });
   }
 
-  render() {
-    const { tableID, menu, basket } = this.state;
+  async delFromBasket(item: MenuItem) {
+    try {
+      await axios.delete(
+        `https://tomcat.xhex.uk/backendtest/order?item=${item.id}&count=1`
+      );
+    } catch (e) {
+      this.addError(`${e.message}: Couldn't remove item to order`);
+      return;
+    }
 
-    if (!menu) return <p>Could not load menu</p>;
+    const basket = await this.fetchBasket();
+    this.setState({ basket: basket });
+  }
+
+  addError(error: string) {
+    const element = (
+      <Toast
+        key={error + Math.random() * 100}
+        onClose={() =>
+          this.setState({
+            errors: this.state.errors.filter(x => x !== element)
+          })
+        }
+        delay={5000}
+        autohide={true}
+        className="text-white bg-dark"
+        style={{ width: "20vw" }}>
+        <Toast.Header className="bg-white">
+          <strong className="mr-auto text-primary">Server</strong>
+        </Toast.Header>
+        <Toast.Body>{error}</Toast.Body>
+      </Toast>
+    );
+
+    this.setState({ errors: [element, ...this.state.errors] });
+  }
+
+  render() {
+    const { tableID, menu, basket, errors } = this.state;
+    console.log(errors);
 
     return (
       <MenuStyle>
+        <div
+          className="pr-3 mr-3"
+          style={{ zIndex: 2000, position: "fixed", top: 0, right: 0 }}>
+          {errors}
+        </div>
         <Container>
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
             <Navbar.Brand href="/#/">Oaxaca Menu</Navbar.Brand>
-            <Navbar.Collapse className="d-flex justify-content-end">
+            <Navbar.Collapse className="d-flex justify-content-center">
               <Navbar.Brand>Table #{tableID}</Navbar.Brand>
             </Navbar.Collapse>
           </Navbar>
@@ -201,16 +203,13 @@ export default class Menu extends React.Component<any, State> {
               {Array.from(menu.entries()).map(([category, items]) => (
                 <React.Fragment key={category}>
                   <h2>{category}</h2>
-
                   <CardDeck>
                     {items.map(item => (
                       <Card
+                        bg="dark"
+                        text="white"
                         key={item.id}
-                        className="mb-3 bg-dark text-white menu_item">
-                        <Card.Header style={{ whiteSpace: "nowrap" }}>
-                          {item.name}
-                        </Card.Header>
-
+                        className="mb-3 menu_item">
                         <Card.Img
                           className="img-fluid"
                           variant="top"
@@ -218,14 +217,17 @@ export default class Menu extends React.Component<any, State> {
                         />
 
                         <Card.Body>
+                          <Card.Title>
+                            <strong>{item.name}</strong>
+                          </Card.Title>
                           <Card.Text>{item.description}</Card.Text>
                         </Card.Body>
 
                         <Card.Footer className="d-flex justify-content-between">
-                          <Card.Text className="mt-2">
-                            £{item.price.toFixed(2)}
-                          </Card.Text>
-                          <Button onClick={() => this.addToBasket(item)}>
+                          <h4 className="mt-1">£{item.price.toFixed(2)}</h4>
+                          <Button
+                            variant="success"
+                            onClick={() => this.addToBasket(item)}>
                             Add
                           </Button>
                         </Card.Footer>
