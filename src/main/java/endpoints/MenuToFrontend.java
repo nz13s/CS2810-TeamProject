@@ -10,6 +10,7 @@ import entities.serialisers.MenuSerialiser;
 import sql.Categories;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,13 +19,13 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
- * Class that converts a Menu from a database, to JSON and POSTs it
- * to the frontend.
+ * Class that converts a Menu from a database to JSON, and allows it to be acquired by the frontend.
  *
  * @author Jatin
  * @author Cameron
  */
 
+@WebServlet("/menu")
 public class MenuToFrontend extends HttpServlet {
 
     private ObjectMapper mapper;
@@ -51,14 +52,13 @@ public class MenuToFrontend extends HttpServlet {
 
     public String menuToJSON() throws IOException, SQLException {
 
-        Categories cat = Database.CATEGORIES;
-        Menu menu = cat.getMenu();
+        Menu menu = Database.CATEGORIES.fetchMenu();
 
         return mapper.writeValueAsString(menu);
     }
 
     /**
-     * Method that POSTs the JSON objects.
+     * Method that GETs the JSON objects.
      *
      * @param req server request.
      * @param resp server response.
@@ -66,15 +66,15 @@ public class MenuToFrontend extends HttpServlet {
      * @throws IOException
      */
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
-        MenuToFrontend m = this;
+        MenuToFrontend m = new MenuToFrontend();
         try {
             pw.println(m.menuToJSON());
         } catch (SQLException e) {
-            e.printStackTrace();
+            pw.println(e.getMessage());
         }
         pw.flush();
     }
