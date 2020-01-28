@@ -12,7 +12,7 @@ public class Order implements IFakeable{
   private int tableNum;
   private ArrayList<Item> foodItems; //we should make this a Set<Item> as Items are (or, should be) unique
 
-  private boolean isFake = true;
+  private transient boolean isFake = true;
 
   public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
                 long orderServed, int tableNum,@Nonnull ArrayList<Item> foodItems) {
