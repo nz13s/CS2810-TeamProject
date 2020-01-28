@@ -1,7 +1,11 @@
 package entities;
 
+import databaseInit.Database;
+
+import java.sql.SQLException;
+
 /**
- * An item stored in {@link Basket}
+ * An item stored in {@link Order}
  */
 
 //TODONE hold a entities.Food object rather than ID+name @cameron
@@ -11,13 +15,25 @@ public class Item {
     private int amount;
 
     /**
-     * Constructor for an Item to go in the {@link Basket}
+     * Constructor for an Item to go in the {@link Order}
      *
-     * @param food   The food item in the order
+     * @param food   The {@link Food} item in the order
      * @param amount The number of the item in the order
      */
     public Item(Food food, int amount) {
         this.food = food;
+        this.amount = amount;
+    }
+
+    /**
+     * Constructor for an Item used in the {@link sql.Orders}
+     *
+     * @param ID   The ID of the {@link Food} item in the order as stored in the database
+     * @param amount The number of the item in the order
+     * @throws SQLException If an error occurs with the database
+     */
+    public Item(int ID, int amount) throws SQLException {
+        this.food = Database.FOODS.getFoodByID(ID);
         this.amount = amount;
     }
 
