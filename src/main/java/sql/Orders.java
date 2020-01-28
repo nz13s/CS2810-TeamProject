@@ -110,8 +110,10 @@ public class Orders {
      */
     public ArrayList<Order> getOrders(Long order_ready) throws SQLException {
         ArrayList<Order> queue = new ArrayList<>();
+        ArrayList<Order> newQueue = new ArrayList<>();
         ordersGet.setLong(1, order_ready);
         ResultSet resultSet = ordersGet.executeQuery();
+
         while (resultSet.next()) {
             ArrayList<Item> l = new ArrayList<>();
             l.add(new Item(resultSet.getInt("food_id"), resultSet.getString("food_name"), resultSet.getInt("quantity")));
@@ -125,8 +127,20 @@ public class Orders {
                     l));
 
         }
+        for (int i = 0; i < queue.size(); i++) {
+            Order a = queue.get(i);
+            for (int j = 0; j < queue.size(); j++) {
+                Order b = queue.get(j);
+                if (a.getOrderID() == b.getOrderID() && a != b) {
+                    a.getFoodItems().add(b.getFoodItems().get(0));
+                    queue.remove(b);
+                }
+            }
+        }
         return queue;
+
     }
+
 
 }
 
