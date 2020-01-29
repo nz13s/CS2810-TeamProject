@@ -42,7 +42,7 @@ public class Orders {
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_confirmed = ?");
+                        "WHERE o.order_confirmed > ?");
     }
 
     /**
