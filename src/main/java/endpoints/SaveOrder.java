@@ -36,9 +36,18 @@ public class SaveOrder extends HttpServlet {
             resp.sendError(400, "Order is empty!");
             return;
         }
+        String tableNum = req.getParameter("table_num");
+        int table;
+        try {
+            table = Integer.parseInt(tableNum);
+        } catch (Exception ex){
+            resp.sendError(400, "invalid num");
+            return;
+        }
+        //todo check for a valid table
         //TODOne @Oliver please
         order.setTimeOrdered(System.currentTimeMillis());
-        order.setTableNum(1);//todo patch tablenum through
+        order.setTableNum(table);//todo patch tablenum through
         order.getFoodItems().forEach(order::addFoodItem);
         boolean success = false;
         try {
