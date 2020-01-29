@@ -4,6 +4,7 @@ import databaseInit.Database;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +19,16 @@ public class DatabaseConnectionFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+        HttpServletResponse resp = (HttpServletResponse) response;
+        HttpServletRequest req = (HttpServletRequest) request;
+
+        if (req.getMethod().equals("OPTIONS")){
+            resp.setHeader("Allow", "POST, GET, HEAD, OPTIONS, DELETE");
+            resp.setHeader("Access-Control-Allow-Methods", "POST, GET, HEAD, OPTIONS, DELETE");
+            return;
+        }
+
         if (cachedError == null) {
             if (!checked) {
                 SQLException ex = Database.getException();
@@ -32,11 +43,20 @@ public class DatabaseConnectionFilter implements Filter {
                 }
             }
         }
+
         if (cachedError != null){
-            HttpServletResponse resp = (HttpServletResponse) response;
             resp.sendError(500, cachedError);
             return;
         }
-        chain.doFilter(request, response);
+
+        SessionRepositoryRequestWrapper wrapper = new SessionRepositoryRequestWrapper(req);
+        if (req.getServletPath().equalsIgnoreCase("/hello")){
+            wrapper.genSession();
+        } else if (wrapper.getSession(false) == null){
+            resp.sendError(401,"You need to provide your authentication token via the X-Session-ID. You can initiate a session with /hello");
+            return;
+        }
+        resp.setHeader("X-Session-ID", req.getSession().getId());
+        chain.doFilter(wrapper, response);
     }
 }

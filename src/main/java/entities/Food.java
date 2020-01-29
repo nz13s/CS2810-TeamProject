@@ -1,17 +1,18 @@
 package entities;
 
 import javax.annotation.Nonnull;
+import java.math.BigDecimal;
 
 public class Food {
   private int foodID;
   private String foodName;
   private String foodDescription;
   private int calories;
-  private long price;
+  private BigDecimal price;
   private boolean available;
   private int categoryID;
 
-  public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, long price,
+  public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, BigDecimal price,
               boolean available, int categoryID) {
     this.foodID = foodID;
     this.foodName = foodName;
@@ -56,11 +57,11 @@ public class Food {
     this.calories = calories;
   }
 
-  public long getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(long price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 
@@ -76,11 +77,4 @@ public class Food {
 
   public void setCategoryID(int categoryID) { this.categoryID = categoryID; }
 
-  @Override
-  public String toString() {
-    //todo fix this to use a Jackson serialiser
-    return "Food{" +
-        "foodName='" + foodName + '\'' +
-        '}';
-  }
 }

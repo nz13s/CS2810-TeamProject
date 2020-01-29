@@ -96,7 +96,7 @@ public class Orders {
 
         for (Item foodItem : foodList) {
             foodSave.setInt(1, order_id);
-            foodSave.setInt(2, foodItem.getFoodID());
+            foodSave.setInt(2, foodItem.getFood().getFoodID());
             foodSave.addBatch();
         }
         foodSave.executeBatch();
