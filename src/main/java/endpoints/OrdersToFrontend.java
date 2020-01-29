@@ -10,6 +10,7 @@ import databaseInit.Database;
 import entities.Order;
 import entities.Queue;
 import entities.serialisers.OrderSerialiser;
+import entities.serialisers.QueueSerialiser;
 import sql.Orders;
 
 import javax.servlet.ServletException;
@@ -44,7 +45,7 @@ public class OrdersToFrontend extends HttpServlet {
         mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         SimpleModule module = new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
-        module.addSerializer(Queue.class, new OrderSerialiser());
+        module.addSerializer(Queue.class, new QueueSerialiser());
         mapper.registerModule(module);
     }
 
