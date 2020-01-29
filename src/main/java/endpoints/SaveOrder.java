@@ -48,7 +48,6 @@ public class SaveOrder extends HttpServlet {
         //TODOne @Oliver please
         order.setTimeOrdered(System.currentTimeMillis());
         order.setTableNum(table);//todo patch tablenum through
-        order.getFoodItems().forEach(order::addFoodItem);
         boolean success = false;
         try {
             success = Database.ORDERS.saveOrder(order);
