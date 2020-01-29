@@ -30,7 +30,7 @@ export default class Menu extends React.Component<any, State> {
     super(props);
 
     this.state = {
-      tableID: 1337,
+      tableID: _.random(1, 100, false),
       menu: new Map(),
       basket: [],
       errors: []
@@ -156,6 +156,25 @@ export default class Menu extends React.Component<any, State> {
     this.setState({ basket: basket });
   }
 
+  async saveBasket() {
+    try {
+      const { tableID } = this.state;
+      await axios({
+        method: "POST",
+        url: `https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/save?table_num=${tableID}`,
+        headers: {
+          "X-Session-ID": localStorage.getItem("session")
+        }
+      });
+    } catch (e) {
+      this.addError(`${e.message}: Couldn't checkout your order`);
+      return;
+    }
+
+    const basket = await this.fetchBasket();
+    this.setState({ basket: basket });
+  }
+
   addError(error: string) {
     const element = (
       <Toast
@@ -230,6 +249,14 @@ export default class Menu extends React.Component<any, State> {
                     {basket
                       .reduce((acc, curr) => acc + curr.price, 0.0)
                       .toFixed(2)}
+                  </ListGroup.Item>
+                  <ListGroup.Item className="bg-dark text-white">
+                    <Button
+                      onClick={() => this.saveBasket()}
+                      variant="success"
+                      block>
+                      Checkout
+                    </Button>
                   </ListGroup.Item>
                 </ListGroup>
               </div>
