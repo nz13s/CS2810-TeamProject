@@ -2,13 +2,14 @@ package sql;
 
 import entities.Item;
 import entities.Order;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Orders Class deals with all order related queries
@@ -42,7 +43,7 @@ public class Orders {
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_confirmed > ?");
+                        "WHERE o.order_confirmed > ? AND o.order_served = ?");
     }
 
     /**
@@ -110,10 +111,12 @@ public class Orders {
      * @return Array of Orders
      * @throws SQLException if an error occurred
      */
-    public ArrayList<Order> getOrders(Long order_ready) throws SQLException {
+    public ArrayList<Order> getOrders(Long order_ready, Long order_served) throws SQLException {
         ArrayList<Order> queue = new ArrayList<>();
         ArrayList<Order> newQueue = new ArrayList<>();
         ordersGet.setLong(1, order_ready);
+        ordersGet.setLong(2, order_served);
+
         ResultSet resultSet = ordersGet.executeQuery();
 
         while (resultSet.next()) {
@@ -129,6 +132,7 @@ public class Orders {
                     resultSet.getInt("table_num"),
                     l));
         }
+
         for (int i = 0; i < queue.size(); i++) {
             Order a = queue.get(i);
             for (int j = 0; j < queue.size(); j++) {

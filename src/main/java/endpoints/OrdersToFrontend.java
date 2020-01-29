@@ -59,7 +59,7 @@ public class OrdersToFrontend extends HttpServlet {
     public String queueToJSON() throws SQLException, IOException {
         Orders order = Database.ORDERS;
 
-        ArrayList<Order> p = order.getOrders(0l);
+        ArrayList<Order> p = order.getOrders(0l, 0l);
         Queue q = new Queue(p);
 
         return mapper.writeValueAsString(q);
