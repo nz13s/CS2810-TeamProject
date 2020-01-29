@@ -1,5 +1,7 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import javax.annotation.Nonnull;
 
@@ -126,6 +128,7 @@ public class Order implements IFakeable{
     return orderServed != 0;
   }
 
+  @JsonIgnore
   @Override
   public boolean isFake() {
     return isFake;
