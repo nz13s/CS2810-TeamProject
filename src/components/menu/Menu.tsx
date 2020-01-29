@@ -36,8 +36,21 @@ export default class Menu extends React.Component<any, State> {
       errors: []
     };
 
-    this.fetchBasket().then(basket => this.setState({ basket: basket }));
     this.fetchMenu().then(menu => this.setState({ menu: menu }));
+    this.fetchBasket().then(basket => this.setState({ basket: basket }));
+  }
+
+  async getSession(forced = false) {
+    if (localStorage.getItem("session") && !forced) return;
+
+    try {
+      const { headers } = await axios.get(
+        "https://tomcat.xhex.uk/warcrimes/hello"
+      );
+      localStorage.setItem("session", headers["x-session-id"]);
+    } catch (e) {
+      this.addError(`${e.message}: Couldn't fetch SessionID from server`);
+    }
   }
 
   async fetchMenu(): Promise<MenuType> {
@@ -71,33 +84,51 @@ export default class Menu extends React.Component<any, State> {
     return menu;
   }
 
-  async fetchBasket(): Promise<BasketType> {
+  async fetchBasket(attempt = 1): Promise<BasketType> {
     let response;
     try {
-      response = await axios.get("https://tomcat.xhex.uk/backendtest/order");
+      response = await axios({
+        method: "GET",
+        url:
+          "https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/order",
+        headers: {
+          "X-Session-ID": localStorage.getItem("session")
+        }
+      });
     } catch (e) {
+      if (e.response.status === 401 && attempt < 5) {
+        await this.getSession(true);
+        return await this.fetchBasket(attempt + 1);
+      }
+
       this.addError(`${e.message}: Couldn't fetch order from server`);
       return [];
     }
 
     const { items } = response.data;
 
-    return items.map((item: any) => {
-      return new MenuItem(
-        item.foodID,
-        item.foodName,
-        item.foodDescription,
-        item.price,
+    return items.flatMap((item: any) => {
+      const { food, amount } = item;
+      const menuItem = new MenuItem(
+        food.foodID,
+        food.foodName,
+        food.foodDescription,
+        food.price,
         ""
       );
+      return Array(amount).fill(menuItem);
     });
   }
 
   async addToBasket(item: MenuItem) {
     try {
-      await axios.post(
-        `https://tomcat.xhex.uk/backendtest/order?item=${item.id}&count=1`
-      );
+      await axios({
+        method: "POST",
+        url: `https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/order?item=${item.id}&count=1`,
+        headers: {
+          "X-Session-ID": localStorage.getItem("session")
+        }
+      });
     } catch (e) {
       this.addError(`${e.message}: Couldn't add item to order`);
       return;
@@ -109,9 +140,13 @@ export default class Menu extends React.Component<any, State> {
 
   async delFromBasket(item: MenuItem) {
     try {
-      await axios.delete(
-        `https://tomcat.xhex.uk/backendtest/order?item=${item.id}&count=1`
-      );
+      await axios({
+        method: "DELETE",
+        url: `https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/order?item=${item.id}&count=1`,
+        headers: {
+          "X-Session-ID": localStorage.getItem("session")
+        }
+      });
     } catch (e) {
       this.addError(`${e.message}: Couldn't remove item to order`);
       return;
@@ -135,7 +170,7 @@ export default class Menu extends React.Component<any, State> {
         className="text-white bg-dark"
         style={{ width: "20vw" }}>
         <Toast.Header className="bg-white">
-          <strong className="mr-auto text-primary">Server</strong>
+          <strong className="mr-auto text-primary">Error</strong>
         </Toast.Header>
         <Toast.Body>{error}</Toast.Body>
       </Toast>
