@@ -2,19 +2,19 @@ package sql;
 
 import entities.Item;
 import entities.Order;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Orders Class deals with all order related queries
  *
  * @author Tony Delchev
+ * @author Bhavik Narang
  */
 public class Orders {
     private PreparedStatement orderById;
@@ -30,11 +30,11 @@ public class Orders {
      */
     public Orders(Connection connection) throws SQLException {
         orderById = connection.prepareStatement(
-                "SELECT order_id, time_ordered, order_confirmed, order_ready, order_served, table_num "
+                "SELECT order_id, time_ordered, order_confirmed, order_preparing, order_ready, order_served, table_num "
                         + "FROM orders "
                         + "WHERE order_id = ?");
         orderSave = connection.prepareStatement(
-                "INSERT INTO orders (table_num, time_ordered, order_confirmed, order_ready, order_served) "
+                "INSERT INTO orders (table_num, time_ordered, order_confirmed, order_preparing, order_ready, order_served) "
                         + "VALUES (?, ?, ?, ?, ?)");
         foodSave = connection.prepareStatement(
                 "INSERT INTO food_orders (order_id, food_id) VALUES (?, ?)");
@@ -42,7 +42,7 @@ public class Orders {
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_ready = ?");
+                        "WHERE o.order_preparing = ?");
     }
 
     /**
@@ -61,6 +61,7 @@ public class Orders {
                     resultSet.getInt("order_id"),
                     resultSet.getLong("time_ordered"),
                     resultSet.getLong("order_confirmed"),
+                    resultSet.getLong("order_preparing"),
                     resultSet.getLong("order_ready"),
                     resultSet.getLong("order_served"),
                     resultSet.getInt("table_num"),
@@ -81,8 +82,9 @@ public class Orders {
         orderSave.setInt(1, o.getTableNum());
         orderSave.setLong(2, o.getTimeOrdered());
         orderSave.setLong(3, o.getOrderConfirmed());
-        orderSave.setBoolean(4, o.orderReady());
-        orderSave.setLong(5, o.getOrderServed());
+        orderSave.setLong(4, o.getOrderPreparing());
+        orderSave.setBoolean(5, o.orderReady());
+        orderSave.setLong(6, o.getOrderServed());
         orderSave.execute();
         ResultSet set = orderSave.getGeneratedKeys();
         if (!set.first()) {
@@ -121,11 +123,11 @@ public class Orders {
                     resultSet.getInt("order_id"),
                     resultSet.getLong("time_ordered"),
                     resultSet.getLong("order_confirmed"),
+                    resultSet.getLong("order_preparing"),
                     resultSet.getLong("order_ready"),
                     resultSet.getLong("order_served"),
                     resultSet.getInt("table_num"),
                     l));
-
         }
         for (int i = 0; i < queue.size(); i++) {
             Order a = queue.get(i);

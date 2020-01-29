@@ -1,12 +1,13 @@
 package entities;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import javax.annotation.Nonnull;
 
 public class Order implements IFakeable{
   private int orderID;
   private long timeOrdered = 0;
   private long orderConfirmed = 0;
+  private long orderPreparing = 0;
   private long orderReady = 0;
   private long orderServed = 0;
   private int tableNum;
@@ -14,12 +15,13 @@ public class Order implements IFakeable{
 
   private transient boolean isFake = true;
 
-  public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
+  public Order(int orderID, long timeOrdered, long orderConfirmed, long orderPreparing, long orderReady,
                 long orderServed, int tableNum,@Nonnull ArrayList<Item> foodItems) {
     isFake = false; //as we have used the orderID to create this object, it is not fake
     this.orderID = orderID;
     this.timeOrdered = timeOrdered;
     this.orderConfirmed = orderConfirmed;
+    this.orderPreparing = orderPreparing;
     this.orderReady = orderReady;
     this.orderServed = orderServed;
     this.tableNum = tableNum;
@@ -28,7 +30,7 @@ public class Order implements IFakeable{
 
   public Order(int orderID, long timeOrdered, long orderConfirmed, long orderReady,
                long orderServed, int tableNum) {
-    new Order(orderID, timeOrdered, orderConfirmed, orderReady, orderServed, tableNum, new ArrayList<>());
+    new Order(orderID, timeOrdered, orderConfirmed, orderPreparing, orderReady, orderServed, tableNum, new ArrayList<>());
     isFake = false;
   }
 
@@ -82,6 +84,14 @@ public class Order implements IFakeable{
 
   public void setOrderConfirmed(long orderConfirmed) {
     this.orderConfirmed = orderConfirmed;
+  }
+
+  public long getOrderPreparing() {
+    return orderPreparing;
+  }
+
+  public void setOrderPreparing(long orderPreparing) {
+    this.orderPreparing = orderPreparing;
   }
 
   public long getOrderReady() {
