@@ -7,8 +7,14 @@ import { AppStyle } from "./App.styled";
 import Menu from "../menu/Menu";
 import Waiter from "../waiter/Waiter";
 import Kitchen from "../kitchen/Kitchen";
+import API from "../../client/api";
 
 export default class App extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    API.getSession();
+  }
+
   render() {
     return (
       <Switch>

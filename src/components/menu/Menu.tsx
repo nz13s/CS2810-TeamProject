@@ -1,32 +1,30 @@
 import React from "react";
 import {
-  Row,
   Button,
+  ButtonGroup,
   Card,
   CardDeck,
-  Container,
-  Navbar,
   Col,
+  Container,
   ListGroup,
-  ButtonGroup,
+  Navbar,
+  Row,
   Toast
 } from "react-bootstrap";
-import MenuItem from "../../entities/MenuItem";
 import { MenuStyle } from "./Menu.styled";
 import _ from "lodash";
-import axios from "axios";
 
-type MenuType = Map<string, Array<MenuItem>>;
-type BasketType = Array<MenuItem>;
+import MenuItem from "../../entities/MenuItem";
+import MenuType from "../../entities/MenuType";
+import BasketType from "../../entities/BasketType";
+import API from "../../client/api";
+
 interface State {
   tableID: number;
   menu: MenuType;
   basket: BasketType;
   notifications: Array<React.ReactNode>;
 }
-
-const servlet = `backend_sprint1`;
-const baseURL = `https://cors.x7.workers.dev/https://tomcat.xhex.uk/${servlet}`;
 
 export default class Menu extends React.Component<any, State> {
   constructor(props: any) {
@@ -39,172 +37,63 @@ export default class Menu extends React.Component<any, State> {
       notifications: []
     };
 
-    this.validateSession().then(isValid => {
-      this.getSession(!isValid).then(() => {
-        this.fetchMenu().then(menu => this.setState({ menu: menu }));
-        this.fetchBasket().then(basket => this.setState({ basket: basket }));
-      });
-    });
+    this.fetchMenu();
+    this.fetchBasket();
   }
 
-  async validateSession(): Promise<boolean> {
+  async fetchMenu(): Promise<void> {
     try {
-      await axios({
-        method: "GET",
-        url: `${baseURL}/menu`,
-        headers: {
-          "X-Session-ID": localStorage.getItem("session")
-        }
-      });
-      return true;
-    } catch (e) {
-      return e.response.status !== 401;
-    }
-  }
-
-  async getSession(forced = false) {
-    if (localStorage.getItem("session") && !forced) return;
-
-    try {
-      const { headers } = await axios.get(`${baseURL}/hello`);
-      localStorage.setItem("session", headers["x-session-id"]);
-    } catch (e) {
-      this.addNotification(
-        `${e.message}: Couldn't fetch SessionID from server`
-      );
-    }
-  }
-
-  async fetchMenu(): Promise<MenuType> {
-    let response;
-    try {
-      response = await axios({
-        method: "GET",
-        url: `${baseURL}/menu`,
-        headers: {
-          "X-Session-ID": localStorage.getItem("session")
-        }
-      });
+      const menu = await API.fetchMenu();
+      this.setState({ menu });
     } catch (e) {
       this.addNotification(`${e.message}: Couldn't fetch menu from server`);
-      return new Map();
     }
-
-    const { categories } = response.data;
-
-    const menu = new Map();
-    categories.forEach((e: any) => {
-      const { categoryName, list } = e;
-
-      const items = list.map(
-        (item: any) =>
-          new MenuItem(
-            item.foodID,
-            item.foodName,
-            item.foodDescription,
-            item.price,
-            "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
-          )
-      );
-
-      menu.set(categoryName, items);
-    });
-    return menu;
   }
 
-  async fetchBasket(): Promise<BasketType> {
-    let response;
+  async fetchBasket(): Promise<void> {
     try {
-      response = await axios({
-        method: "GET",
-        url: `${baseURL}/order`,
-        headers: {
-          "X-Session-ID": localStorage.getItem("session")
-        }
-      });
+      const basket = await API.fetchBasket();
+      this.setState({ basket });
     } catch (e) {
       this.addNotification(`${e.message}: Couldn't fetch order from server`);
-      return [];
     }
-
-    const { items } = response.data;
-
-    return items.flatMap((item: any) => {
-      const { food, amount } = item;
-      const menuItem = new MenuItem(
-        food.foodID,
-        food.foodName,
-        food.foodDescription,
-        food.price,
-        ""
-      );
-      return Array(amount).fill(menuItem);
-    });
   }
 
-  async addToBasket(item: MenuItem) {
+  async addToBasket(item: MenuItem): Promise<void> {
     try {
-      await axios({
-        method: "POST",
-        url: `${baseURL}/order?item=${item.id}&count=1`,
-        headers: {
-          "X-Session-ID": localStorage.getItem("session")
-        }
-      });
+      await API.addToBasket(item);
+      await this.fetchBasket();
     } catch (e) {
       this.addNotification(`${e.message}: Couldn't add item to order`);
-      return;
     }
-
-    const basket = await this.fetchBasket();
-    this.setState({ basket: basket });
   }
 
-  async delFromBasket(item: MenuItem) {
+  async delFromBasket(item: MenuItem): Promise<void> {
     try {
-      await axios({
-        method: "DELETE",
-        url: `${baseURL}/order?item=${item.id}&count=1`,
-        headers: {
-          "X-Session-ID": localStorage.getItem("session")
-        }
-      });
+      await API.delFromBasket(item);
+      await this.fetchBasket();
     } catch (e) {
-      this.addNotification(`${e.message}: Couldn't remove item to order`);
-      return;
+      this.addNotification(`${e.message}: Couldn't remove item from order`);
     }
-
-    const basket = await this.fetchBasket();
-    this.setState({ basket: basket });
   }
 
-  async saveBasket() {
+  async saveBasket(): Promise<void> {
     if (this.state.basket.length === 0)
       return this.addNotification("Cannot checkout empty order");
 
     try {
-      const { tableID } = this.state;
-      await axios({
-        method: "POST",
-        url: `${baseURL}/save?table_num=${tableID}`,
-        headers: {
-          "X-Session-ID": localStorage.getItem("session")
-        }
-      });
+      await API.saveBasket(this.state.tableID);
+      await this.fetchBasket();
+      this.addNotification(
+        "Successful checkout, your order is being prepared!",
+        "Notification"
+      );
     } catch (e) {
       this.addNotification(`${e.message}: Couldn't checkout your order`);
-      return;
     }
-
-    this.addNotification(
-      "Successful checkout, your order is being prepared!",
-      "Notification"
-    );
-    const basket = await this.fetchBasket();
-    this.setState({ basket: basket });
   }
 
-  addNotification(message: string, title = "Error") {
+  addNotification(message: string, title = "Error"): void {
     const element = (
       <Toast
         key={_.random(1, 9999, false)}
