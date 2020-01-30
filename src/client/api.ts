@@ -2,6 +2,9 @@ import client from "./client";
 import MenuType from "../entities/MenuType";
 import MenuItem from "../entities/MenuItem";
 import BasketType from "../entities/BasketType";
+import CategoryType from "../entities/CategoryType";
+import QueueType from "../entities/QueueType";
+import OrderItem from "../entities/OrderItem";
 
 export default class API {
   static async validateSession(): Promise<boolean> {
@@ -30,6 +33,8 @@ export default class API {
     categories.forEach((category: any) => {
       const { categoryName, list } = category;
 
+      // https://filebin.ca/5Adzx3fKX2qL
+      // https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e
       const items = list.map(
         (item: any) =>
           new MenuItem(
@@ -37,7 +42,7 @@ export default class API {
             item.foodName,
             item.foodDescription,
             item.price,
-            "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
+            "https://filebin.ca/5Adzx3fKX2qL"
           )
       );
 
@@ -82,5 +87,45 @@ export default class API {
       item: item.id,
       count: 1
     });
+  }
+
+  static async getQueue(): Promise<QueueType> {
+    const response = await client.makeRequest("GET", "/orders");
+    const { orders } = response.data;
+
+    const queue: QueueType = [[], [], []];
+
+    orders.forEach((order: any) => {
+      const item = new OrderItem(
+        order.orderID,
+        order.foodItems.flatMap(({ food, amount }: any) => {
+          const menuItem = new MenuItem(
+            food.foodID,
+            food.foodName,
+            food.foodDescription,
+            0,
+            ""
+          );
+          return Array(amount).fill(menuItem);
+        }),
+        new Date(order.timeOrdered),
+        order.rank
+      );
+
+      switch (order.category as CategoryType) {
+        case CategoryType.CONFIRMED:
+        case CategoryType.ORDERED:
+          queue[0].push(item);
+          break;
+        case CategoryType.PREPARING:
+          queue[1].push(item);
+          break;
+        case CategoryType.READY:
+          queue[2].push(item);
+          break;
+      }
+    });
+
+    return queue;
   }
 }
