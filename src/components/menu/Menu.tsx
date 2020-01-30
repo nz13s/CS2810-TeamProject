@@ -56,7 +56,7 @@ export default class Menu extends React.Component<any, State> {
     }
   }
 
-  async fetchMenu(): Promise<MenuType> {
+  async fetchMenu(attempt = 1): Promise<MenuType> {
     let response;
     try {
       response = await axios({
@@ -67,6 +67,11 @@ export default class Menu extends React.Component<any, State> {
         }
       });
     } catch (e) {
+      if (e.response.status === 401 && attempt < 5) {
+        await this.getSession(true);
+        return await this.fetchMenu(attempt + 1);
+      }
+
       this.addError(`${e.message}: Couldn't fetch menu from server`);
       return new Map();
     }
