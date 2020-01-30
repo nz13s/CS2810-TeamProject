@@ -25,6 +25,9 @@ interface State {
   errors: Array<React.ReactNode>;
 }
 
+const servlet = `backend_sprint1`;
+const baseURL = `https://cors.x7.workers.dev/https://tomcat.xhex.uk/${servlet}`;
+
 export default class Menu extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
@@ -36,17 +39,17 @@ export default class Menu extends React.Component<any, State> {
       errors: []
     };
 
-    this.fetchMenu().then(menu => this.setState({ menu: menu }));
-    this.fetchBasket().then(basket => this.setState({ basket: basket }));
+    this.getSession().then(() => {
+      this.fetchMenu().then(menu => this.setState({ menu: menu }));
+      this.fetchBasket().then(basket => this.setState({ basket: basket }));
+    });
   }
 
   async getSession(forced = false) {
     if (localStorage.getItem("session") && !forced) return;
 
     try {
-      const { headers } = await axios.get(
-        "https://tomcat.xhex.uk/warcrimes/hello"
-      );
+      const { headers } = await axios.get(`${baseURL}/hello`);
       localStorage.setItem("session", headers["x-session-id"]);
     } catch (e) {
       this.addError(`${e.message}: Couldn't fetch SessionID from server`);
@@ -56,7 +59,13 @@ export default class Menu extends React.Component<any, State> {
   async fetchMenu(): Promise<MenuType> {
     let response;
     try {
-      response = await axios.get("https://tomcat.xhex.uk/menutest/menu");
+      response = await axios({
+        method: "GET",
+        url: `${baseURL}/menu`,
+        headers: {
+          "X-Session-ID": localStorage.getItem("session")
+        }
+      });
     } catch (e) {
       this.addError(`${e.message}: Couldn't fetch menu from server`);
       return new Map();
@@ -89,8 +98,7 @@ export default class Menu extends React.Component<any, State> {
     try {
       response = await axios({
         method: "GET",
-        url:
-          "https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/order",
+        url: `${baseURL}/order`,
         headers: {
           "X-Session-ID": localStorage.getItem("session")
         }
@@ -124,7 +132,7 @@ export default class Menu extends React.Component<any, State> {
     try {
       await axios({
         method: "POST",
-        url: `https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/order?item=${item.id}&count=1`,
+        url: `${baseURL}/order?item=${item.id}&count=1`,
         headers: {
           "X-Session-ID": localStorage.getItem("session")
         }
@@ -142,7 +150,7 @@ export default class Menu extends React.Component<any, State> {
     try {
       await axios({
         method: "DELETE",
-        url: `https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/order?item=${item.id}&count=1`,
+        url: `${baseURL}/order?item=${item.id}&count=1`,
         headers: {
           "X-Session-ID": localStorage.getItem("session")
         }
@@ -161,7 +169,7 @@ export default class Menu extends React.Component<any, State> {
       const { tableID } = this.state;
       await axios({
         method: "POST",
-        url: `https://cors.x7.workers.dev/https://tomcat.xhex.uk/warcrimes/save?table_num=${tableID}`,
+        url: `${baseURL}/save?table_num=${tableID}`,
         headers: {
           "X-Session-ID": localStorage.getItem("session")
         }
