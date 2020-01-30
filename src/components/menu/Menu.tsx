@@ -39,10 +39,27 @@ export default class Menu extends React.Component<any, State> {
       errors: []
     };
 
-    this.getSession().then(() => {
-      this.fetchMenu().then(menu => this.setState({ menu: menu }));
-      this.fetchBasket().then(basket => this.setState({ basket: basket }));
+    this.validateSession().then(isValid => {
+      this.getSession(!isValid).then(() => {
+        this.fetchMenu().then(menu => this.setState({ menu: menu }));
+        this.fetchBasket().then(basket => this.setState({ basket: basket }));
+      });
     });
+  }
+
+  async validateSession(): Promise<boolean> {
+    try {
+      await axios({
+        method: "GET",
+        url: `${baseURL}/menu`,
+        headers: {
+          "X-Session-ID": localStorage.getItem("session")
+        }
+      });
+      return true;
+    } catch (e) {
+      return e.response.status === 401;
+    }
   }
 
   async getSession(forced = false) {
@@ -52,11 +69,13 @@ export default class Menu extends React.Component<any, State> {
       const { headers } = await axios.get(`${baseURL}/hello`);
       localStorage.setItem("session", headers["x-session-id"]);
     } catch (e) {
-      this.addError(`${e.message}: Couldn't fetch SessionID from server`);
+      this.addNotification(
+        `${e.message}: Couldn't fetch SessionID from server`
+      );
     }
   }
 
-  async fetchMenu(attempt = 1): Promise<MenuType> {
+  async fetchMenu(): Promise<MenuType> {
     let response;
     try {
       response = await axios({
@@ -67,12 +86,7 @@ export default class Menu extends React.Component<any, State> {
         }
       });
     } catch (e) {
-      if (e.response.status === 401 && attempt < 5) {
-        await this.getSession(true);
-        return await this.fetchMenu(attempt + 1);
-      }
-
-      this.addError(`${e.message}: Couldn't fetch menu from server`);
+      this.addNotification(`${e.message}: Couldn't fetch menu from server`);
       return new Map();
     }
 
@@ -98,7 +112,7 @@ export default class Menu extends React.Component<any, State> {
     return menu;
   }
 
-  async fetchBasket(attempt = 1): Promise<BasketType> {
+  async fetchBasket(): Promise<BasketType> {
     let response;
     try {
       response = await axios({
@@ -109,12 +123,7 @@ export default class Menu extends React.Component<any, State> {
         }
       });
     } catch (e) {
-      if (e.response.status === 401 && attempt < 5) {
-        await this.getSession(true);
-        return await this.fetchBasket(attempt + 1);
-      }
-
-      this.addError(`${e.message}: Couldn't fetch order from server`);
+      this.addNotification(`${e.message}: Couldn't fetch order from server`);
       return [];
     }
 
@@ -143,7 +152,7 @@ export default class Menu extends React.Component<any, State> {
         }
       });
     } catch (e) {
-      this.addError(`${e.message}: Couldn't add item to order`);
+      this.addNotification(`${e.message}: Couldn't add item to order`);
       return;
     }
 
@@ -161,7 +170,7 @@ export default class Menu extends React.Component<any, State> {
         }
       });
     } catch (e) {
-      this.addError(`${e.message}: Couldn't remove item to order`);
+      this.addNotification(`${e.message}: Couldn't remove item to order`);
       return;
     }
 
@@ -180,15 +189,19 @@ export default class Menu extends React.Component<any, State> {
         }
       });
     } catch (e) {
-      this.addError(`${e.message}: Couldn't checkout your order`);
+      this.addNotification(`${e.message}: Couldn't checkout your order`);
       return;
     }
 
+    this.addNotification(
+      "Successful checkout, your order is being prepared by our mexican chefs!",
+      "Notification"
+    );
     const basket = await this.fetchBasket();
     this.setState({ basket: basket });
   }
 
-  addError(error: string) {
+  addNotification(error: string, title = "Error") {
     const element = (
       <Toast
         key={error + Math.random() * 100}
@@ -197,12 +210,12 @@ export default class Menu extends React.Component<any, State> {
             errors: this.state.errors.filter(x => x !== element)
           })
         }
-        delay={5000}
+        delay={7000}
         autohide={true}
         className="text-white bg-dark"
         style={{ width: "20vw" }}>
         <Toast.Header className="bg-white">
-          <strong className="mr-auto text-primary">Error</strong>
+          <strong className="mr-auto text-primary">{title}</strong>
         </Toast.Header>
         <Toast.Body>{error}</Toast.Body>
       </Toast>
