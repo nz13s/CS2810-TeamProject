@@ -33,7 +33,7 @@ export default class Menu extends React.Component<any, State> {
     super(props);
 
     this.state = {
-      tableID: _.random(1, 100, false),
+      tableID: _.random(1, 8, false),
       menu: new Map(),
       basket: [],
       errors: []
