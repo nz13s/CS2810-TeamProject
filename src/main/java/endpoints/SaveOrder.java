@@ -52,10 +52,13 @@ public class SaveOrder extends HttpServlet {
         try {
             success = Database.ORDERS.saveOrder(order);
         } catch (SQLException e) {
+            resp.sendError(500, "Unable to save Order. Database error");
             e.printStackTrace();
+            return;
         }
         if (!success) {
             resp.sendError(500, "Unable to save Order.");
+            return;
         }
     }
 

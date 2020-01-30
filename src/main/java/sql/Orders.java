@@ -6,10 +6,7 @@ import entities.Order;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -37,7 +34,7 @@ public class Orders {
                         + "WHERE order_id = ?");
         orderSave = connection.prepareStatement(
                 "INSERT INTO orders (table_num, time_ordered, order_confirmed, order_preparing, order_ready, order_served) "
-                        + "VALUES (?, ?, ?, ?, ?, ?)");
+                        + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         foodSave = connection.prepareStatement(
                 "INSERT INTO food_orders (order_id, food_id) VALUES (?, ?)");
         ordersGet = connection.prepareStatement(
@@ -89,10 +86,10 @@ public class Orders {
         orderSave.setLong(6, o.getOrderServed());
         orderSave.execute();
         ResultSet set = orderSave.getGeneratedKeys();
-        if (!set.first()) {
+        if (!set.next()) {
             return false;
         }
-        int order_id = set.getInt("food_id");
+        int order_id = set.getInt("order_id");
         orderSave.close();
 
         for (Item foodItem : foodList) {
