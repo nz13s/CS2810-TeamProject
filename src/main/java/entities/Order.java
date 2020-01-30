@@ -1,14 +1,12 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import databaseInit.Database;
 import endpoints.AddToOrder;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.annotation.Nonnull;
 
 public class Order implements IFakeable {
     private int orderID;
@@ -215,6 +213,7 @@ public class Order implements IFakeable {
     }
 
     @Override
+    @JsonIgnore
     public boolean isFake() {
         return isFake;
     }
