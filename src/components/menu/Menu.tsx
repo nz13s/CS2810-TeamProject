@@ -22,7 +22,7 @@ interface State {
   tableID: number;
   menu: MenuType;
   basket: BasketType;
-  errors: Array<React.ReactNode>;
+  notifications: Array<React.ReactNode>;
 }
 
 const servlet = `backend_sprint1`;
@@ -36,7 +36,7 @@ export default class Menu extends React.Component<any, State> {
       tableID: _.random(1, 8, false),
       menu: new Map(),
       basket: [],
-      errors: []
+      notifications: []
     };
 
     this.validateSession().then(isValid => {
@@ -197,45 +197,45 @@ export default class Menu extends React.Component<any, State> {
     }
 
     this.addNotification(
-      "Successful checkout, your order is being prepared by our mexican chefs!",
+      "Successful checkout, your order is being prepared!",
       "Notification"
     );
     const basket = await this.fetchBasket();
     this.setState({ basket: basket });
   }
 
-  addNotification(error: string, title = "Error") {
+  addNotification(message: string, title = "Error") {
     const element = (
       <Toast
-        key={error + Math.random() * 100}
+        key={_.random(1, 9999, false)}
         onClose={() =>
           this.setState({
-            errors: this.state.errors.filter(x => x !== element)
+            notifications: this.state.notifications.filter(x => x !== element)
           })
         }
-        delay={7000}
+        delay={8000}
         autohide={true}
         className="text-white bg-dark"
         style={{ width: "20vw" }}>
         <Toast.Header className="bg-white">
           <strong className="mr-auto text-primary">{title}</strong>
         </Toast.Header>
-        <Toast.Body>{error}</Toast.Body>
+        <Toast.Body>{message}</Toast.Body>
       </Toast>
     );
 
-    this.setState({ errors: [element, ...this.state.errors] });
+    this.setState({ notifications: [element, ...this.state.notifications] });
   }
 
   render() {
-    const { tableID, menu, basket, errors } = this.state;
+    const { tableID, menu, basket, notifications } = this.state;
 
     return (
       <MenuStyle>
         <div
           className="pr-3 mr-3"
           style={{ zIndex: 2000, position: "fixed", top: 0, right: 0 }}>
-          {errors}
+          {notifications}
         </div>
         <Container>
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
@@ -281,6 +281,7 @@ export default class Menu extends React.Component<any, State> {
                   </ListGroup.Item>
                   <ListGroup.Item className="bg-dark text-white">
                     <Button
+                      id="checkout_button"
                       onClick={() => this.saveBasket()}
                       variant="success"
                       block>
