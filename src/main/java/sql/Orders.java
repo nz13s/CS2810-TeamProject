@@ -36,7 +36,7 @@ public class Orders {
                 "INSERT INTO orders (table_num, time_ordered, order_confirmed, order_preparing, order_ready, order_served) "
                         + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         foodSave = connection.prepareStatement(
-                "INSERT INTO food_orders (order_id, food_id) VALUES (?, ?)");
+                "INSERT INTO food_orders (order_id, food_id, quantity) VALUES (?, ?, ?)");
         ordersGet = connection.prepareStatement(
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
@@ -94,6 +94,7 @@ public class Orders {
         for (Item foodItem : foodList) {
             foodSave.setInt(1, order_id);
             foodSave.setInt(2, foodItem.getFood().getFoodID());
+            foodSave.setInt(3, foodItem.getAmount());
             foodSave.addBatch();
         }
         foodSave.executeBatch();
