@@ -48,9 +48,10 @@ public class SaveOrder extends HttpServlet {
         //TODOne @Oliver please
         order.setTimeOrdered(System.currentTimeMillis());
         order.setTableNum(table);//todo patch tablenum through
-        boolean success = false;
+        boolean success;
         try {
             success = Database.ORDERS.saveOrder(order);
+            req.getSession().setAttribute("order", null);
         } catch (SQLException e) {
             resp.sendError(500, "Unable to save Order. Database error");
             e.printStackTrace();
