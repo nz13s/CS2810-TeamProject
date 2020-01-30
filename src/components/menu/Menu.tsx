@@ -192,8 +192,6 @@ export default class Menu extends React.Component<any, State> {
                         key={item.id}
                         className="mb-3 menu_item">
                         <Card.Img
-                          autoPlay
-                          as="video"
                           className="img-fluid"
                           variant="top"
                           src={item.image}

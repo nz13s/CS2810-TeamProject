@@ -33,8 +33,6 @@ export default class API {
     categories.forEach((category: any) => {
       const { categoryName, list } = category;
 
-      // https://filebin.ca/5Adzx3fKX2qL
-      // https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e
       const items = list.map(
         (item: any) =>
           new MenuItem(
@@ -42,7 +40,7 @@ export default class API {
             item.foodName,
             item.foodDescription,
             item.price,
-            "https://filebin.ca/5Adzx3fKX2qL"
+            "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
           )
       );
 
