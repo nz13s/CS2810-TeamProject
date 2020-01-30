@@ -90,7 +90,6 @@ public class Orders {
             return false;
         }
         int order_id = set.getInt("order_id");
-        orderSave.close();
 
         for (Item foodItem : foodList) {
             foodSave.setInt(1, order_id);
@@ -98,7 +97,6 @@ public class Orders {
             foodSave.addBatch();
         }
         foodSave.executeBatch();
-        foodSave.close();
         return true;
     }
 
