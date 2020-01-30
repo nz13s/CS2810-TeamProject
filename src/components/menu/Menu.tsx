@@ -179,6 +179,9 @@ export default class Menu extends React.Component<any, State> {
   }
 
   async saveBasket() {
+    if (this.state.basket.length === 0)
+      return this.addNotification("Cannot checkout empty order");
+
     try {
       const { tableID } = this.state;
       await axios({
