@@ -85,7 +85,7 @@ public class Orders {
         orderSave.setLong(2, o.getTimeOrdered());
         orderSave.setLong(3, o.getOrderConfirmed());
         orderSave.setLong(4, o.getOrderPreparing());
-        orderSave.setBoolean(5, o.orderReady());
+        orderSave.setLong(5, o.getOrderReady());
         orderSave.setLong(6, o.getOrderServed());
         orderSave.execute();
         ResultSet set = orderSave.getGeneratedKeys();
