@@ -20,6 +20,7 @@ public class Orders {
     private PreparedStatement orderSave;
     private PreparedStatement ordersGet;
     private PreparedStatement foodSave;
+    private PreparedStatement orderUpdateState;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -41,7 +42,10 @@ public class Orders {
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_confirmed > ? AND o.order_served = ?");
+                        "WHERE o.order_confirmed != ? AND o.order_served = ?");
+        orderUpdateState = connection.prepareStatement("UPDATE orders " +
+                "SET order_preparing = ? , order_ready = ?, order_served = ?" +
+                "WHERE order_id = ?");
     }
 
     /**
@@ -146,6 +150,19 @@ public class Orders {
         }
         return queue;
 
+    }
+
+    public boolean updateOrderState(long order_preparing, long order_ready, long order_served, Order o) throws SQLException {
+        orderUpdateState.setLong(1, order_preparing);
+        orderUpdateState.setLong(2, order_ready);
+        orderUpdateState.setLong(3, order_served);
+        orderUpdateState.setInt(4, o.getOrderID());
+        orderUpdateState.execute();
+        ResultSet resultSet = orderUpdateState.getGeneratedKeys();
+        if (!resultSet.next()) {
+            return false;
+        }
+        return true;
     }
 
 
