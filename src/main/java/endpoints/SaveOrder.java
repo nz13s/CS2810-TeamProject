@@ -47,6 +47,7 @@ public class SaveOrder extends HttpServlet {
         //todo check for a valid table
         //TODOne @Oliver please
         order.setTimeOrdered(System.currentTimeMillis());
+        order.setOrderConfirmed(System.currentTimeMillis() + 100);
         order.setTableNum(table);//todo patch tablenum through
         boolean success;
         try {
