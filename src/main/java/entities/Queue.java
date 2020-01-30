@@ -2,6 +2,7 @@ package entities;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that stores all Order objects inside an ArrayList.
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public class Queue {
 
-    private ArrayList<Order> queue;
+    private List<? extends Order> queue;
 
     /**
      * Initialises the ArrayList queue.
@@ -25,7 +26,7 @@ public class Queue {
      * @param queue ArrayList containing Orders.
      */
 
-    public Queue(ArrayList<Order> queue) {
+    public Queue(List<? extends Order> queue) {
         this.queue = queue;
     }
 
@@ -51,23 +52,13 @@ public class Queue {
     }
 
     /**
-     * Adds an order to the Queue.
-     *
-     * @param order Order to be added to the queue.
-     */
-
-    public void addOrder(Order order) {
-        queue.add(order);
-    }
-
-    /**
      * Returns the list of all Orders in the queue.
      *
      * @return list of Orders.
      */
 
     @Nonnull
-    public ArrayList<Order> getList() {
+    public List<? extends Order> getList() {
         return queue;
     }
 

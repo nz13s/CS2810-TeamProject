@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
+import entities.IndexedOrder;
 import entities.Order;
 import entities.Queue;
 import entities.serialisers.OrderSerialiser;
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class that converts a Queue of Orders from a database, to JSON and GETs it
@@ -58,10 +61,22 @@ public class OrdersToFrontend extends HttpServlet {
      */
 
     public String queueToJSON() throws SQLException, IOException {
-        Orders order = Database.ORDERS;
 
-        ArrayList<Order> p = order.getOrders(0l, 0l);
-        Queue q = new Queue(p);
+        ArrayList<Order> p = Database.ORDERS.getOrders(0L, 0L);
+
+        //add some custom payloads to serve
+        List<IndexedOrder> orders = p.stream()
+                .map(o -> (IndexedOrder) o)
+                .sorted(
+                        (o1, o2) -> (int) Math.signum(o1.findLatestTime() - o2.findLatestTime())
+                )
+                .collect(Collectors.toList());
+        int rank = 0;
+        for (Order order : orders) {
+            ((IndexedOrder) order).setRank(rank++);
+        }
+
+        Queue q = new Queue(orders);
 
         return mapper.writeValueAsString(q);
     }

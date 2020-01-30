@@ -26,7 +26,7 @@ public class Order implements IFakeable {
         this.orderID = orderID;
         this.timeOrdered = timeOrdered;
         this.orderConfirmed = orderConfirmed;
-    this.orderPreparing = orderPreparing;
+        this.orderPreparing = orderPreparing;
         this.orderReady = orderReady;
         this.orderServed = orderServed;
         this.tableNum = tableNum;

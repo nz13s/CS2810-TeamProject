@@ -1,6 +1,7 @@
 package sql;
 
 import entities.Food;
+import entities.IndexedOrder;
 import entities.Item;
 import entities.Order;
 
@@ -123,7 +124,7 @@ public class Orders {
                     resultSet.getString("food_description"), resultSet.getInt("calories"),
                     null, true, resultSet.getInt("category_id"));
             l.add(new Item(food, resultSet.getInt("quantity")));
-            queue.add(new Order(
+            queue.add(new IndexedOrder(
                     resultSet.getInt("order_id"),
                     resultSet.getLong("time_ordered"),
                     resultSet.getLong("order_confirmed"),
