@@ -58,7 +58,7 @@ export default class Menu extends React.Component<any, State> {
       });
       return true;
     } catch (e) {
-      return e.response.status === 401;
+      return e.response.status !== 401;
     }
   }
 
