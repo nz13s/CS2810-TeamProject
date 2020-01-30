@@ -56,7 +56,7 @@ public class DatabaseConnectionFilter implements Filter {
             resp.sendError(401,"You need to provide your authentication token via the X-Session-ID. You can initiate a session with /hello");
             return;
         }
-        resp.setHeader("X-Session-ID", req.getSession().getId());
+        resp.setHeader("X-Session-ID", wrapper.getSession().getId());
         chain.doFilter(wrapper, response);
     }
 }
