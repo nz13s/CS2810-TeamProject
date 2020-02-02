@@ -3,7 +3,7 @@ package endpoints;
 import databaseInit.Database;
 import entities.Order;
 
-import javax.servlet.ServletException;
+import javax.annotation.Nonnull;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,46 +21,46 @@ public class OrderUpdate extends HttpServlet {
     /**
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
-     * @throws ServletException
-     * @throws IOException      If an input or output exception occurs
+     * @throws IOException If an input or output exception occurs
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Order order = null;
+        try {
+            order = getOrder(req);
+        } catch (SQLException e) {
+            resp.sendError(500, "500");
+        }
         boolean success = false;
-
-        int state = getState(req);
+        int state = getState(req, resp);
 
 
         if (order == null) {
-            resp.sendError(500, "No Order exists for this session.");
+            resp.sendError(400, "No Order exists for this ID");
             return;
-        }
-        if (order.getFoodItems().isEmpty()) {
-            resp.sendError(400, "Order is empty!");
-            return;
-        }
-
-        try {
-            order = Database.ORDERS.getOrderByID(getOrder(req));
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         switch (state) {
+            case 0:
+                try {
+                    success = Database.ORDERS.updateOrderState(0L, 0L, 0L, order);
+                    break;
+                } catch (SQLException e) {
+                    resp.sendError(500, "Unable to update Order. Database error");
+                    e.printStackTrace();
+                }
             case 1:
                 try {
-                    success = Database.ORDERS.updateOrderState(System.currentTimeMillis(), 0l, 0l, order);
-
+                    success = Database.ORDERS.updateOrderState(System.currentTimeMillis(), 0L, 0L, order);
+                    break;
                 } catch (SQLException e) {
                     resp.sendError(500, "Unable to update Order. Database error");
                     e.printStackTrace();
                 }
             case 2:
                 try {
-                    success = Database.ORDERS.updateOrderState(order.getOrderPreparing(), System.currentTimeMillis(), 0l, order);
-                    resp.sendError(500, "Unable to update Order. Database error");
-
+                    success = Database.ORDERS.updateOrderState(order.getOrderPreparing(), System.currentTimeMillis(), 0L, order);
+                    break;
                 } catch (SQLException e) {
                     resp.sendError(500, "Unable to update Order. Database error");
                     e.printStackTrace();
@@ -68,20 +68,19 @@ public class OrderUpdate extends HttpServlet {
             case 3:
                 try {
                     success = Database.ORDERS.updateOrderState(order.getOrderPreparing(), order.getOrderReady(), System.currentTimeMillis(), order);
-
+                    break;
                 } catch (SQLException e) {
                     resp.sendError(500, "Unable to update Order. Database error");
                     e.printStackTrace();
                 }
-
-
+                break;
+            default:
+                resp.sendError(500, "Unexpected Value.");
         }
 
         if (!success) {
-            resp.sendError(500, "Unable to save Order.");
+            resp.sendError(500, "Unable to update order.");
         }
-        return;
-
     }
 
     /**
@@ -90,12 +89,26 @@ public class OrderUpdate extends HttpServlet {
      * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @return The sessions Basket or null if none exists
      */
-    private int getOrder(HttpServletRequest req) {
-        return (int) req.getSession().getAttribute("orderID");
+
+    @Nonnull
+    private Order getOrder(HttpServletRequest req) throws SQLException {
+        int orderID = Integer.parseInt(req.getParameter("orderID"));
+        Order order = Database.ORDERS.getOrderByID(orderID);
+        assert order != null;
+        return order;
     }
 
-    private int getState(HttpServletRequest req) {
-        return (int) req.getSession().getAttribute("orderState");
+    private int getState(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int state = -1;
+        try {
+            state = Integer.parseInt(req.getParameter("state"));
+            if (state < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid State.");
+        }
+        return state;
     }
 }
 

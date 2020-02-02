@@ -1,21 +1,18 @@
 package entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import databaseInit.Database;
 import endpoints.AddToOrder;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.annotation.Nonnull;
 
 public class Order implements IFakeable {
     private int orderID;
     private long timeOrdered = 0;
     private long orderConfirmed = 0;
     private long orderPreparing = 0;
-  private long orderReady = 0;
+    private long orderReady = 0;
     private long orderServed = 0;
     private int tableNum;
     private ArrayList<Item> foodItems; //we should make this a Set<Item> as Items are (or, should be) unique

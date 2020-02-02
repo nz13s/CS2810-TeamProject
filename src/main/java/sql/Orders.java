@@ -44,8 +44,8 @@ public class Orders {
                         "JOIN food f on i.food_id = f.food_id " +
                         "WHERE o.order_confirmed != ? AND o.order_served = ?");
         orderUpdateState = connection.prepareStatement("UPDATE orders " +
-                "SET order_preparing = ? , order_ready = ?, order_served = ?" +
-                "WHERE order_id = ?");
+                "SET order_preparing = ?, order_ready = ?, order_served = ? " +
+                "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
     }
 
     /**
@@ -159,10 +159,7 @@ public class Orders {
         orderUpdateState.setInt(4, o.getOrderID());
         orderUpdateState.execute();
         ResultSet resultSet = orderUpdateState.getGeneratedKeys();
-        if (!resultSet.next()) {
-            return false;
-        }
-        return true;
+        return resultSet.next();
     }
 
 
