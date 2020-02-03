@@ -44,7 +44,7 @@ public class TableInfo extends HttpServlet {
 
     public String tablesToJSON() throws SQLException, IOException {
 
-        ArrayList<Table> list = Database.TABLES.getAllNonOccupiedTables();
+        ArrayList<Table> list = Database.TABLES.fetchTables();
         return mapper.writeValueAsString(list);
     }
 
