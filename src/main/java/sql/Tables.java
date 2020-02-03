@@ -28,7 +28,7 @@ public class Tables {
     public Tables(Connection connection) throws SQLException {
         allNonOccupiedTables = connection.prepareStatement(
                 "SELECT table_num, seats_available, occupied " +
-                        "FROM restaurant_table" +
+                        "FROM restaurant_table " +
                         "WHERE occupied = false");
     }
 
