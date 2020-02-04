@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Orders Class deals with all order related queries
+ * Orders Class deals with all order related queries and methods.
  *
  * @author Tony Delchev
  * @author Bhavik Narang
@@ -106,9 +106,11 @@ public class Orders {
     }
 
     /**
-     * Selects the completed/uncompleted orders from the database
+     * Selects confirmed orders from database, populates each order
+     * with Array of Food items.
      *
-     * @param order_ready order status
+     * @param order_ready  order status
+     * @param order_served order status
      * @return Array of Orders
      * @throws SQLException if an error occurred
      */
@@ -151,6 +153,18 @@ public class Orders {
         return queue;
 
     }
+
+    /**
+     * Updates Order State by time stamping each stage the order reaches.
+     * It updates every field to be able to reverse order state timestamp.
+     *
+     * @param order_preparing timestamp
+     * @param order_ready     timestamp
+     * @param order_served    timestamp
+     * @param o               The order to be updated
+     * @return true if successful
+     * @throws SQLException if an error occurred
+     */
 
     public boolean updateOrderState(long order_preparing, long order_ready, long order_served, Order o) throws SQLException {
         orderUpdateState.setLong(1, order_preparing);

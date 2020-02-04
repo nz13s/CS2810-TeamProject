@@ -13,12 +13,17 @@ import java.sql.SQLException;
 
 
 /**
- * Class for handling the updating of order sessions {@link Order}
+ * Class for handling the updating of order states. {@link Order}
+ *
+ * @author Tony Delchev
  */
 @WebServlet("/update")
 public class OrderUpdate extends HttpServlet {
 
     /**
+     * Validates the orderID and depending on the State(0-3), calls update method
+     * with Different parameters for each state. Displays adequate error if fail.
+     *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
      * @throws IOException If an input or output exception occurs
@@ -26,17 +31,18 @@ public class OrderUpdate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Order order = null;
+
         try {
             order = getOrder(req);
         } catch (SQLException e) {
-            resp.sendError(500, "500");
+            resp.sendError(500, "Could not get OrderID.");
         }
         boolean success = false;
         int state = getState(req, resp);
 
 
         if (order == null) {
-            resp.sendError(400, "No Order exists for this ID");
+            resp.sendError(400, "No Order exists for this orderID");
             return;
         }
 
@@ -75,7 +81,7 @@ public class OrderUpdate extends HttpServlet {
                 }
                 break;
             default:
-                resp.sendError(500, "Unexpected Value.");
+                resp.sendError(400, "Unexpected Value.");
         }
 
         if (!success) {
@@ -84,7 +90,7 @@ public class OrderUpdate extends HttpServlet {
     }
 
     /**
-     * Gets the sessions {@link Order} returns null if no Order exists
+     * Gets the orderID from frontend as parameter.
      *
      * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @return The sessions Basket or null if none exists
@@ -98,6 +104,13 @@ public class OrderUpdate extends HttpServlet {
         return order;
     }
 
+    /**
+     * Gets the state int from frontend as parameter.
+     *
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @return The state integer
+     */
     private int getState(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int state = -1;
         try {
@@ -106,7 +119,7 @@ public class OrderUpdate extends HttpServlet {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            resp.sendError(400, "Invalid State.");
+            resp.sendError(400, "Invalid State integer.");
         }
         return state;
     }
