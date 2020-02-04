@@ -11,53 +11,59 @@ public class StaffInstance {
 
     /**
      * Creates a new staff instance for a session used by a staff member
+     *
      * @param staffID The ID of the staff member the session is created by
      */
-    public StaffInstance(String staffID){
+    public StaffInstance(String staffID) {
         this.staffID = staffID;
         messages = new LinkedList<>();
     }
 
     /**
      * Removes the notification at the specified index
+     *
      * @param pos The index of the notification to remove
      */
-    public void removeNotification(int pos){
+    public void removeNotification(int pos) {
         messages.remove(pos);
     }
 
     /**
      * Adds a new notification to the notification queue for the staff member
+     *
      * @param newNotification A String notification fot he staff member
      */
-    public void addNotification(String newNotification){
+    public void addNotification(String newNotification) {
         messages.add(newNotification);
     }
 
     /**
      * Adds a new table to the staff member to look after
+     *
      * @param newTable The new table that the staff member is looking after
      */
-    public void addTable(Table newTable){
+    public void addTable(Table newTable) {
         this.tables.add(newTable);
     }
 
     /**
      * Removes the table from the staff members list of tables to look after
+     *
      * @param tableToRemove The table to remove from the staff members list of tables
      */
-    public void removeTable(Table tableToRemove){
+    public void removeTable(Table tableToRemove) {
         this.tables.remove(tableToRemove);
     }
 
     /**
      * Gets the specified table by table number, returns null if the table is not in the staff members list of tables
+     *
      * @param tableNum The number of the table to get
      * @return The table specified by the table number, null if the staff member is not in charge of that table
      */
-    public Table getTable(int tableNum){
-        for (Table table: tables){
-            if(table.getTableNum() == tableNum){
+    public Table getTable(int tableNum) {
+        for (Table table : tables) {
+            if (table.getTableNum() == tableNum) {
                 return table;
             }
         }
