@@ -32,9 +32,8 @@ public class Tables {
     public Tables(Connection connection) throws SQLException {
 
         fetchTables = connection.prepareStatement(
-                "SELECT restaurant_table.table_num, seats_available, occupied, order_id, time_ordered, order_confirmed, order_preparing, order_ready, order_served " +
-                        "FROM restaurant_table, orders " +
-                        "WHERE orders.table_num = restaurant_table.table_num " +
+                "SELECT restaurant_table.table_num, order_id, seats_available, occupied, time_ordered, order_confirmed, order_preparing, order_ready, order_served\n" +
+                        "FROM restaurant_table LEFT JOIN orders ON restaurant_table.table_num = orders.table_num\n" +
                         "ORDER BY table_num");
     }
 
