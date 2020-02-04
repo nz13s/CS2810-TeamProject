@@ -38,6 +38,15 @@ public class StaffInstance {
     }
 
     /**
+     * Gets the notifications for the staff member
+     *
+     * @return The stored list of messages for the staff member
+     */
+    public LinkedList<String> getNotifications() {
+        return this.messages;
+    }
+
+    /**
      * Adds a new table to the staff member to look after
      *
      * @param newTable The new table that the staff member is looking after
