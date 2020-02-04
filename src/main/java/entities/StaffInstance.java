@@ -25,7 +25,9 @@ public class StaffInstance {
      * @param pos The index of the notification to remove
      */
     public void removeNotification(int pos) {
-        messages.remove(pos);
+        if (pos >= 0 && pos < messages.size()) {
+            messages.remove(pos);
+        }
     }
 
     /**
