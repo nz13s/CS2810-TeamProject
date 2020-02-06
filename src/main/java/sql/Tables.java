@@ -2,12 +2,12 @@ package sql;
 
 import entities.Order;
 import entities.Table;
+import entities.TableState;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,8 +44,8 @@ public class Tables {
      * @throws SQLException thrown if sql logic is incorrect.
      */
 
-    public ArrayList<Table> fetchTables() throws SQLException {
-        ArrayList<Table> list = new ArrayList<Table>();
+    public TableState fetchTables() throws SQLException {
+        TableState tableState = new TableState();
         ResultSet resultSet = fetchTables.executeQuery();
         Set<Table> tables = new HashSet<>();
 
@@ -64,8 +64,8 @@ public class Tables {
             c.addOrder(order);
             tables.add(c);
         }
-        tables.forEach(list::add);
-        return list;
+        tables.forEach(tableState::addTable);
+        return tableState;
     }
 
 }

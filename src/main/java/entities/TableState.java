@@ -16,6 +16,14 @@ public class TableState {
      * Constructor that initialises the list of tables.
      */
 
+    public TableState() {
+        tables = new ArrayList<Table>();
+    }
+
+    /**
+     * Constructor that initialises the list of tables, given by the parameter.
+     */
+
     public TableState(ArrayList<Table> tables) {
        this.tables = tables;
     }
@@ -38,6 +46,10 @@ public class TableState {
 
     public ArrayList<Table> getTableList() {
         return tables;
+    }
+
+    public void addTable(Table table) {
+        tables.add(table);
     }
 
 }

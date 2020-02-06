@@ -3,7 +3,7 @@ package endpoints;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import databaseInit.Database;
-import entities.Table;
+import entities.TableState;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Class that converts all tables from the database to JSON, and allows it to be acquired by the frontend.
@@ -35,17 +34,17 @@ public class TableInfo extends HttpServlet {
     }
 
     /**
-     * Method that converts the ArrayList into JSON.
+     * Method that converts the TableState into JSON.
      *
-     * @return JSON String representing all tables that are not occupied.
+     * @return JSON String representing the state of all tables.
      * @throws SQLException
      * @throws IOException
      */
 
     public String tablesToJSON() throws SQLException, IOException {
 
-        ArrayList<Table> list = Database.TABLES.fetchTables();
-        return mapper.writeValueAsString(list);
+        TableState tableState = Database.TABLES.fetchTables();
+        return mapper.writeValueAsString(tableState);
     }
 
     /**
