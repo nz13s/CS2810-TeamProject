@@ -14,4 +14,8 @@ public class TableState {
         return tables.size();
     }
 
+    public ArrayList<Table> getTableList() {
+        return tables;
+    }
+
 }
