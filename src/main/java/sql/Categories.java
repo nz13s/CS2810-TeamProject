@@ -17,7 +17,8 @@ import java.util.Set;
 /**
  * Class that stores SQL queries related to the categories table.
  *
- * @author Jatin, Anas
+ * @author Jatin
+ * @author Anas
  */
 
 public class Categories {
@@ -51,13 +52,12 @@ public class Categories {
                         "FROM food " +
                         "JOIN categories c on food.category_id = c.category_id " +
                         "WHERE available = TRUE " +
-                        "ORDER BY c.category_id ASC;");
+                        "ORDER BY c.category_id;");
 
         fetchAllergy = connection.prepareStatement(
-                "SELECT food_ingredients.food_id, food.food_name, food_ingredients.ingredient_id, ingredients.ingredient" +
-                        "FROM food, ingredients, food_ingredients" +
-                        "WHERE food_ingredients.food_id = food.food_id and food_ingredients.ingredient_id = ingredients.ingredient_id AND ingredients.allergen = TRUE;"
-        );
+                "SELECT food_ingredients.food_id, food.food_name, food_ingredients.ingredient_id, ingredients.ingredient " +
+                        "FROM food, ingredients, food_ingredients " +
+                        "WHERE food_ingredients.food_id = food.food_id and food_ingredients.ingredient_id = ingredients.ingredient_id AND ingredients.allergen = TRUE;");
     }
 
     /**
