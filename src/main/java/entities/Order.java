@@ -1,5 +1,6 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import databaseInit.Database;
 import endpoints.AddToOrder;
 
@@ -212,6 +213,7 @@ public class Order implements IFakeable {
     }
 
     @Override
+    @JsonIgnore
     public boolean isFake() {
         return isFake;
     }
