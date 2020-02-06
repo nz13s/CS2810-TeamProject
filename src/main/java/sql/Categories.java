@@ -20,6 +20,7 @@ import java.util.Set;
  *
  * @author Jatin
  * @author Anas
+ * @author Bhavik
  */
 
 public class Categories {
@@ -136,6 +137,9 @@ public class Categories {
         Menu menu = new Menu();
         ResultSet resultSet = fetchMenu.executeQuery();
         Set<Category> categories = new HashSet<>();
+
+        ArrayList<Ingredient> ingredients = fetchIngredients();
+
         while (resultSet.next()){
             Food food = new Food(
                     resultSet.getInt("food_id"),
@@ -150,6 +154,13 @@ public class Categories {
                     .orElse(new Category(resultSet.getInt("category_id"), resultSet.getString("category")));
             c.addFood(food);
             categories.add(c);
+
+            for (Ingredient ingredient : ingredients) {
+                if (food.getFoodID() == ingredient.getFoodID()) {
+                    food.addIngredient(ingredient);
+                }
+            }
+
         }
         categories.forEach(menu::addCat);
         return menu;
