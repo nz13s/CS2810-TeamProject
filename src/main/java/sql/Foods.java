@@ -18,6 +18,7 @@ import java.sql.SQLException;
 public class Foods {
 
     private PreparedStatement foodById;
+    private PreparedStatement updateAvailability;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -31,6 +32,9 @@ public class Foods {
                 "SELECT food_id, food_name, food_description, calories, price, available, category_id "
                         + "FROM food "
                         + "WHERE food_id = ?");
+
+        updateAvailability = connection.prepareStatement(
+                "UPDATE public.food SET available = ? WHERE food_id = ?");
     }
 
     /**
@@ -57,5 +61,19 @@ public class Foods {
                     resultSet.getInt("category_id"));
         }
         return null;
+    }
+
+    /**
+     * Method that updates the availability of a food based on the ID.
+     *
+     * @param foodID foodID of the food.
+     * @param availability availability of the food.
+     * @throws SQLException thrown if sql logic is wrong.
+     */
+
+    public void updateAvailability(int foodID, boolean availability) throws SQLException {
+        updateAvailability.setBoolean(1, availability);
+        updateAvailability.setInt(2, foodID);
+        updateAvailability.executeUpdate();
     }
 }
