@@ -122,7 +122,7 @@ public class Orders {
             //o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity
             Food food = new Food(resultSet.getInt("food_id"), resultSet.getString("food_name"),
                     resultSet.getString("food_description"), resultSet.getInt("calories"),
-                    null, true, resultSet.getInt("category_id"));
+                    null, true, resultSet.getInt("category_id"),null);
             l.add(new Item(food, resultSet.getInt("quantity")));
             queue.add(new IndexedOrder(
                     resultSet.getInt("order_id"),

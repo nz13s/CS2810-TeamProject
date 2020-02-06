@@ -54,7 +54,8 @@ public class Foods {
                     resultSet.getInt("calories"),
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
-                    resultSet.getInt("category_id"));
+                    resultSet.getInt("category_id"),
+                    null);
         }
         return null;
     }

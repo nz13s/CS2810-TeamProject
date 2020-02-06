@@ -100,7 +100,8 @@ public class Categories {
                     resultSet.getInt("calories"),
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
-                    resultSet.getInt("category_id")));
+                    resultSet.getInt("category_id"),
+                    null));
         }
         return list;
     }
@@ -126,7 +127,8 @@ public class Categories {
                     resultSet.getInt("calories"),
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
-                    resultSet.getInt("category_id"));
+                    resultSet.getInt("category_id"),
+                    null);
             Category c = categories.stream().filter(cat -> cat.getCategoryNumber() == food.getCategoryID()).findFirst()
                     .orElse(new Category(resultSet.getInt("category_id"), resultSet.getString("category")));
             c.addFood(food);
