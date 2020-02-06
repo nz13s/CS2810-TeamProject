@@ -27,14 +27,6 @@ public class Menu {
     return menu.get(i);
   }
 
-  @Override
-  public String toString() {
-    //todo fix this to use a Jackson serialiser
-    return "Menu{" +
-        "menu=" + menu +
-        '}';
-  }
-
   @Nonnull
   public ArrayList<Category> getList() {
     return menu;
