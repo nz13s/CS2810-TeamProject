@@ -13,6 +13,7 @@ import java.sql.SQLException;
  * Class that stores SQL queries related to the food table.
  *
  * @author Nick
+ * @author Bhavik Narang
  */
 
 public class Foods {
