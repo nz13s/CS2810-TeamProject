@@ -93,7 +93,7 @@ public class Category {
    */
 
   @Nonnull
-  public ArrayList<Food> getList() {
+  public ArrayList<Food> getFoods() {
     return items;
   }
 
