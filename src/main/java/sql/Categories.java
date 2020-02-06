@@ -2,6 +2,7 @@ package sql;
 
 import entities.Category;
 import entities.Food;
+import entities.Ingredient;
 import entities.Menu;
 
 import javax.annotation.Nonnull;
@@ -27,7 +28,7 @@ public class Categories {
     private PreparedStatement foodByCatId;
     private PreparedStatement getAllCatId;
     private PreparedStatement fetchMenu;
-    private PreparedStatement fetchAllergy;
+    private PreparedStatement fetchIngredients;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -52,12 +53,14 @@ public class Categories {
                         "FROM food " +
                         "JOIN categories c on food.category_id = c.category_id " +
                         "WHERE available = TRUE " +
-                        "ORDER BY c.category_id;");
+                        "ORDER BY c.category_id");
 
-        fetchAllergy = connection.prepareStatement(
-                "SELECT food_ingredients.food_id, food.food_name, food_ingredients.ingredient_id, ingredients.ingredient " +
+        fetchIngredients = connection.prepareStatement(
+                "SELECT food_ingredients.food_id, food_ingredients.ingredient_id, ingredients.ingredient, ingredients.allergen " +
                         "FROM food, ingredients, food_ingredients " +
-                        "WHERE food_ingredients.food_id = food.food_id and food_ingredients.ingredient_id = ingredients.ingredient_id AND ingredients.allergen = TRUE;");
+                        "WHERE food_ingredients.food_id = food.food_id " +
+                        "AND food_ingredients.ingredient_id = ingredients.ingredient_id " +
+                        "ORDER BY food_ingredients.food_id ASC");
     }
 
     /**
@@ -106,6 +109,20 @@ public class Categories {
         return list;
     }
 
+    public ArrayList<Ingredient> fetchIngredients() throws SQLException {
+        ArrayList<Ingredient> list = new ArrayList<Ingredient>();
+        ResultSet resultSet = fetchIngredients.executeQuery();
+
+        while (resultSet.next()) {
+            list.add(new Ingredient(
+                    resultSet.getInt("food_id"),
+                    resultSet.getInt("ingredient_id"),
+                    resultSet.getString("ingredient"),
+                    resultSet.getBoolean("allergen")));
+        }
+        return list;
+    }
+
     /**
      * Method that organises all categories and foods into an ArrayList to represent
      * the restaurant's menu, and stores all information into a Menu object.
@@ -128,7 +145,7 @@ public class Categories {
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
                     resultSet.getInt("category_id"),
-                    null);
+                    new ArrayList<Ingredient>());
             Category c = categories.stream().filter(cat -> cat.getCategoryNumber() == food.getCategoryID()).findFirst()
                     .orElse(new Category(resultSet.getInt("category_id"), resultSet.getString("category")));
             c.addFood(food);

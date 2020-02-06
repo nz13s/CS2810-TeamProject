@@ -8,16 +8,20 @@ package entities;
 
 public class Ingredient {
 
+    private int foodID;
     private int ingredientID;
     private String ingredient;
     private boolean allergen;
 
     /**
-     * Constructor that assigns the allergen to false by default.
+     * Constructor that assigns the parameters to the attributes.
      */
 
-    public Ingredient() {
-        allergen = false;
+    public Ingredient(int foodID, int ingredientID, String ingredient, boolean allergen) {
+        this.foodID = foodID;
+        this.ingredientID = ingredientID;
+        this.ingredient = ingredient;
+        this.allergen = allergen;
     }
 
     /**
@@ -78,6 +82,26 @@ public class Ingredient {
 
     public void setAllergen(boolean allergen){
         this.allergen = allergen;
+    }
+
+    /**
+     * Gets the foodID that the ingredient is linked to.
+     *
+     * @return foodID of the ingredient.
+     */
+
+    public int getFoodID() {
+        return foodID;
+    }
+
+    /**
+     * Sets the foodID of the ingredient.
+     *
+     * @param foodID foodID of the ingredient.
+     */
+
+    public void setFoodID(int foodID) {
+        this.foodID = foodID;
     }
 
 }
