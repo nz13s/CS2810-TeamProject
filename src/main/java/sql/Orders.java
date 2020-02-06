@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Orders Class deals with all order related queries
+ * Orders Class deals with all order related queries and methods.
  *
  * @author Tony Delchev
  * @author Bhavik Narang
@@ -21,6 +21,7 @@ public class Orders {
     private PreparedStatement orderSave;
     private PreparedStatement ordersGet;
     private PreparedStatement foodSave;
+    private PreparedStatement orderUpdateState;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -42,7 +43,10 @@ public class Orders {
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_confirmed > ? AND o.order_served = ?");
+                        "WHERE o.order_confirmed != ? AND o.order_served = ?");
+        orderUpdateState = connection.prepareStatement("UPDATE orders " +
+                "SET order_preparing = ?, order_ready = ?, order_served = ? " +
+                "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
     }
 
     /**
@@ -103,9 +107,11 @@ public class Orders {
     }
 
     /**
-     * Selects the completed/uncompleted orders from the database
+     * Selects confirmed orders from database, populates each order
+     * with Array of Food items.
      *
-     * @param order_ready order status
+     * @param order_ready  order status
+     * @param order_served order status
      * @return Array of Orders
      * @throws SQLException if an error occurred
      */
@@ -147,6 +153,28 @@ public class Orders {
         }
         return queue;
 
+    }
+
+    /**
+     * Updates Order State by time stamping each stage the order reaches.
+     * It updates every field to be able to reverse order state timestamp.
+     *
+     * @param order_preparing timestamp
+     * @param order_ready     timestamp
+     * @param order_served    timestamp
+     * @param o               The order to be updated
+     * @return true if successful
+     * @throws SQLException if an error occurred
+     */
+
+    public boolean updateOrderState(long order_preparing, long order_ready, long order_served, Order o) throws SQLException {
+        orderUpdateState.setLong(1, order_preparing);
+        orderUpdateState.setLong(2, order_ready);
+        orderUpdateState.setLong(3, order_served);
+        orderUpdateState.setInt(4, o.getOrderID());
+        orderUpdateState.execute();
+        ResultSet resultSet = orderUpdateState.getGeneratedKeys();
+        return resultSet.next();
     }
 
 
