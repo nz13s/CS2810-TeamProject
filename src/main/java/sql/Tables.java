@@ -1,5 +1,6 @@
 package sql;
 
+import entities.Item;
 import entities.Order;
 import entities.Table;
 import entities.TableState;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,7 +60,7 @@ public class Tables {
                     resultSet.getLong("order_ready"),
                     resultSet.getLong("order_served"),
                     resultSet.getInt("table_num"),
-                    null);
+                    new ArrayList<Item>());
             Table t = tables.stream().filter(tab -> tab.getTableNum() == order.getTableNum()).findFirst()
                     .orElse(new Table(resultSet.getInt("table_num"), resultSet.getInt("seats_available"), resultSet.getBoolean("occupied"),null));
 
