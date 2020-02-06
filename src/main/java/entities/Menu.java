@@ -69,7 +69,7 @@ public class Menu {
    */
 
   @Nonnull
-  public ArrayList<Category> getList() {
+  public ArrayList<Category> getCategoryList() {
     return menu;
   }
 }
