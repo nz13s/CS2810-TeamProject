@@ -1,9 +1,12 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Class that stores the ingredients from the database.
  *
  * @author Anas
+ * @author Bhavik
  */
 
 public class Ingredient {
@@ -29,7 +32,6 @@ public class Ingredient {
      *
      * @return ID of the ingredient.
      */
-
     public int getIngredientID(){
         return ingredientID;
     }
@@ -89,7 +91,7 @@ public class Ingredient {
      *
      * @return foodID of the ingredient.
      */
-
+    @JsonIgnore
     public int getFoodID() {
         return foodID;
     }
