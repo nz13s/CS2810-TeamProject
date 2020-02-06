@@ -59,10 +59,14 @@ public class Tables {
                     resultSet.getLong("order_served"),
                     resultSet.getInt("table_num"),
                     null);
-            Table c = tables.stream().filter(cat -> cat.getTableNum() == order.getTableNum()).findFirst()
+            Table t = tables.stream().filter(tab -> tab.getTableNum() == order.getTableNum()).findFirst()
                     .orElse(new Table(resultSet.getInt("table_num"), resultSet.getInt("seats_available"), resultSet.getBoolean("occupied"),null));
-            c.addOrder(order);
-            tables.add(c);
+
+            // if no orders exist for a given table
+            if (order.getOrderID() != 0) {
+                t.addOrder(order);
+            }
+            tables.add(t);
         }
         tables.forEach(tableState::addTable);
         return tableState;
