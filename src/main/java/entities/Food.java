@@ -2,6 +2,7 @@ package entities;
 
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class Food {
   private int foodID;
@@ -11,9 +12,10 @@ public class Food {
   private BigDecimal price;
   private boolean available;
   private int categoryID;
+  private ArrayList<Ingredient> ingredients;
 
   public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, BigDecimal price,
-              boolean available, int categoryID) {
+              boolean available, int categoryID, ArrayList<Ingredient> ingredients) {
     this.foodID = foodID;
     this.foodName = foodName;
     this.foodDescription = foodDescription;
@@ -21,6 +23,7 @@ public class Food {
     this.price = price;
     this.available = available;
     this.categoryID = categoryID;
+    this.ingredients = ingredients;
   }
 
   public int getFoodID() {
@@ -76,5 +79,17 @@ public class Food {
   public int getCategoryID() { return categoryID; };
 
   public void setCategoryID(int categoryID) { this.categoryID = categoryID; }
+
+  public ArrayList<Ingredient> getIngredients() {
+    return ingredients;
+  }
+
+  public int size() {
+    return ingredients.size();
+  }
+
+  public void addIngredient(Ingredient ingredient) {
+    ingredients.add(ingredient);
+  }
 
 }
