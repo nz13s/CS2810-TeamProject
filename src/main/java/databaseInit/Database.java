@@ -5,6 +5,7 @@ import sql.FoodOrdersSql;
 import sql.Foods;
 import sql.Orders;
 import sql.Categories;
+import sql.Tables;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -25,6 +26,7 @@ public class Database implements ServletContextListener {
   public static FoodOrdersSql FOOD_ORDERS;
   public static Orders ORDERS;
   public static Categories CATEGORIES;
+  public static Tables TABLES;
 
   public Database(){
     instance = instance == null ? this : null; //preserve the current instance if it is not null
@@ -54,6 +56,7 @@ public class Database implements ServletContextListener {
     FOOD_ORDERS = new FoodOrdersSql(connection);
     ORDERS = new Orders(connection);
     CATEGORIES = new Categories(connection);
+    TABLES = new Tables(connection);
   }
 
   public static SQLException getException(){

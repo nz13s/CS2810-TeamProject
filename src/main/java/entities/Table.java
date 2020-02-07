@@ -11,11 +11,11 @@ public class Table {
   private boolean occupied;
   private List<Order> orders; //orders from this specific entities.Table
 
-  public Table(int tableNum, int seatsAvailable, @Nullable List<Order> orders) {
+  public Table(int tableNum, int seatsAvailable, boolean occupied, @Nullable List<Order> orders) {
     if (orders == null) orders = new ArrayList<>();
     this.tableNum = tableNum;
     this.seatsAvailable = seatsAvailable;
-    this.occupied = false;
+    this.occupied = occupied;
     this.orders = orders;
   }
 
@@ -47,6 +47,8 @@ public class Table {
   public List<Order> getOrders() {
     return orders;
   }
+
+  public void addOrder(Order order) { orders.add(order); }
 
   public void setOrders(List<Order> orders) {
     this.orders = orders;
