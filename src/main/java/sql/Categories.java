@@ -57,11 +57,11 @@ public class Categories {
                         "ORDER BY c.category_id");
 
         fetchIngredients = connection.prepareStatement(
-                "SELECT food_ingredients.food_id, food_ingredients.ingredient_id, ingredients.ingredient, ingredients.allergen " +
-                        "FROM food, ingredients, food_ingredients " +
-                        "WHERE food_ingredients.food_id = food.food_id " +
-                        "AND food_ingredients.ingredient_id = ingredients.ingredient_id " +
-                        "ORDER BY food_ingredients.food_id ASC");
+                "SELECT fi.food_id, fi.ingredient_id, i.ingredient, i.allergen\n" +
+                        "FROM food\n" +
+                        "JOIN food_ingredients fi on fi.food_id = food.food_id\n" +
+                        "JOIN ingredients i on fi.ingredient_id = i.ingredient_id\n" +
+                        "ORDER BY fi.food_id");
     }
 
     /**
