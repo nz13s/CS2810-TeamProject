@@ -13,7 +13,7 @@ public class Order implements IFakeable {
     private long timeOrdered = 0;
     private long orderConfirmed = 0;
     private long orderPreparing = 0;
-  private long orderReady = 0;
+    private long orderReady = 0;
     private long orderServed = 0;
     private int tableNum;
     private ArrayList<Item> foodItems; //we should make this a Set<Item> as Items are (or, should be) unique

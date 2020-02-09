@@ -2,6 +2,7 @@ package sql;
 
 import entities.Category;
 import entities.Food;
+import entities.Ingredient;
 import entities.Menu;
 
 import javax.annotation.Nonnull;
@@ -18,6 +19,8 @@ import java.util.Set;
  * Class that stores SQL queries related to the categories table.
  *
  * @author Jatin
+ * @author Anas
+ * @author Bhavik
  */
 
 public class Categories {
@@ -25,8 +28,8 @@ public class Categories {
     private PreparedStatement catById;
     private PreparedStatement foodByCatId;
     private PreparedStatement getAllCatId;
-
     private PreparedStatement fetchMenu;
+    private PreparedStatement fetchIngredients;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -51,8 +54,14 @@ public class Categories {
                         "FROM food " +
                         "JOIN categories c on food.category_id = c.category_id " +
                         "WHERE available = TRUE " +
-                        "ORDER BY c.category_id ASC;"
-        );
+                        "ORDER BY c.category_id");
+
+        fetchIngredients = connection.prepareStatement(
+                "SELECT fi.food_id, fi.ingredient_id, i.ingredient, i.allergen\n" +
+                        "FROM food\n" +
+                        "JOIN food_ingredients fi on fi.food_id = food.food_id\n" +
+                        "JOIN ingredients i on fi.ingredient_id = i.ingredient_id\n" +
+                        "ORDER BY fi.food_id");
     }
 
     /**
@@ -95,7 +104,22 @@ public class Categories {
                     resultSet.getInt("calories"),
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
-                    resultSet.getInt("category_id")));
+                    resultSet.getInt("category_id"),
+                    null));
+        }
+        return list;
+    }
+
+    public ArrayList<Ingredient> fetchIngredients() throws SQLException {
+        ArrayList<Ingredient> list = new ArrayList<Ingredient>();
+        ResultSet resultSet = fetchIngredients.executeQuery();
+
+        while (resultSet.next()) {
+            list.add(new Ingredient(
+                    resultSet.getInt("food_id"),
+                    resultSet.getInt("ingredient_id"),
+                    resultSet.getString("ingredient"),
+                    resultSet.getBoolean("allergen")));
         }
         return list;
     }
@@ -113,6 +137,9 @@ public class Categories {
         Menu menu = new Menu();
         ResultSet resultSet = fetchMenu.executeQuery();
         Set<Category> categories = new HashSet<>();
+
+        ArrayList<Ingredient> ingredients = fetchIngredients();
+
         while (resultSet.next()){
             Food food = new Food(
                     resultSet.getInt("food_id"),
@@ -121,11 +148,19 @@ public class Categories {
                     resultSet.getInt("calories"),
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
-                    resultSet.getInt("category_id"));
+                    resultSet.getInt("category_id"),
+                    new ArrayList<Ingredient>());
             Category c = categories.stream().filter(cat -> cat.getCategoryNumber() == food.getCategoryID()).findFirst()
                     .orElse(new Category(resultSet.getInt("category_id"), resultSet.getString("category")));
             c.addFood(food);
             categories.add(c);
+
+            for (Ingredient ingredient : ingredients) {
+                if (food.getFoodID() == ingredient.getFoodID()) {
+                    food.addIngredient(ingredient);
+                }
+            }
+
         }
         categories.forEach(menu::addCat);
         return menu;

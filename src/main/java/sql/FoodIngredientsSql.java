@@ -25,14 +25,16 @@ public class FoodIngredientsSql {
      * @param connection connection to the database.
      * @throws SQLException thrown if sql logic is wrong.
      * @author Jatin
+     * @author Bhavik
      */
 
     public FoodIngredientsSql(Connection connection) throws SQLException {
 
         getIngredients = connection.prepareStatement(
-                "SELECT ingredient_id, ingredient "
-                        + "FROM ingredients, food "
-                        + "WHERE (ingredients.ingredient_id = food.food_id AND food_id = ?)");
+                "SELECT i.ingredient_id, i.ingredient\n" +
+                        "FROM food\n" +
+                        "JOIN ingredients i on i.ingredient_id = food.food_id\n" +
+                        "WHERE food_id = ?");
     }
 
     /**
