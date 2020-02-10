@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StaffInstance {
@@ -8,7 +8,7 @@ public class StaffInstance {
     //TODO Ask about this being a database thing for persistence/loss of connection?
     private List<String> messages;//TODO Discuss making a notification class
     private String staffID;
-    private LinkedList<Table> tables;//TODO Remove if other method is decided better
+    private List<Table> tables;//TODO Remove if other method is decided better
 
     /**
      * Creates a new staff instance for a session used by a staff member
@@ -17,7 +17,7 @@ public class StaffInstance {
      */
     public StaffInstance(String staffID) {
         this.staffID = staffID;
-        messages = new LinkedList<>();
+        messages = new ArrayList<>();
     }
 
     /**
