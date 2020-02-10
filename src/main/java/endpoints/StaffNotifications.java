@@ -13,6 +13,10 @@ import java.io.PrintWriter;
 
 /**
  * Endpoint for the frontend to call to get the notifications for a sessions {@link StaffInstance}
+ *
+ * Spec:
+ *  GET - No params
+ *  DELETE - int: notificationID
  */
 @WebServlet("/staff/notifications")
 public class StaffNotifications extends HttpServlet {
