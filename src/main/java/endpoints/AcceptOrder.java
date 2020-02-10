@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+/**
+ * Endpoint for the frontend to call to allow staff to confirm a users {@link Order}
+ */
 @WebServlet("/staff/checkorder")
 public class AcceptOrder extends HttpServlet {
 
