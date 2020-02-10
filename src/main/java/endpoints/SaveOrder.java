@@ -13,6 +13,9 @@ import java.sql.SQLException;
 
 /**
  * Class for handling the saving of a sessions {@link Order}
+ *
+ * Spec:
+ *  POST - int: table_num
  */
 @WebServlet("/save")
 public class SaveOrder extends HttpServlet {
