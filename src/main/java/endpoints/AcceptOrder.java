@@ -19,6 +19,10 @@ import java.sql.SQLException;
 
 /**
  * Endpoint for the frontend to call to allow staff to confirm a users {@link Order}
+ *
+ * Spec:
+ *  GET - int: id
+ *  POST - int: id
  */
 @WebServlet("/staff/checkorder")
 public class AcceptOrder extends HttpServlet {
