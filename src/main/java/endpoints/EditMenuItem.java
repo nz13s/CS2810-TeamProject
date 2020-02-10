@@ -19,6 +19,12 @@ import java.util.function.Consumer;
 
 /**
  * Endpoint for the frontend to call to get {@link Food} items from the database to edit
+ *
+ * Spec:
+ *  GET - int: id
+ *  POST - boolean: availability, int: calories, int: category, String: description, String: name, BigDecimal: price
+ *      Not all parameters need to be passed for the POST request only the ones that are being changed
+ *  DELETE - int: id
  */
 @WebServlet("/staff/editmenu")
 public class EditMenuItem extends HttpServlet {
