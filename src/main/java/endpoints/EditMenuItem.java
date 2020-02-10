@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Endpoint for the frontend to call to get {@link Food} items from the database to edit
@@ -32,20 +35,14 @@ public class EditMenuItem extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        StaffInstance staff = getStaffMember(req);
-        if (staff == null) {
-            resp.sendError(400, "Not a staff member.");
+        if (!validStaff(req, resp)) {
             return;
         }
         int foodID;
-        try{
-            foodID = Integer.parseInt(req.getParameter("id"));
-        }catch(NumberFormatException e) {
-            resp.sendError(400, "Invalid ID");
+        try {
+            foodID = getFoodID(req, resp);
+        } catch (NumberFormatException e) {
             return;
-        }
-        if(foodID < 0){
-            resp.sendError(400, "Invalid ID");
         }
         Food menuItem;
         try {
@@ -72,9 +69,74 @@ public class EditMenuItem extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO Get a method from Database people to edit a food item
-        //Something for just changing availability?
-        //Maybe a variable to check the last called thing for security?
+        if (!validStaff(req, resp)) {
+            return;
+        }
+        int foodID;
+        try {
+            foodID = getFoodID(req, resp);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        Map<String, String[]> params = req.getParameterMap();
+        for (String param : params.keySet()) {
+            try {
+                switch (param) {
+                    case "availability":
+                        if (params.get(param) != null) {
+                            boolean val = Boolean.parseBoolean(params.get(param)[0]);
+                            Database.FOODS.updateAvailability(foodID, val);
+                        } else {
+                            resp.sendError(500, "No value passed with: " + param);
+                        }
+                        break;
+                    case "calories":
+                        if (params.get(param) != null) {
+                            int val = Integer.parseInt(params.get(param)[0]);
+                            Database.FOODS.updateCalories(foodID, val);
+                        } else {
+                            resp.sendError(500, "No value passed with: " + param);
+                        }
+                        break;
+                    case "category":
+                        if (params.get(param) != null) {
+                            int val = Integer.parseInt(params.get(param)[0]);
+                            Database.FOODS.updateCategoryId(foodID, val);
+                        } else {
+                            resp.sendError(500, "No value passed with: " + param);
+                        }
+                        break;
+                    case "description":
+                        if (params.get(param) != null) {
+                            Database.FOODS.updateFoodDescription(foodID, params.get(param)[0]);
+                        } else {
+                            resp.sendError(500, "No value passed with: " + param);
+                        }
+                        break;
+                    case "name":
+                        if (params.get(param) != null) {
+                            Database.FOODS.updateFoodName(foodID, params.get(param)[0]);
+                        } else {
+                            resp.sendError(500, "No value passed with: " + param);
+                        }
+                        break;
+                    case "price":
+                        if (params.get(param) != null) {
+                            BigDecimal val = new BigDecimal(params.get(param)[0]);
+                            Database.FOODS.updatePrice(foodID, val);
+                        } else {
+                            resp.sendError(500, "No value passed with: " + param);
+                        }
+                        break;
+                    default:
+                        resp.sendError(400, "Invalid parameter passed: " + param);
+                }
+            } catch (SQLException e) {
+                resp.sendError(500, "Error in database changing: " + param);
+            } catch (NumberFormatException e) {
+                resp.sendError(400, "Invalid number passed for value: " + param);
+            }
+        }
     }
 
     /**
@@ -87,7 +149,60 @@ public class EditMenuItem extends HttpServlet {
      */
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO Get a method from Database people to delete a food item
+        if (!validStaff(req, resp)) {
+            return;
+        }
+        int foodID;
+        try {
+            foodID = getFoodID(req, resp);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        try {
+            Database.FOODS.updateAvailability(foodID, false);
+        } catch (SQLException e) {
+            resp.sendError(500, "Error occurred whilst changing availability of food.");
+        }
+    }
+
+    /**
+     * Gets the Food ID of the menu item
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @return The food ID of the menu item passed to the backend as stored in the database
+     * @throws IOException           IOException If an input or output exception occurs
+     * @throws NumberFormatException Thrown when an invalid number is passed by the frontend
+     */
+    private int getFoodID(HttpServletRequest req, HttpServletResponse resp) throws IOException, NumberFormatException {
+        int foodID;
+        try {
+            foodID = Integer.parseInt(req.getParameter("id"));
+            if (foodID < 0) {
+                resp.sendError(400, "Invalid ID");
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid ID");
+            throw new NumberFormatException();
+        }
+        return foodID;
+    }
+
+    /**
+     * Checks whether the current session is able to change the menu
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @return True if the staff member is able to change the menu, false otherwise
+     * @throws IOException If an input or output exception occurs
+     */
+    private boolean validStaff(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        StaffInstance staff = getStaffMember(req);
+        if (staff == null) {
+            resp.sendError(400, "Not a staff member.");
+            return false;
+        }
+        return true;
     }
 
     /**
