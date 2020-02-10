@@ -1,11 +1,12 @@
 package entities;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
-    private LinkedList<String> messages;//TODO Discuss making a notification class
+    private List<String> messages;//TODO Discuss making a notification class
     private String staffID;
     private LinkedList<Table> tables;//TODO Remove if other method is decided better
 
@@ -44,7 +45,7 @@ public class StaffInstance {
      *
      * @return The stored list of messages for the staff member
      */
-    public LinkedList<String> getNotifications() {
+    public List<String> getNotifications() {
         return this.messages;
     }
 
