@@ -4,6 +4,7 @@ import entities.Food;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.CheckReturnValue;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -141,8 +142,8 @@ public class Foods {
      * @param price price of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
-    public void updatePrice(int foodID, int price) throws SQLException {
-        updatePriceById.setInt(1, price);
+    public void updatePrice(int foodID, BigDecimal price) throws SQLException {
+        updatePriceById.setBigDecimal(1, price);
         updatePriceById.setInt(2, foodID);
         updatePriceById.executeUpdate();
     }
