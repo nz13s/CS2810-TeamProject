@@ -81,4 +81,12 @@ public class StaffInstance {
         }
         return null;
     }
+
+    /**
+     * Returns the staffs ID as stored in the database.
+     * @return The String identifier for the staff member
+     */
+    public String getStaffID(){
+        return this.staffID;
+    }
 }
