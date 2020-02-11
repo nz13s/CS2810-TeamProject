@@ -129,4 +129,13 @@
         <url-pattern>/restricted/update</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AcceptOrder</servlet-name>
+        <servlet-class>endpoints.AcceptOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AcceptOrder</servlet-name>
+        <url-pattern>/restricted/checkorder</url-pattern>
+    </servlet-mapping>
+
 </web-app>
