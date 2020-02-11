@@ -19,6 +19,10 @@ import java.sql.SQLException;
 
 /**
  * Class for handling modification and access to a sessions {@link Order}
+ * Spec:
+ *  GET - No params
+ *  POST - int: item, int: count
+ *  DELETE - int: item, int: count
  */
 public class AddToOrder extends HttpServlet {
 
