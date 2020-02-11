@@ -26,6 +26,7 @@ public class Orders {
     private PreparedStatement updateOrderConfirmedByID;
     private PreparedStatement updateOrderPreparingByID;
     private PreparedStatement updateOrderReadyByID;
+    private PreparedStatement updateOrderServedByID;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -52,20 +53,21 @@ public class Orders {
                 "UPDATE orders " +
                 "SET order_preparing = ?, order_ready = ?, order_served = ? " +
                 "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
-
         updateOrderConfirmedByID = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_confirmed = ? " +
                         "WHERE order_id = ?");
-
         updateOrderPreparingByID = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_preparing = ? " +
                         "WHERE order_id = ?");
-
         updateOrderReadyByID = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_ready = ? " +
+                        "WHERE order_id = ?");
+        updateOrderServedByID = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_served = ? " +
                         "WHERE order_id = ?");
     }
 
@@ -234,6 +236,19 @@ public class Orders {
         updateOrderReadyByID.setLong(1, System.currentTimeMillis());
         updateOrderReadyByID.setInt(2, orderID);
         updateOrderReadyByID.executeUpdate();
+    }
+
+    /**
+     * Updates "order_served" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
+
+    public void updateOrderServedByID(int orderID) throws SQLException {
+        updateOrderServedByID.setLong(1, System.currentTimeMillis());
+        updateOrderServedByID.setInt(2, orderID);
+        updateOrderServedByID.executeUpdate();
     }
 
 
