@@ -22,6 +22,7 @@ public class Orders {
     private PreparedStatement ordersGet;
     private PreparedStatement foodSave;
     private PreparedStatement orderUpdateState;
+    private PreparedStatement updateOrderConfirmedByID;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -47,6 +48,9 @@ public class Orders {
         orderUpdateState = connection.prepareStatement("UPDATE orders " +
                 "SET order_preparing = ?, order_ready = ?, order_served = ? " +
                 "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
+
+        updateOrderConfirmedByID = connection.prepareStatement(
+                "UPDATE orders SET order_confirmed = ? WHERE order_id = ?");
     }
 
     /**
@@ -175,6 +179,12 @@ public class Orders {
         orderUpdateState.execute();
         ResultSet resultSet = orderUpdateState.getGeneratedKeys();
         return resultSet.next();
+    }
+
+    public void updateOrderConfirmedByID(int orderID) throws SQLException {
+        updateOrderConfirmedByID.setLong(1, System.currentTimeMillis());
+        updateOrderConfirmedByID.setInt(2, orderID);
+        updateOrderConfirmedByID.executeUpdate();
     }
 
 
