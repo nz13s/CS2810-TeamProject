@@ -1,10 +1,6 @@
 package databaseInit;
 
-import sql.FoodIngredientsSql;
-import sql.FoodOrdersSql;
-import sql.Foods;
-import sql.Orders;
-import sql.Categories;
+import sql.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -24,7 +20,8 @@ public class Database implements ServletContextListener {
   public static FoodIngredientsSql FOOD_INGREDIENTS;
   public static FoodOrdersSql FOOD_ORDERS;
   public static Orders ORDERS;
-  public static Categories CATEGORIES;
+    public static Categories CATEGORIES;
+    public static Authentication AUTHENTICATION;
 
   public Database(){
     instance = instance == null ? this : null; //preserve the current instance if it is not null
@@ -53,7 +50,8 @@ public class Database implements ServletContextListener {
     FOOD_INGREDIENTS = new FoodIngredientsSql(connection);
     FOOD_ORDERS = new FoodOrdersSql(connection);
     ORDERS = new Orders(connection);
-    CATEGORIES = new Categories(connection);
+      CATEGORIES = new Categories(connection);
+      AUTHENTICATION = new Authentication(connection);
   }
 
   public static SQLException getException(){

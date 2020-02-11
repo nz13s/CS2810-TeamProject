@@ -17,12 +17,18 @@ public class Authentication {
 
     private PreparedStatement getUser;
     private PreparedStatement addUser; //todo
-    private PreparedStatement modifyUser; //todo
+    private PreparedStatement modifyUserPass; //todo
 
 
     public Authentication(Connection connection) throws SQLException {
         getUser = connection.prepareStatement(
                 "SELECT staff_id, pwd_hash, pwd_salt, username from staff where username = ?");
+
+        addUser = connection.prepareStatement(
+                "INSERT INTO staff (pwd_hash, pwd_salt, username) values (?, ?, ?) ", PreparedStatement.RETURN_GENERATED_KEYS);
+
+        modifyUserPass = connection.prepareStatement(
+                "UPDATE staff set pwd_hash = ?, pwd_salt = ? where staff_id = ?");
     }
 
     /**
@@ -32,7 +38,7 @@ public class Authentication {
      */
     public int login(String username, String password) {
         try {
-            getUser.setString(1, username);
+            getUser.setString(1, username.toLowerCase());
             ResultSet resultSet = getUser.executeQuery();
 
             byte[] pwd_salt = resultSet.getBytes("pwd_salt");
@@ -54,6 +60,44 @@ public class Authentication {
 
     }
 
+    public int addNewUser(String username, String password) {
+        try {
+
+            byte[] salt = genNewSalt();
+            byte[] hash = genPasswordHash(password, salt, PBKDF2_ITERATIONS);
+
+            addUser.setBytes(1, hash);
+            addUser.setBytes(2, salt);
+            addUser.setString(3, username.toLowerCase());
+
+            addUser.executeUpdate();
+
+            ResultSet resultSet = addUser.getGeneratedKeys();
+
+            return resultSet.getInt("staff_id");
+
+        } catch (SQLException ex) {
+            return -1;
+        }
+    }
+
+    public boolean updateUserPassword(int userID, String password) {
+        try {
+            byte[] salt = genNewSalt();
+            byte[] hash = genPasswordHash(password, salt, PBKDF2_ITERATIONS);
+
+            modifyUserPass.setBytes(1, hash);
+            modifyUserPass.setBytes(2, salt);
+            modifyUserPass.setInt(3, userID);
+
+            modifyUserPass.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+
+
     /**
      * Generates the hash of a password, given its salt and iteration num
      *
@@ -62,7 +106,7 @@ public class Authentication {
      * @param iterations the number of iterations (must be the same as when generated)
      * @return byte array of the hash
      */
-    public static byte[] genPasswordHash(String password, byte[] salt, int iterations) {
+    private static byte[] genPasswordHash(String password, byte[] salt, int iterations) {
         try {
             char[] chars = password.toCharArray();
             PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
@@ -73,7 +117,7 @@ public class Authentication {
         }
     }
 
-    private static byte[] genSalt() {
+    private static byte[] genNewSalt() {
         try {
             byte[] salt = new byte[64];
             SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
