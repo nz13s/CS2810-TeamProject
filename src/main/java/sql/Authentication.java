@@ -34,7 +34,7 @@ public class Authentication {
     /**
      * Attempt to log the user in. Returns userID if successful, else a negative, failure number.
      *
-     * @return return >= 0 on success, return < 0 on failure - -1 for user not found or password d
+     * @return return >= 0 on success, return < 0 on failure - -1 for user not found or password incorrect. -2 for an SQL error
      */
     public int login(String username, String password) {
         try {
@@ -82,6 +82,15 @@ public class Authentication {
         }
     }
 
+    /**
+     * Update a user's password.
+     * <p>
+     * Doing so automatically assigns them a new salt.
+     *
+     * @param userID   the ID of the user to update
+     * @param password the new password
+     * @return true if success, false if exception
+     */
     public boolean updateUserPassword(int userID, String password) {
         try {
             byte[] salt = genNewSalt();
