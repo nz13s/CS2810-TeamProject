@@ -24,7 +24,6 @@ import java.sql.SQLException;
  *  GET - int: id
  *  POST - int: id
  */
-@WebServlet("/staff/checkorder")
 public class AcceptOrder extends HttpServlet {
 
     private ObjectMapper om = new ObjectMapper();

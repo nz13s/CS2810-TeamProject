@@ -68,9 +68,8 @@ public class MenuToFrontend extends HttpServlet {
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
-        MenuToFrontend m = new MenuToFrontend();
         try {
-            pw.println(m.menuToJSON());
+            pw.println(menuToJSON());
         } catch (SQLException e) {
             pw.println(e.getMessage());
         }
