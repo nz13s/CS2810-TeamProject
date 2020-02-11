@@ -10,7 +10,6 @@ import entities.serialisers.OrderSerialiser;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import java.sql.SQLException;
 /**
  * Class for handling modification and access to a sessions {@link Order}
  */
-@WebServlet("/order")
 public class AddToOrder extends HttpServlet {
 
     //https://www.baeldung.com/jackson-object-mapper-tutorial

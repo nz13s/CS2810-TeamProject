@@ -10,7 +10,6 @@ import entities.serialisers.MenuSerialiser;
 import sql.Categories;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +24,6 @@ import java.sql.SQLException;
  * @author Cameron
  */
 
-@WebServlet("/menu")
 public class MenuToFrontend extends HttpServlet {
 
     private ObjectMapper mapper;

@@ -1,10 +1,6 @@
 package databaseInit;
 
-import sql.FoodIngredientsSql;
-import sql.FoodOrdersSql;
-import sql.Foods;
-import sql.Orders;
-import sql.Categories;
+import sql.*;
 import sql.Tables;
 
 import javax.servlet.ServletContextEvent;
@@ -25,6 +21,7 @@ public class Database implements ServletContextListener {
   public static FoodIngredientsSql FOOD_INGREDIENTS;
   public static FoodOrdersSql FOOD_ORDERS;
   public static Orders ORDERS;
+  public static Authentication AUTHENTICATION;
   public static Categories CATEGORIES;
   public static Tables TABLES;
 
@@ -55,6 +52,7 @@ public class Database implements ServletContextListener {
     FOOD_INGREDIENTS = new FoodIngredientsSql(connection);
     FOOD_ORDERS = new FoodOrdersSql(connection);
     ORDERS = new Orders(connection);
+    AUTHENTICATION = new Authentication(connection);
     CATEGORIES = new Categories(connection);
     TABLES = new Tables(connection);
   }
