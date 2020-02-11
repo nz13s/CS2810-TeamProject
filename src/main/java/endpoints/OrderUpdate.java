@@ -31,57 +31,28 @@ public class OrderUpdate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Order order = null;
+        boolean success = false;
+        int state = getState(req, resp);
 
         try {
             order = getOrder(req);
         } catch (SQLException e) {
             resp.sendError(500, "Could not get OrderID.");
         }
-        boolean success = false;
-        int state = getState(req, resp);
-
 
         if (order == null) {
             resp.sendError(400, "No Order exists for this orderID");
             return;
         }
 
-        switch (state) {
-            case 0:
-                try {
-                    success = Database.ORDERS.updateOrderState(0L, 0L, 0L, order);
-                    break;
-                } catch (SQLException e) {
-                    resp.sendError(500, "Unable to update Order. Database error");
-                    e.printStackTrace();
-                }
-            case 1:
-                try {
-                    success = Database.ORDERS.updateOrderState(System.currentTimeMillis(), 0L, 0L, order);
-                    break;
-                } catch (SQLException e) {
-                    resp.sendError(500, "Unable to update Order. Database error");
-                    e.printStackTrace();
-                }
-            case 2:
-                try {
-                    success = Database.ORDERS.updateOrderState(order.getOrderPreparing(), System.currentTimeMillis(), 0L, order);
-                    break;
-                } catch (SQLException e) {
-                    resp.sendError(500, "Unable to update Order. Database error");
-                    e.printStackTrace();
-                }
-            case 3:
-                try {
-                    success = Database.ORDERS.updateOrderState(order.getOrderPreparing(), order.getOrderReady(), System.currentTimeMillis(), order);
-                    break;
-                } catch (SQLException e) {
-                    resp.sendError(500, "Unable to update Order. Database error");
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                resp.sendError(400, "Unexpected Value.");
+        if (state > 3 || state < 0) {
+            resp.sendError(400, "Unexpected State Value.");
+        }
+
+        try {
+            success = Database.ORDERS.updateOrderState(order, state);
+        } catch (SQLException e) {
+            resp.sendError(500, "Unable to update order.");
         }
 
         if (!success) {

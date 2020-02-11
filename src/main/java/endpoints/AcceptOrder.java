@@ -92,11 +92,11 @@ public class AcceptOrder extends HttpServlet {
             return;
         }
         //TODO Need this method please
-        /*try {
-            //Database.ORDERS.confirmOrder(orderID, System.currentTimeMillis());
+        try {
+            Database.ORDERS.confirmOrder(orderID);
         } catch (SQLException e) {
             resp.sendError(500, "Unable to confirm order in Database.");
-        }*/
+        }
     }
 
     /**
