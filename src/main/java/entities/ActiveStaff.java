@@ -16,7 +16,7 @@ public class ActiveStaff {
      * @param staffID The staffID, as stored in the database, to send the notification to
      * @param message The notification to pass to the specified staff member
      */
-    public static void addNotification(int staffID, String message) {
+    public static void addNotification(int staffID, Notification message) {
         StaffInstance employee = getStaffByID(staffID);
         if (employee != null) {
             addNotification(employee, message);
@@ -26,10 +26,11 @@ public class ActiveStaff {
 
     /**
      * Adds the inputted notification to the specified staff member
+     *
      * @param employee The staff member to send the notification to
-     * @param message The notification to pass to the specified staff member
+     * @param message  The notification to pass to the specified staff member
      */
-    public static void addNotification(StaffInstance employee, String message) {
+    public static void addNotification(StaffInstance employee, Notification message) {
         employee.addNotification(message);
     }
 
