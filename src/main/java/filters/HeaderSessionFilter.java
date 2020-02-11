@@ -19,7 +19,7 @@ public class HeaderSessionFilter implements Filter {
         if (req.getServletPath().equalsIgnoreCase("/hello")) {
             session = wrapper.genSession();
         } else if (req.getServletPath().equalsIgnoreCase("/login")) {
-            chain.doFilter(request, response);
+            chain.doFilter(wrapper, response);
             //delegate the session creation to the login object, if and only if the login was successful.
             return;
         } else {

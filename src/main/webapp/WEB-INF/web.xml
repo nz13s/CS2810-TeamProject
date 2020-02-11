@@ -30,4 +30,76 @@
         <url-pattern>/restricted/*</url-pattern>
     </filter-mapping>
 
+    <servlet>
+        <servlet-name>Menu</servlet-name>
+        <servlet-class>endpoints.MenuToFrontend</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Menu</servlet-name>
+        <url-pattern>/menu</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Order</servlet-name>
+        <servlet-class>endpoints.AddToOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Order</servlet-name>
+        <url-pattern>/order</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Hello</servlet-name>
+        <servlet-class>endpoints.Hello</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Hello</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>endpoints.Login</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SaveOrder</servlet-name>
+        <servlet-class>endpoints.SaveOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveOrder</servlet-name>
+        <url-pattern>/save</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrdersToFrontend</servlet-name>
+        <servlet-class>endpoints.OrdersToFrontend</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrdersToFrontend</servlet-name>
+        <url-pattern>/orders</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DebugMakeLogin</servlet-name>
+        <servlet-class>endpoints.debug.DebugMakeLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugMakeLogin</servlet-name>
+        <url-pattern>/debug/makelogin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ExampleRestricted</servlet-name>
+        <servlet-class>endpoints.restricted.ExampleRestricted</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExampleRestricted</servlet-name>
+        <url-pattern>/restricted/echo</url-pattern>
+    </servlet-mapping>
+
 </web-app>

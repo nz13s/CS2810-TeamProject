@@ -5,13 +5,12 @@ import filters.SessionRepositoryRequestWrapper;
 import verification.LoginVerification;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebListener("/login")
 public class Login extends HttpServlet {
 
     @Override
@@ -38,7 +37,8 @@ public class Login extends HttpServlet {
         if (userID < 0) { //an error code
             switch (userID) {
                 case -1:
-                    resp.sendError(400, "User or password not valid.");
+                    resp.setStatus(403);
+                    resp.getWriter().println("{\"code\":\"Invalid username or password\"}");
                     return;
                 case -2:
                     resp.sendError(500, "SQL server error.");
@@ -49,8 +49,8 @@ public class Login extends HttpServlet {
             }
         } else {
             SessionRepositoryRequestWrapper sessWrapper = (SessionRepositoryRequestWrapper) req;
-            sessWrapper.genSession();
-            resp.setHeader("X-Session-ID", req.getSession().getId());
+            HttpSession theSession = sessWrapper.genSession();
+            resp.setHeader("X-Session-ID", theSession.getId());
             resp.getWriter().println("{\"userID\":" + userID + "}");
             req.getSession().setAttribute("StaffEntity", "true");
         }

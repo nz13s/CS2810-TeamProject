@@ -4,7 +4,6 @@ import databaseInit.Database;
 import entities.Order;
 
 import javax.annotation.Nonnull;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
  *
  * @author Tony Delchev
  */
-@WebServlet("/update")
 public class OrderUpdate extends HttpServlet {
 
     /**

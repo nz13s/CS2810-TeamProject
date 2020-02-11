@@ -4,7 +4,6 @@ import databaseInit.Database;
 import entities.Order;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,6 @@ import java.sql.SQLException;
 /**
  * Class for handling the saving of a sessions {@link Order}
  */
-@WebServlet("/save")
 public class SaveOrder extends HttpServlet {
 
     /**

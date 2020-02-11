@@ -2,13 +2,11 @@ package sql;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.sql.rowset.serial.SerialBlob;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 
 public class Authentication {
@@ -40,7 +38,7 @@ public class Authentication {
         try {
             getUser.setString(1, username.toLowerCase());
             ResultSet resultSet = getUser.executeQuery();
-            boolean match = resultSet.first();
+            boolean match = resultSet.next();
             if (match) {
                 byte[] pwd_salt = resultSet.getBytes("pwd_salt");
                 byte[] pwd_hash = resultSet.getBytes("pwd_hash");
@@ -56,6 +54,7 @@ public class Authentication {
             return resultSet.getInt("staff_id");
 
         } catch (SQLException e) {
+            e.printStackTrace();
             return -2;
         }
 
@@ -74,10 +73,11 @@ public class Authentication {
             addUser.executeUpdate();
 
             ResultSet resultSet = addUser.getGeneratedKeys();
-
+            resultSet.next();
             return resultSet.getInt("staff_id");
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return -1;
         }
     }
