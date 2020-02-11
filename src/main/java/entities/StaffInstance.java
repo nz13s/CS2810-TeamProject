@@ -6,7 +6,7 @@ import java.util.List;
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
-    private List<String> messages;//TODO Discuss making a notification class
+    private List<Notification> messages;//TODO Discuss making a notification class
     private int staffID;
     private List<Table> tables;//TODO Remove if other method is decided better
 
@@ -34,9 +34,9 @@ public class StaffInstance {
     /**
      * Adds a new notification to the notification queue for the staff member
      *
-     * @param newNotification A String notification fot he staff member
+     * @param newNotification A notification fot he staff member
      */
-    public void addNotification(String newNotification) {
+    public void addNotification(Notification newNotification) {
         messages.add(newNotification);
     }
 
@@ -45,7 +45,7 @@ public class StaffInstance {
      *
      * @return The stored list of messages for the staff member
      */
-    public List<String> getNotifications() {
+    public List<Notification> getNotifications() {
         return this.messages;
     }
 
