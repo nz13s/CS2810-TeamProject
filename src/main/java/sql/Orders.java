@@ -15,6 +15,7 @@ import java.util.ArrayList;
  *
  * @author Tony Delchev
  * @author Bhavik Narang
+ * @author Jatin Khatra
  */
 public class Orders {
     private PreparedStatement orderById;
@@ -180,6 +181,13 @@ public class Orders {
         ResultSet resultSet = orderUpdateState.getGeneratedKeys();
         return resultSet.next();
     }
+
+    /**
+     * Updates "order_confirmed" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
 
     public void updateOrderConfirmedByID(int orderID) throws SQLException {
         updateOrderConfirmedByID.setLong(1, System.currentTimeMillis());
