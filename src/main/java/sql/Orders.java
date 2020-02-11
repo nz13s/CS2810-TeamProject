@@ -25,6 +25,7 @@ public class Orders {
     private PreparedStatement orderUpdateState;
     private PreparedStatement updateOrderConfirmedByID;
     private PreparedStatement updateOrderPreparingByID;
+    private PreparedStatement updateOrderReadyByID;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -60,6 +61,11 @@ public class Orders {
         updateOrderPreparingByID = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_preparing = ? " +
+                        "WHERE order_id = ?");
+
+        updateOrderReadyByID = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_ready = ? " +
                         "WHERE order_id = ?");
     }
 
@@ -215,6 +221,19 @@ public class Orders {
         updateOrderPreparingByID.setLong(1, System.currentTimeMillis());
         updateOrderPreparingByID.setInt(2, orderID);
         updateOrderPreparingByID.executeUpdate();
+    }
+
+    /**
+     * Updates "order_ready" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
+
+    public void updateOrderReadyByID(int orderID) throws SQLException {
+        updateOrderReadyByID.setLong(1, System.currentTimeMillis());
+        updateOrderReadyByID.setInt(2, orderID);
+        updateOrderReadyByID.executeUpdate();
     }
 
 
