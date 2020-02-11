@@ -47,15 +47,20 @@ public class Orders {
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
                         "WHERE o.order_confirmed != ? AND o.order_served = ?");
-        orderUpdateState = connection.prepareStatement("UPDATE orders " +
+        orderUpdateState = connection.prepareStatement(
+                "UPDATE orders " +
                 "SET order_preparing = ?, order_ready = ?, order_served = ? " +
                 "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
 
         updateOrderConfirmedByID = connection.prepareStatement(
-                "UPDATE orders SET order_confirmed = ? WHERE order_id = ?");
+                "UPDATE orders " +
+                        "SET order_confirmed = ? " +
+                        "WHERE order_id = ?");
 
         updateOrderPreparingByID = connection.prepareStatement(
-                "UPDATE orders SET order_preparing = ? WHERE order_id = ?");
+                "UPDATE orders " +
+                        "SET order_preparing = ? " +
+                        "WHERE order_id = ?");
     }
 
     /**
