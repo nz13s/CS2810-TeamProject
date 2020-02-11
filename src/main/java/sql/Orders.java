@@ -15,6 +15,7 @@ import java.util.ArrayList;
  *
  * @author Tony Delchev
  * @author Bhavik Narang
+ * @author Jatin Khatra
  */
 public class Orders {
     private PreparedStatement orderById;
@@ -22,6 +23,10 @@ public class Orders {
     private PreparedStatement ordersGet;
     private PreparedStatement foodSave;
     private PreparedStatement orderUpdateState;
+    private PreparedStatement updateOrderConfirmedByID;
+    private PreparedStatement updateOrderPreparingByID;
+    private PreparedStatement updateOrderReadyByID;
+    private PreparedStatement updateOrderServedByID;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -44,9 +49,26 @@ public class Orders {
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
                         "WHERE o.order_confirmed != ? AND o.order_served = ?");
-        orderUpdateState = connection.prepareStatement("UPDATE orders " +
+        orderUpdateState = connection.prepareStatement(
+                "UPDATE orders " +
                 "SET order_preparing = ?, order_ready = ?, order_served = ? " +
                 "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
+        updateOrderConfirmedByID = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_confirmed = ? " +
+                        "WHERE order_id = ?");
+        updateOrderPreparingByID = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_preparing = ? " +
+                        "WHERE order_id = ?");
+        updateOrderReadyByID = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_ready = ? " +
+                        "WHERE order_id = ?");
+        updateOrderServedByID = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_served = ? " +
+                        "WHERE order_id = ?");
     }
 
     /**
@@ -128,7 +150,7 @@ public class Orders {
             //o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity
             Food food = new Food(resultSet.getInt("food_id"), resultSet.getString("food_name"),
                     resultSet.getString("food_description"), resultSet.getInt("calories"),
-                    null, true, resultSet.getInt("category_id"));
+                    null, true, resultSet.getInt("category_id"),null);
             l.add(new Item(food, resultSet.getInt("quantity")));
             queue.add(new IndexedOrder(
                     resultSet.getInt("order_id"),
@@ -175,6 +197,58 @@ public class Orders {
         orderUpdateState.execute();
         ResultSet resultSet = orderUpdateState.getGeneratedKeys();
         return resultSet.next();
+    }
+
+    /**
+     * Updates "order_confirmed" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
+
+    public void updateOrderConfirmedByID(int orderID) throws SQLException {
+        updateOrderConfirmedByID.setLong(1, System.currentTimeMillis());
+        updateOrderConfirmedByID.setInt(2, orderID);
+        updateOrderConfirmedByID.executeUpdate();
+    }
+
+    /**
+     * Updates "order_preparing" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
+
+    public void updateOrderPreparingByID(int orderID) throws SQLException {
+        updateOrderPreparingByID.setLong(1, System.currentTimeMillis());
+        updateOrderPreparingByID.setInt(2, orderID);
+        updateOrderPreparingByID.executeUpdate();
+    }
+
+    /**
+     * Updates "order_ready" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
+
+    public void updateOrderReadyByID(int orderID) throws SQLException {
+        updateOrderReadyByID.setLong(1, System.currentTimeMillis());
+        updateOrderReadyByID.setInt(2, orderID);
+        updateOrderReadyByID.executeUpdate();
+    }
+
+    /**
+     * Updates "order_served" to hold the current system time of when it is executed.
+     *
+     * @param orderID ID of the customer's order that needs to be updated.
+     * @throws SQLException if sql logic is incorrect.
+     */
+
+    public void updateOrderServedByID(int orderID) throws SQLException {
+        updateOrderServedByID.setLong(1, System.currentTimeMillis());
+        updateOrderServedByID.setInt(2, orderID);
+        updateOrderServedByID.executeUpdate();
     }
 
 
