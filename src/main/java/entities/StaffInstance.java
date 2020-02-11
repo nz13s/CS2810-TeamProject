@@ -1,13 +1,14 @@
 package entities;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
-    private LinkedList<String> messages;//TODO Discuss making a notification class
+    private List<String> messages;//TODO Discuss making a notification class
     private int staffID;
-    private LinkedList<Table> tables;//TODO Remove if other method is decided better
+    private List<Table> tables;//TODO Remove if other method is decided better
 
     /**
      * Creates a new staff instance for a session used by a staff member
@@ -16,7 +17,7 @@ public class StaffInstance {
      */
     public StaffInstance(int staffID) {
         this.staffID = staffID;
-        messages = new LinkedList<>();
+        messages = new ArrayList<>();
     }
 
     /**
@@ -44,7 +45,7 @@ public class StaffInstance {
      *
      * @return The stored list of messages for the staff member
      */
-    public LinkedList<String> getNotifications() {
+    public List<String> getNotifications() {
         return this.messages;
     }
 
@@ -79,5 +80,13 @@ public class StaffInstance {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns the staffs ID as stored in the database.
+     * @return The String identifier for the staff member
+     */
+    public String getStaffID(){
+        return this.staffID;
     }
 }

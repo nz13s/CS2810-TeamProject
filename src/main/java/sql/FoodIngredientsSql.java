@@ -31,9 +31,9 @@ public class FoodIngredientsSql {
     public FoodIngredientsSql(Connection connection) throws SQLException {
 
         getIngredients = connection.prepareStatement(
-                "SELECT i.ingredient_id, i.ingredient\n" +
-                        "FROM food\n" +
-                        "JOIN ingredients i on i.ingredient_id = food.food_id\n" +
+                "SELECT i.ingredient_id, i.ingredient " +
+                        "FROM food " +
+                        "JOIN ingredients i on i.ingredient_id = food.food_id " +
                         "WHERE food_id = ?");
     }
 

@@ -27,6 +27,7 @@ public class Orders {
     private PreparedStatement updateOrderPreparingByID;
     private PreparedStatement updateOrderReadyByID;
     private PreparedStatement updateOrderServedByID;
+    private PreparedStatement orderConfirm;
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -53,6 +54,9 @@ public class Orders {
                 "UPDATE orders " +
                 "SET order_preparing = ?, order_ready = ?, order_served = ? " +
                 "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
+        orderConfirm = connection.prepareStatement("UPDATE orders " +
+                "SET order_confirmed = ?" +
+                "WHERE order_id = ?");
         updateOrderConfirmedByID = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_confirmed = ? " +
@@ -181,19 +185,40 @@ public class Orders {
      * Updates Order State by time stamping each stage the order reaches.
      * It updates every field to be able to reverse order state timestamp.
      *
-     * @param order_preparing timestamp
-     * @param order_ready     timestamp
-     * @param order_served    timestamp
-     * @param o               The order to be updated
+     * @param o The order to be updated
      * @return true if successful
      * @throws SQLException if an error occurred
      */
 
-    public boolean updateOrderState(long order_preparing, long order_ready, long order_served, Order o) throws SQLException {
-        orderUpdateState.setLong(1, order_preparing);
-        orderUpdateState.setLong(2, order_ready);
-        orderUpdateState.setLong(3, order_served);
-        orderUpdateState.setInt(4, o.getOrderID());
+    public boolean updateOrderState(Order o, int state) throws SQLException {
+        switch (state) {
+            case 0:
+                orderUpdateState.setLong(1, 0);
+                orderUpdateState.setLong(2, 0);
+                orderUpdateState.setLong(3, 0);
+                orderUpdateState.setInt(4, o.getOrderID());
+                break;
+            case 1:
+                orderUpdateState.setLong(1, System.currentTimeMillis());
+                orderUpdateState.setLong(2, 0);
+                orderUpdateState.setLong(3, 0);
+                orderUpdateState.setInt(4, o.getOrderID());
+                break;
+            case 2:
+                orderUpdateState.setLong(1, o.getOrderPreparing());
+                orderUpdateState.setLong(2, System.currentTimeMillis());
+                orderUpdateState.setLong(3, 0);
+                orderUpdateState.setInt(4, o.getOrderID());
+                break;
+            case 3:
+                orderUpdateState.setLong(1, o.getOrderPreparing());
+                orderUpdateState.setLong(2, o.getOrderReady());
+                orderUpdateState.setLong(3, System.currentTimeMillis());
+                orderUpdateState.setInt(4, o.getOrderID());
+                break;
+            default:
+                return false;
+        }
         orderUpdateState.execute();
         ResultSet resultSet = orderUpdateState.getGeneratedKeys();
         return resultSet.next();
@@ -251,6 +276,11 @@ public class Orders {
         updateOrderServedByID.executeUpdate();
     }
 
+    public void confirmOrder(int orderID) throws SQLException {
+        orderConfirm.setLong(1, System.currentTimeMillis());
+        orderConfirm.setInt(2, orderID);
+        orderConfirm.execute();
+    }
 
 }
 
