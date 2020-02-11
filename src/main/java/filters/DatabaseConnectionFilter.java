@@ -42,10 +42,12 @@ public class DatabaseConnectionFilter implements Filter {
             }
         }
 
-        if (cachedError != null){
+        if (cachedError != null) {
             resp.sendError(500, cachedError);
             return;
         }
+
+        chain.doFilter(request, response);
 
     }
 }
