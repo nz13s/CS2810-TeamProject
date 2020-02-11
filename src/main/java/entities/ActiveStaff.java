@@ -16,12 +16,13 @@ public class ActiveStaff {
 
     /**
      * Adds the inputted notification to the specified staff member by their staffID
-     * @param staffID The String staffID, as stored in the database, to send the notification to
+     *
+     * @param staffID The staffID, as stored in the database, to send the notification to
      * @param message The notification to pass to the specified staff member
      */
-    public void addNotification(String staffID, String message) {
+    public void addNotification(int staffID, String message) {
         StaffInstance employee = getStaffByID(staffID);
-        if(employee != null){
+        if (employee != null) {
             addNotification(employee, message);
         }
         //TODO Some sort of error message if the staff member is not active
@@ -51,7 +52,7 @@ public class ActiveStaff {
      * @param staffID The String ID, as stored in the database, of the staff member to be added to the list of
      *                active staff
      */
-    public void addStaff(String staffID) {
+    public void addStaff(int staffID) {
         //TODO Add validation for a valid staff member being added
         this.addStaff(new StaffInstance(staffID));
     }
@@ -59,10 +60,10 @@ public class ActiveStaff {
     /**
      * Removes the specified staff member from the active list of staff
      *
-     * @param staffID The String ID, as stored in the database, of the staff member to be removed from the list of
+     * @param staffID The ID, as stored in the database, of the staff member to be removed from the list of
      *                active staff
      */
-    public void remove(String staffID) {
+    public void remove(int staffID) {
         StaffInstance employee = getStaffByID(staffID);
         if (employee != null) {
             removeStaffFromActive(employee);
@@ -94,12 +95,12 @@ public class ActiveStaff {
      * Gets the specified staff member from the list of active staff by their staffID as is stored in the database,
      * returns null if the staff member does not exist or is not currently active
      *
-     * @param staffID The String ID, as stored in the database, of the staff member to be located
+     * @param staffID The ID, as stored in the database, of the staff member to be located
      * @return The {@link StaffInstance} of the staff member with the specified staffID, null if not there/active
      */
-    private StaffInstance getStaffByID(String staffID) {
+    private StaffInstance getStaffByID(int staffID) {
         for (StaffInstance employee : staff) {
-            if (employee.getStaffID().contentEquals(staffID)) {
+            if (employee.getStaffID() == staffID) {
                 return employee;
             }
         }
