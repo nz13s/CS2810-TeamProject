@@ -116,6 +116,16 @@ export default class Menu extends React.Component<any, State> {
     this.setState({ notifications: [element, ...this.state.notifications] });
   }
 
+  scrollToTarget(id: string): void {
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    element.scrollIntoView({
+      block: "start",
+      behavior: "smooth"
+    });
+  }
+
   render() {
     const { tableID, menu, basket, notifications } = this.state;
 
@@ -181,8 +191,34 @@ export default class Menu extends React.Component<any, State> {
               </div>
             </Col>
             <Col xs="8">
+              <div
+                id="sections"
+                className="sticky-top mb-2 bg-dark text-white rounded">
+                <ButtonGroup className="d-flex flex-wrap justify-content-center">
+                  {Array.from(menu.keys()).map((category, idx) => (
+                    <Button
+                      key={idx}
+                      className="section_button rounded-pill mx-1 my-1"
+                      variant="secondary"
+                      onClick={() =>
+                        this.scrollToTarget(`section_${category}`)
+                      }>
+                      {category}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+              </div>
+
               {Array.from(menu.entries()).map(([category, items]) => (
                 <React.Fragment key={category}>
+                  <div
+                    id={`section_${category}`}
+                    style={{
+                      position: "relative",
+                      top: `-${
+                        document.getElementById("sections")!.offsetHeight
+                      }px`
+                    }}/>
                   <h2>{category}</h2>
                   <CardDeck>
                     {items.map(item => (

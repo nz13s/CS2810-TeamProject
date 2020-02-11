@@ -8,8 +8,17 @@ const MenuStyle = styled.div`
     max-width: 45%;
   }
 
+  .section_button {
+    min-width: 13vw;
+    max-width: 13vw;
+  }
+
   @media only screen and (max-device-width: 812px) {
     .menu_item {
+      max-width: 100%;
+    }
+
+    .section_button {
       max-width: 100%;
     }
 
