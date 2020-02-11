@@ -10,6 +10,12 @@ public class LoginVerification {
             "and cannot contain anything other than alphanumeric characters," +
             " underscores or hyphens.";
 
+    /**
+     * Checks the username against the regex, to check if it is a valid username
+     *
+     * @param username the username to check
+     * @return true if valid, false if invalid
+     */
     public static boolean checkUsername(String username) {
         Matcher m = usernameCheck.matcher(username);
         return m.matches();

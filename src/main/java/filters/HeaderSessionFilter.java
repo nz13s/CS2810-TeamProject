@@ -18,9 +18,15 @@ public class HeaderSessionFilter implements Filter {
         HttpSession session = wrapper.getSession();
         if (req.getServletPath().equalsIgnoreCase("/hello")) {
             session = wrapper.genSession();
-        } else if (wrapper.getSession(false) == null) {
-            resp.sendError(401, "You need to provide your authentication token via the X-Session-ID. You can initiate a session with /hello");
+        } else if (req.getServletPath().equalsIgnoreCase("/login")) {
+            chain.doFilter(request, response);
+            //delegate the session creation to the login object, if and only if the login was successful.
             return;
+        } else {
+            if (wrapper.getSession(false) == null) {
+                resp.sendError(401, "You need to provide your authentication token via the X-Session-ID. You can initiate a session with /hello");
+                return;
+            }
         }
         resp.setHeader("X-Session-ID", session.getId());
         chain.doFilter(wrapper, response);

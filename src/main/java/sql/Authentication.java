@@ -34,20 +34,21 @@ public class Authentication {
     /**
      * Attempt to log the user in. Returns userID if successful, else a negative, failure number.
      *
-     * @return return >= 0 on success, return < 0 on failure
+     * @return return >= 0 on success, return < 0 on failure - -1 for user not found or password d
      */
     public int login(String username, String password) {
         try {
             getUser.setString(1, username.toLowerCase());
             ResultSet resultSet = getUser.executeQuery();
+            boolean match = resultSet.first();
+            if (match) {
+                byte[] pwd_salt = resultSet.getBytes("pwd_salt");
+                byte[] pwd_hash = resultSet.getBytes("pwd_hash");
 
-            byte[] pwd_salt = resultSet.getBytes("pwd_salt");
-            byte[] pwd_hash = resultSet.getBytes("pwd_hash");
+                byte[] hash = genPasswordHash(password, pwd_salt, PBKDF2_ITERATIONS);
 
-            byte[] hash = genPasswordHash(password, pwd_salt, PBKDF2_ITERATIONS);
-
-            boolean match = Arrays.equals(pwd_hash, hash);
-
+                match = Arrays.equals(pwd_hash, hash);
+            }
             if (!match) {
                 return -1;
             }
