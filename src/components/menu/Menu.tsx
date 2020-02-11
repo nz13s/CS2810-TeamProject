@@ -215,9 +215,7 @@ export default class Menu extends React.Component<any, State> {
                     id={`section_${category}`}
                     style={{
                       position: "relative",
-                      top: `-${
-                        document.getElementById("sections")!.offsetHeight
-                      }px`
+                      top: "-12vh"
                     }}
                   />
                   <h2>{category}</h2>
