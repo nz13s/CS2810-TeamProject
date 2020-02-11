@@ -81,7 +81,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>OrdersToFrontend</servlet-name>
-        <url-pattern>restricted/orders</url-pattern>
+        <url-pattern>/restricted/orders</url-pattern>
     </servlet-mapping>
 
     <servlet>
