@@ -1,4 +1,4 @@
-package endpoints;
+package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.StaffInstance;
@@ -67,9 +67,10 @@ public class StaffNotifications extends HttpServlet {
     private StaffInstance getStaffMember(HttpServletRequest req) {
         StaffInstance staff = (StaffInstance) req.getSession().getAttribute("staffMember");
         if (staff == null) {
-            staff = new StaffInstance("Bob");
-            //TODO Throw error and remove create instance since only staff should be able to get here
-            req.getSession().setAttribute("staffMember", staff);
+//            staff = new StaffInstance("Bob");
+//            //TODO Throw error and remove create instance since only staff should be able to get here
+//            req.getSession().setAttribute("staffMember", staff);
+            throw new IllegalStateException("No staff object found.");
         }
         return staff;
     }

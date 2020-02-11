@@ -102,4 +102,22 @@
         <url-pattern>/restricted/echo</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>EditMenuItem</servlet-name>
+        <servlet-class>endpoints.restricted.EditMenuItem</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditMenuItem</servlet-name>
+        <url-pattern>/restricted/editmenu</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StaffNotifications</servlet-name>
+        <servlet-class>endpoints.restricted.StaffNotifications</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffNotifications</servlet-name>
+        <url-pattern>/restricted/staffnotifications</url-pattern>
+    </servlet-mapping>
+
 </web-app>

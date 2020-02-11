@@ -1,4 +1,4 @@
-package endpoints;
+package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import databaseInit.Database;
@@ -17,7 +17,6 @@ import java.sql.SQLException;
 /**
  * Endpoint for the frontend to call to get {@link Food} items from the database to edit
  */
-@WebServlet("/staff/editmenu")
 public class EditMenuItem extends HttpServlet {
 
     private ObjectMapper om = new ObjectMapper();

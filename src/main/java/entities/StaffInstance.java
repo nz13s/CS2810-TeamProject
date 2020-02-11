@@ -6,7 +6,7 @@ public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
     private LinkedList<String> messages;//TODO Discuss making a notification class
-    private String staffID;
+    private int staffID;
     private LinkedList<Table> tables;//TODO Remove if other method is decided better
 
     /**
@@ -14,7 +14,7 @@ public class StaffInstance {
      *
      * @param staffID The ID of the staff member the session is created by
      */
-    public StaffInstance(String staffID) {
+    public StaffInstance(int staffID) {
         this.staffID = staffID;
         messages = new LinkedList<>();
     }
