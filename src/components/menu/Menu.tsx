@@ -218,7 +218,8 @@ export default class Menu extends React.Component<any, State> {
                       top: `-${
                         document.getElementById("sections")!.offsetHeight
                       }px`
-                    }}/>
+                    }}
+                  />
                   <h2>{category}</h2>
                   <CardDeck>
                     {items.map(item => (

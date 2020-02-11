@@ -10,7 +10,7 @@ const MenuStyle = styled.div`
 
   .section_button {
     min-width: 13vw;
-    max-width: 13vw;
+    //max-width: 15vw;
   }
 
   @media only screen and (max-device-width: 812px) {
@@ -18,9 +18,9 @@ const MenuStyle = styled.div`
       max-width: 100%;
     }
 
-    .section_button {
-      max-width: 100%;
-    }
+    //.section_button {
+    //  max-width: 100%;
+    //}
 
     #checkout_button {
       word-break: break-word;
