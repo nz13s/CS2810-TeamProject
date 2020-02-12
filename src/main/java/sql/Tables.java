@@ -23,6 +23,7 @@ import java.util.Set;
 public class Tables {
 
     private PreparedStatement fetchTables;
+    private PreparedStatement tableById;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -36,6 +37,12 @@ public class Tables {
         fetchTables = connection.prepareStatement(
                 "SELECT restaurant_table.table_num, order_id, seats_available, occupied, time_ordered, order_confirmed, order_preparing, order_ready, order_served\n" +
                         "FROM restaurant_table LEFT JOIN orders ON restaurant_table.table_num = orders.table_num\n" +
+                        "ORDER BY table_num");
+
+        tableById = connection.prepareStatement(
+                "SELECT restaurant_table.table_num, order_id, seats_available, occupied, time_ordered, order_confirmed, order_preparing, order_ready, order_served\n" +
+                        "FROM restaurant_table LEFT JOIN orders ON restaurant_table.table_num = orders.table_num\n" +
+                        "WHERE restaurant_table.table_num = ?" +
                         "ORDER BY table_num");
     }
 
