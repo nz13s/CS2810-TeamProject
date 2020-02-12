@@ -2,6 +2,6 @@ import React from "react";
 
 export default class WaiterEdit extends React.Component<any, any> {
   render() {
-    return <p>Edit Menu</p>;
+    return <h1>Edit Menu</h1>;
   }
 }

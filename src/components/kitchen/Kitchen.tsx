@@ -21,6 +21,8 @@ interface State {
 }
 
 export default class Kitchen extends React.Component<any, State> {
+  interval: number;
+
   constructor(props: any) {
     super(props);
 
@@ -29,19 +31,18 @@ export default class Kitchen extends React.Component<any, State> {
     };
 
     API.getQueue().then(queue => this.setState({ orders: queue }));
-    setInterval(() => API.getQueue(), 2500);
+    this.interval = setInterval(
+      () => API.getQueue().then(queue => this.setState({ orders: queue })),
+      1000
+    );
   }
 
   async moveItem(currentIndex: number, delta: number, item: OrderItem) {
-    API.moveOrder(item.id, currentIndex + 1);
+    await API.moveOrder(item.id, currentIndex + delta);
+  }
 
-    const orders = [...this.state.orders];
-    orders[currentIndex] = orders[currentIndex].filter(x => x.id !== item.id);
-
-    if (currentIndex + delta <= 2)
-      orders[currentIndex + delta] = [...orders[currentIndex + delta], item];
-
-    this.setState({ orders: orders });
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {

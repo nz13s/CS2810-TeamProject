@@ -1,18 +1,46 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import { WaiterStyle } from "./Waiter.styled";
-import { Button, Col, Container, Navbar, Row } from "react-bootstrap";
-import WaiterOrder from "./WaiterOrder";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  ListGroup,
+  Navbar,
+  Row
+} from "react-bootstrap";
+import WaiterManagement from "./WaiterManagement";
 import WaiterEdit from "./WaiterEdit";
-import WaiterServe from "./WaiterServe";
-import WaiterBill from "./WaiterBill";
+import Notification from "../../entities/Notification";
 
-export default class Waiter extends React.Component<any, any> {
+interface State {
+  notifications: Array<Notification>;
+}
+
+export default class Waiter extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
+
+    this.state = {
+      notifications: [
+        new Notification(
+          1,
+          "Food Serving",
+          "Bat soup to be served for all guests at table #1337"
+        ),
+        new Notification(
+          2,
+          "Attention",
+          "Someone ate the bat soup and now the floor needs a wiping"
+        )
+      ]
+    };
   }
 
   render() {
+    const { notifications } = this.state;
+
     return (
       <Switch>
         <Route exact path="/waiter">
@@ -22,59 +50,64 @@ export default class Waiter extends React.Component<any, any> {
                 <Navbar.Brand href="/#/">Oaxaca Waiter</Navbar.Brand>
               </Navbar>
 
-              <div className="my-5 py-5" />
+              <Row>
+                <Col xs="7">
+                  <h2>Notifications</h2>
+                  <ListGroup variant="flush" className="d-inline-block w-100">
+                    {notifications.map((notification, idx) => (
+                      <ListGroup.Item key={idx} className="bg-dark text-white">
+                        <Card
+                          border="danger"
+                          className="mb-3 bg-dark text-white">
+                          <Card.Header>
+                            <strong>{notification.title}</strong>
+                          </Card.Header>
+                          <Card.Body>
+                            <Card.Text>{notification.content}</Card.Text>
+                          </Card.Body>
+                          <Card.Footer>
+                            <Button
+                              variant="success"
+                              onClick={() => console.log("CLICKED")}>
+                              Dismiss
+                            </Button>
+                          </Card.Footer>
+                        </Card>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Col>
 
-              <Row className="d-flex mb-2 justify-content-center">
-                <Col xs="auto">
-                  <Link to="/waiter/order">
-                    <Button className="waiter_button" variant="success">
-                      Take Order
-                    </Button>
-                  </Link>
-                </Col>
-                <Col xs="auto">
-                  <Link to="/waiter/edit">
-                    <Button className="waiter_button" variant="danger">
-                      Edit Menu
-                    </Button>
-                  </Link>
-                </Col>
-              </Row>
-              <Row className="d-flex justify-content-center">
-                <Col xs="auto">
-                  <Link to="/waiter/serve">
-                    <Button className="waiter_button" variant="primary">
-                      Serve Food
-                    </Button>
-                  </Link>
-                </Col>
-                <Col xs="auto">
-                  <Link to="/waiter/bill">
-                    <Button className="waiter_button" variant="info">
-                      Check Bill
-                    </Button>
-                  </Link>
+                <Col xs="5">
+                  <h2>Settings</h2>
+                  <div className="mb-2">
+                    <Link to="/waiter/edit">
+                      <Button
+                        block
+                        className="waiter_button"
+                        variant="outline-danger">
+                        Edit Menu
+                      </Button>
+                    </Link>
+                  </div>
+                  <div className="mb-4">
+                    <Link to="/waiter/management">
+                      <Button
+                        block
+                        className="waiter_button"
+                        variant="outline-warning">
+                        Table Management
+                      </Button>
+                    </Link>
+                  </div>
                 </Col>
               </Row>
             </Container>
           </WaiterStyle>
         </Route>
 
-        <Route exact path="/waiter/order">
-          <WaiterOrder />
-        </Route>
-
-        <Route exact path="/waiter/edit">
-          <WaiterEdit />
-        </Route>
-
-        <Route exact path="/waiter/serve">
-          <WaiterServe />
-        </Route>
-
-        <Route exact path="/waiter/bill">
-          <WaiterBill />
-        </Route>
+        <Route exact path="/waiter/management" component={WaiterManagement} />
+        <Route exact path="/waiter/edit" component={WaiterEdit} />
       </Switch>
     );
   }
