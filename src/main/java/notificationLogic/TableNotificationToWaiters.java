@@ -7,13 +7,27 @@ import entities.Table;
 
 import java.util.List;
 
+/**
+ * Class that manages the notifications to waiters if a new order has been checked out by the customer.
+ *
+ * @author Jatin Khatra
+ */
+
 public class TableNotificationToWaiters {
 
     private List<StaffInstance> staff;
 
+    /**
+     * Constructor that initialises the staff attribute to hold all active staff.
+     */
+
     public TableNotificationToWaiters() {
         staff = new ActiveStaff().getAllActiveStaff();
     }
+
+    /**
+     * Adds table notifications to all waiter's notifications.
+     */
 
     public void addTableNotificationToAllStaff() {
 
