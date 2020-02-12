@@ -53,7 +53,7 @@ public class Login extends HttpServlet {
             HttpSession theSession = sessWrapper.genSession();
             resp.setHeader("X-Session-ID", theSession.getId());
             resp.getWriter().println("{\"userID\":" + userID + "}");
-            req.getSession().setAttribute("staffMember", new StaffInstance(userID));
+            req.getSession().setAttribute("StaffEntity", new StaffInstance(userID));
         }
     }
 }
