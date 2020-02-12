@@ -18,6 +18,7 @@ import MenuItem from "../../entities/MenuItem";
 import MenuType from "../../entities/MenuType";
 import BasketType from "../../entities/BasketType";
 import API from "../../client/api";
+import { IoIosWarning } from "react-icons/all";
 
 interface State {
   tableID: number;
@@ -237,6 +238,17 @@ export default class Menu extends React.Component<any, State> {
                             <strong>{item.name}</strong>
                           </Card.Title>
                           <Card.Text>{item.description}</Card.Text>
+                          <Card.Text>
+                            {item.ingredients.map((ingredient, idx) => (
+                              <React.Fragment key={idx}>
+                                {ingredient.allergen ? <IoIosWarning /> : ""}{" "}
+                                {ingredient.name}
+                                {idx === item.ingredients.length - 1
+                                  ? ""
+                                  : ", "}
+                              </React.Fragment>
+                            ))}
+                          </Card.Text>
                         </Card.Body>
 
                         <Card.Footer className="d-flex justify-content-between">

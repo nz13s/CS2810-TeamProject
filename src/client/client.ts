@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const CORS = `https://cors.x7.workers.dev/`;
-const servlet = `backend_sprint1`;
+const servlet = `api`;
 const baseURL = `${CORS}https://tomcat.xhex.uk/${servlet}`;
 
 export default class Client {

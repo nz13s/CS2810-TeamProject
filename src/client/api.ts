@@ -5,6 +5,7 @@ import BasketType from "../entities/BasketType";
 import CategoryType from "../entities/CategoryType";
 import QueueType from "../entities/QueueType";
 import OrderItem from "../entities/OrderItem";
+import Ingredient from "../entities/Ingredient";
 
 export default class API {
   static async validateSession(): Promise<boolean> {
@@ -31,15 +32,23 @@ export default class API {
     const menu = new Map();
 
     categories.forEach((category: any) => {
-      const { categoryName, list } = category;
+      const { categoryName, foods } = category;
 
-      const items = list.map(
+      const items = foods.map(
         (item: any) =>
           new MenuItem(
             item.foodID,
             item.foodName,
             item.foodDescription,
             item.price,
+            item.ingredients.map(
+              (ingredient: any) =>
+                new Ingredient(
+                  ingredient.ingredientID,
+                  ingredient.ingredient,
+                  ingredient.allergen
+                )
+            ),
             "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
           )
       );
@@ -61,6 +70,7 @@ export default class API {
         food.foodName,
         food.foodDescription,
         food.price,
+        [],
         ""
       );
       return Array(amount).fill(menuItem);
@@ -102,6 +112,7 @@ export default class API {
             food.foodName,
             food.foodDescription,
             0,
+            [],
             ""
           );
           return Array(amount).fill(menuItem);
