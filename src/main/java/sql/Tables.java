@@ -42,10 +42,9 @@ public class Tables {
                         "ORDER BY table_num");
 
         tableById = connection.prepareStatement(
-                "SELECT restaurant_table.table_num, order_id, seats_available, occupied, time_ordered, order_confirmed, order_preparing, order_ready, order_served\n" +
-                        "FROM restaurant_table LEFT JOIN orders ON restaurant_table.table_num = orders.table_num\n" +
-                        "WHERE restaurant_table.table_num = ?" +
-                        "ORDER BY table_num");
+                "SELECT table_num, seats_available, occupied\n" +
+                        "FROM restaurant_table\n" +
+                        "WHERE table_num = ?");
     }
 
     /**
@@ -71,7 +70,7 @@ public class Tables {
                     resultSet.getInt("table_num"),
                     new ArrayList<Item>());
             Table t = tables.stream().filter(tab -> tab.getTableNum() == order.getTableNum()).findFirst()
-                    .orElse(new Table(resultSet.getInt("table_num"), resultSet.getInt("seats_available"), resultSet.getBoolean("occupied"),null));
+                    .orElse(new Table(resultSet.getInt("table_num"), resultSet.getInt("seats_available"), resultSet.getBoolean("occupied"), null));
 
             // if no orders exist for a given table
             if (order.getOrderID() != 0) {
@@ -92,16 +91,22 @@ public class Tables {
      */
     @Nullable
     public Table getTableByID(int table_num) throws SQLException {
-        ArrayList<Order> orders = Database.ORDERS.getOrders(0L,0L);
+        ArrayList<Order> allOrders = Database.ORDERS.getOrders(0L, 0L);
         tableById.setInt(1, table_num);
         ResultSet resultSet = tableById.executeQuery();
         if (resultSet.next()) {
-            return new Table(
+            Table t = new Table(
                     resultSet.getInt("table_num"),
                     resultSet.getInt("seats_available"),
                     resultSet.getBoolean("occupied"),
-                    orders
+                    new ArrayList<>()
             );
+            for (Order order : allOrders) {
+                if (order.getTableNum() == t.getTableNum()) {
+                    t.addOrder(order);
+                }
+            }
+            return t;
         }
         return null;
     }
