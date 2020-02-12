@@ -8,21 +8,35 @@ import OrderItem from "../entities/OrderItem";
 import Ingredient from "../entities/Ingredient";
 
 export default class API {
-  static async validateSession(): Promise<boolean> {
+  static async validateSession(elevated = false): Promise<boolean> {
+    const endpoint = elevated ? "/restricted/orders" : "/menu";
     try {
-      await client.makeRequest("GET", "/menu");
+      await client.makeRequest("GET", endpoint);
       return true;
     } catch (e) {
       return e.response.status !== 401;
     }
   }
 
-  static async getSession(): Promise<void> {
-    const isValid = await this.validateSession();
+  static async getSession(elevated = false): Promise<void> {
+    const isValid = await this.validateSession(elevated);
     if (isValid) return;
 
     const { headers } = await client.makeRequest("GET", "/hello");
     localStorage.setItem("session", headers["x-session-id"]);
+  }
+
+  static async login(username: string, password: string): Promise<boolean> {
+    try {
+      const { headers } = await client.makeRequest("POST", "/login", {
+        username,
+        password
+      });
+      localStorage.setItem("session", headers["x-session-id"]);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   static async fetchMenu(): Promise<MenuType> {
@@ -98,7 +112,7 @@ export default class API {
   }
 
   static async getQueue(): Promise<QueueType> {
-    const response = await client.makeRequest("GET", "/orders");
+    const response = await client.makeRequest("GET", "/restricted/orders");
     const { orders } = response.data;
 
     const queue: QueueType = [[], [], []];
@@ -136,5 +150,12 @@ export default class API {
     });
 
     return queue;
+  }
+
+  static async moveOrder(orderID: number, state: number): Promise<void> {
+    await client.makeRequest("POST", "/restricted/update", {
+      orderID: orderID,
+      state: state
+    });
   }
 }

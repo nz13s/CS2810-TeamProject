@@ -29,9 +29,12 @@ export default class Kitchen extends React.Component<any, State> {
     };
 
     API.getQueue().then(queue => this.setState({ orders: queue }));
+    setInterval(() => API.getQueue(), 2500);
   }
 
-  moveItem(currentIndex: number, delta: number, item: OrderItem) {
+  async moveItem(currentIndex: number, delta: number, item: OrderItem) {
+    API.moveOrder(item.id, currentIndex + 1);
+
     const orders = [...this.state.orders];
     orders[currentIndex] = orders[currentIndex].filter(x => x.id !== item.id);
 
@@ -68,12 +71,14 @@ export default class Kitchen extends React.Component<any, State> {
                     <Card border="danger" className="mb-3 bg-dark text-white">
                       <Card.Header>Order #{item.id}</Card.Header>
                       <Card.Body>
-                        {item.foods.map((x, idx) => (
-                          <Card.Text key={idx}>
-                            • {x.name}
-                            <br />
-                          </Card.Text>
-                        ))}
+                        {Object.entries(_.groupBy(item.foods, x => x.id)).map(
+                          ([, items], idx) => (
+                            <Card.Text key={idx}>
+                              {items.length}x {items[0].name}
+                              <br />
+                            </Card.Text>
+                          )
+                        )}
                         <Card.Subtitle>
                           Time Ordered: {item.ordered.toLocaleTimeString()}
                         </Card.Subtitle>
@@ -100,12 +105,14 @@ export default class Kitchen extends React.Component<any, State> {
                     <Card border="warning" className="mb-3 bg-dark text-white">
                       <Card.Header>Order #{item.id}</Card.Header>
                       <Card.Body>
-                        {item.foods.map((x, idx) => (
-                          <Card.Text key={idx}>
-                            • {x.name}
-                            <br />
-                          </Card.Text>
-                        ))}
+                        {Object.entries(_.groupBy(item.foods, x => x.id)).map(
+                          ([, items], idx) => (
+                            <Card.Text key={idx}>
+                              {items.length}x {items[0].name}
+                              <br />
+                            </Card.Text>
+                          )
+                        )}
                         <Card.Subtitle>
                           Time Ordered: {item.ordered.toLocaleTimeString()}
                         </Card.Subtitle>
@@ -138,12 +145,14 @@ export default class Kitchen extends React.Component<any, State> {
                     <Card border="success" className="mb-3 bg-dark text-white">
                       <Card.Header>Order #{item.id}</Card.Header>
                       <Card.Body>
-                        {item.foods.map((x, idx) => (
-                          <Card.Text key={idx}>
-                            • {x.name}
-                            <br />
-                          </Card.Text>
-                        ))}
+                        {Object.entries(_.groupBy(item.foods, x => x.id)).map(
+                          ([, items], idx) => (
+                            <Card.Text key={idx}>
+                              {items.length}x {items[0].name}
+                              <br />
+                            </Card.Text>
+                          )
+                        )}
                         <Card.Subtitle>
                           Time Ordered: {item.ordered.toLocaleTimeString()}
                         </Card.Subtitle>
