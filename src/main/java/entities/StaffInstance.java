@@ -91,6 +91,13 @@ public class StaffInstance {
         return this.staffID;
     }
 
+    /**
+     * Returns a Notification object from a given message.
+     *
+     * @param message message of the notification.
+     * @return Notification based on the message.
+     */
+
     public Notification getNotificationFromMessage(String message) {
 
         for (int i=0; i<messages.size(); i++) {
@@ -99,5 +106,20 @@ public class StaffInstance {
             }
         }
         return null;
+    }
+
+    /**
+     * Removes a notification based on a given message.
+     *
+     * @param message message of the notification.
+     */
+
+    public void removeNotificationFromMessage(String message) {
+
+        for (int i=0; i<messages.size(); i++) {
+            if (messages.get(i).getMessage().equals(message)) {
+                messages.remove(i);
+            }
+        }
     }
 }
