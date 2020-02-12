@@ -15,6 +15,7 @@ import java.util.List;
 
 public class TableNotificationToWaiters {
 
+    private ActiveStaff activeStaff;
     private List<StaffInstance> staff;
 
     /**
@@ -22,7 +23,7 @@ public class TableNotificationToWaiters {
      */
 
     public TableNotificationToWaiters() {
-        staff = new ActiveStaff().getAllActiveStaff();
+        staff = activeStaff.getAllActiveStaff();
     }
 
     /**
@@ -31,8 +32,8 @@ public class TableNotificationToWaiters {
 
     public void addTableNotificationToAllStaff() {
 
-        //temp table object - will be changed to actual table object depending on how tables are going to see assigned.
-        Table table = new Table(1,1,false,null);
+        //temp table object - will be changed to actual table object depending on how tables are going to be assigned.
+        Table table = new Table(1, 1, false, null);
 
         for (StaffInstance staffInstance : staff) {
             staffInstance.addNotification(new Notification(table, "Table waiting for order confirmation"));
