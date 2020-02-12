@@ -90,4 +90,14 @@ public class StaffInstance {
     public int getStaffID() {
         return this.staffID;
     }
+
+    public Notification getNotificationFromMessage(String message) {
+
+        for (int i=0; i<messages.size(); i++) {
+            if (messages.get(i).getMessage().equals(message)) {
+                return messages.get(i);
+            }
+        }
+        return null;
+    }
 }

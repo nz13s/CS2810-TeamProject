@@ -33,11 +33,34 @@ public class TableNotificationToWaiters {
     public void addTableNotificationToAllStaff() {
 
         //temp table object - will be changed to actual table object depending on how tables are going to be assigned.
-        Table table = new Table(1, 1, false, null);
+        Table table = new Table(1,1,false,null);
 
         for (StaffInstance staffInstance : staff) {
             staffInstance.addNotification(new Notification(table, "Table waiting for order confirmation"));
         }
+    }
+
+    /**
+     * Staff accepts the notification and is assigned to the table.
+     */
+
+    public void acceptNotification(int staffID) {
+
+        for (int i=0; i<staff.size(); i++) {
+
+            if (staff.get(i).getStaffID() == staffID) {
+                staff.get(i).getNotificationFromMessage("Table waiting for order confirmation").setCompleted(true);
+            }
+        }
+
+    }
+
+    /**
+     * Removes the notifications from staff who have not accepted the notification.
+     */
+
+    public void removeTableNotificationFromStaff() {
+
     }
 
 }
