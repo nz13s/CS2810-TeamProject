@@ -103,4 +103,14 @@ public class ActiveStaff {
         }
         return null;
     }
+
+    /**
+     * Method that returns all active staff to send notifications to.
+     *
+     * @return List of StaffIntances objects.
+     */
+
+    public List<StaffInstance> getAllActiveStaff() {
+        return staff;
+    }
 }
