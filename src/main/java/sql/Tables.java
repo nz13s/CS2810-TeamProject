@@ -1,10 +1,12 @@
 package sql;
 
+import databaseInit.Database;
 import entities.Item;
 import entities.Order;
 import entities.Table;
 import entities.TableState;
 
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,6 +81,29 @@ public class Tables {
         }
         tables.forEach(tableState::addTable);
         return tableState;
+    }
+
+    /**
+     * Selects the table record with all of its orders matching the table_num
+     *
+     * @param table_num table number
+     * @return Table object
+     * @throws SQLException if an error occurred
+     */
+    @Nullable
+    public Table getTableByID(int table_num) throws SQLException {
+        ArrayList<Order> orders = Database.ORDERS.getOrders(0L,0L);
+        tableById.setInt(1, table_num);
+        ResultSet resultSet = tableById.executeQuery();
+        if (resultSet.next()) {
+            return new Table(
+                    resultSet.getInt("table_num"),
+                    resultSet.getInt("seats_available"),
+                    resultSet.getBoolean("occupied"),
+                    orders
+            );
+        }
+        return null;
     }
 
 }
