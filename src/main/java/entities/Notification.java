@@ -7,7 +7,6 @@ public class Notification {
     private Long time;
     private Boolean completed;
 
-
     /**
      * Constructor for an Notification used in the {@link StaffInstance}.
      *

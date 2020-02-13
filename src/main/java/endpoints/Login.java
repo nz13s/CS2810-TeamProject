@@ -1,6 +1,7 @@
 package endpoints;
 
 import databaseInit.Database;
+import entities.ActiveStaff;
 import entities.StaffInstance;
 import filters.SessionRepositoryRequestWrapper;
 import verification.LoginVerification;
@@ -53,7 +54,10 @@ public class Login extends HttpServlet {
             HttpSession theSession = sessWrapper.genSession();
             resp.setHeader("X-Session-ID", theSession.getId());
             resp.getWriter().println("{\"userID\":" + userID + "}");
+
+            ActiveStaff.addStaff(new StaffInstance(userID));
             theSession.setAttribute("StaffEntity", new StaffInstance(userID));
+
         }
     }
 }
