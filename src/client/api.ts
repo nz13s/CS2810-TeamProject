@@ -63,6 +63,7 @@ export default class API {
                   ingredient.allergen
                 )
             ),
+            item.calories,
             "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
           )
       );
@@ -85,6 +86,7 @@ export default class API {
         food.foodDescription,
         food.price,
         [],
+        0,
         ""
       );
       return Array(amount).fill(menuItem);
@@ -127,6 +129,7 @@ export default class API {
             food.foodDescription,
             0,
             [],
+            0,
             ""
           );
           return Array(amount).fill(menuItem);

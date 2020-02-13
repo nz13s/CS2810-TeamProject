@@ -6,6 +6,7 @@ export default class MenuItem {
   description: string;
   price: number;
   ingredients: Array<Ingredient>;
+  calories: number;
   image: string;
 
   constructor(
@@ -14,6 +15,7 @@ export default class MenuItem {
     description: string,
     price: number,
     ingredients: Array<Ingredient>,
+    calories: number,
     image: string
   ) {
     this.id = id;
@@ -21,6 +23,7 @@ export default class MenuItem {
     this.description = description;
     this.price = price;
     this.ingredients = ingredients;
+    this.calories = calories;
     this.image = image;
   }
 }

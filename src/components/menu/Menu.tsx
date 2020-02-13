@@ -249,6 +249,7 @@ export default class Menu extends React.Component<any, State> {
                               </React.Fragment>
                             ))}
                           </Card.Text>
+                          <Card.Text>{item.calories}kcal</Card.Text>
                         </Card.Body>
 
                         <Card.Footer className="d-flex justify-content-between">
