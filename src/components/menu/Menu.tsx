@@ -3,7 +3,7 @@ import {
   Button,
   ButtonGroup,
   Card,
-  CardDeck,
+  CardGroup,
   Col,
   Container,
   ListGroup,
@@ -137,7 +137,7 @@ export default class Menu extends React.Component<any, State> {
           style={{ zIndex: 2000, position: "fixed", top: 0, right: 0 }}>
           {notifications}
         </div>
-        <Container>
+        <Container fluid className="mx-2">
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
             <Navbar.Brand href="/#/">Oaxaca Menu</Navbar.Brand>
             <Navbar.Collapse className="d-flex justify-content-center">
@@ -145,7 +145,7 @@ export default class Menu extends React.Component<any, State> {
             </Navbar.Collapse>
           </Navbar>
           <Row>
-            <Col xs="4">
+            <Col xs="3">
               <div className="sticky-top">
                 <h2>Your Order</h2>
                 <ListGroup variant="flush" className="d-inline-block w-100">
@@ -191,15 +191,16 @@ export default class Menu extends React.Component<any, State> {
                 </ListGroup>
               </div>
             </Col>
-            <Col xs="8">
+            <Col xs="9">
               <div
                 id="sections"
-                className="sticky-top mb-2 bg-dark text-white rounded">
+                className="sticky-top mb-2 text-white rounded"
+                style={{ backgroundColor: "#1d1d1d" }}>
                 <ButtonGroup className="d-flex flex-wrap justify-content-center">
                   {Array.from(menu.keys()).map((category, idx) => (
                     <Button
                       key={idx}
-                      className="section_button rounded-pill mx-1 my-1"
+                      className="section_button rounded mx-1 my-1"
                       variant="secondary"
                       onClick={() =>
                         this.scrollToTarget(`section_${category}`)
@@ -219,14 +220,14 @@ export default class Menu extends React.Component<any, State> {
                       top: "-12vh"
                     }}
                   />
-                  <h2>{category}</h2>
-                  <CardDeck>
+                  <h1>{category}</h1>
+                  <CardGroup>
                     {items.map(item => (
                       <Card
                         bg="dark"
                         text="white"
                         key={item.id}
-                        className="mb-3 menu_item">
+                        className="mb-3 mr-2 menu_item">
                         <Card.Img
                           className="img-fluid"
                           variant="top"
@@ -262,7 +263,7 @@ export default class Menu extends React.Component<any, State> {
                         </Card.Footer>
                       </Card>
                     ))}
-                  </CardDeck>
+                  </CardGroup>
                 </React.Fragment>
               ))}
             </Col>

@@ -135,6 +135,9 @@ export default class API {
           return Array(amount).fill(menuItem);
         }),
         new Date(order.timeOrdered),
+        new Date(order.orderConfirmed),
+        new Date(order.orderPreparing),
+        new Date(order.orderReady),
         order.rank
       );
 

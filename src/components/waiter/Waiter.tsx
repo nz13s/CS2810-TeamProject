@@ -45,13 +45,13 @@ export default class Waiter extends React.Component<any, State> {
       <Switch>
         <Route exact path="/waiter">
           <WaiterStyle>
-            <Container>
+            <Container fluid className="mx-2">
               <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
                 <Navbar.Brand href="/#/">Oaxaca Waiter</Navbar.Brand>
               </Navbar>
 
               <Row>
-                <Col xs="7">
+                <Col xs="6">
                   <h2>Notifications</h2>
                   <ListGroup variant="flush" className="d-inline-block w-100">
                     {notifications.map((notification, idx) => (
@@ -78,7 +78,7 @@ export default class Waiter extends React.Component<any, State> {
                   </ListGroup>
                 </Col>
 
-                <Col xs="5">
+                <Col xs="6">
                   <h2>Settings</h2>
                   <div className="mb-2">
                     <Link to="/waiter/edit">

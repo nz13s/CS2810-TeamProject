@@ -4,7 +4,7 @@ const WaiterStyle = styled.div`
   display: flex;
 
   .waiter_button {
-    font-size: 2rem;
+    font-size: 2.5rem;
     word-break: break-word;
     word-wrap: break-word;
   }

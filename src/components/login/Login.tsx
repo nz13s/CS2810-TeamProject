@@ -38,7 +38,7 @@ export default class Login extends React.Component<any, State> {
   render() {
     return (
       <LoginStyle>
-        <Container>
+        <Container fluid className="mx-2">
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
             <Navbar.Brand href="/#/">Oaxaca</Navbar.Brand>
           </Navbar>

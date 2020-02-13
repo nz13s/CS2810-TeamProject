@@ -51,7 +51,7 @@ export default class Kitchen extends React.Component<any, State> {
 
     return (
       <KitchenStyle>
-        <Container>
+        <Container fluid className="mx-2">
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
             <Navbar.Brand href="/#/">Oaxaca Kitchen</Navbar.Brand>
           </Navbar>
@@ -81,7 +81,7 @@ export default class Kitchen extends React.Component<any, State> {
                           )
                         )}
                         <Card.Subtitle>
-                          Time Ordered: {item.ordered.toLocaleTimeString()}
+                          Time ordered: {item.timeOrdered.toLocaleTimeString()}
                         </Card.Subtitle>
                       </Card.Body>
                       <Card.Footer>
@@ -115,7 +115,8 @@ export default class Kitchen extends React.Component<any, State> {
                           )
                         )}
                         <Card.Subtitle>
-                          Time Ordered: {item.ordered.toLocaleTimeString()}
+                          Preparing since:{" "}
+                          {item.timePreparing.toLocaleTimeString()}
                         </Card.Subtitle>
                       </Card.Body>
                       <Card.Footer>
@@ -155,20 +156,16 @@ export default class Kitchen extends React.Component<any, State> {
                           )
                         )}
                         <Card.Subtitle>
-                          Time Ordered: {item.ordered.toLocaleTimeString()}
+                          Ready since: {item.timeReady.toLocaleTimeString()}
                         </Card.Subtitle>
                       </Card.Body>
                       <Card.Footer>
-                        <ButtonGroup className="d-flex">
-                          <Button
-                            variant="warning"
-                            onClick={() => this.moveItem(2, -1, item)}>
-                            ⇐ Preparing
-                          </Button>
-                          <Button onClick={() => this.moveItem(2, 1, item)}>
-                            Served
-                          </Button>
-                        </ButtonGroup>
+                        <Button
+                          variant="warning"
+                          onClick={() => this.moveItem(2, -1, item)}
+                          block>
+                          ⇐ Preparing
+                        </Button>
                       </Card.Footer>
                     </Card>
                   </ListGroup.Item>

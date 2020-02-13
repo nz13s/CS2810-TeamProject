@@ -4,13 +4,13 @@ const MenuStyle = styled.div`
   display: flex;
 
   .menu_item {
-    min-width: 30%;
-    max-width: 45%;
+    min-width: 30vh;
+    max-width: 35vh;
   }
 
   .section_button {
     min-width: 13vw;
-    //max-width: 15vw;
+    // max-width: 15vw;
   }
 
   @media only screen and (max-device-width: 812px) {
