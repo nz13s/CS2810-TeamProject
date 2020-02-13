@@ -1,3 +1,5 @@
+//TODO -- Tony look at this pls
+
 package endpoints;
 
 import com.fasterxml.jackson.core.Version;
@@ -5,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import entities.Notification;
+import entities.Table;
 import entities.serialisers.NotificationSerialiser;
 
 import javax.servlet.ServletException;
@@ -13,10 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 
-@WebServlet() //todo -- what goes in brackets?
+@WebServlet("/notification") //todo -- what goes in brackets?
 public class NotifyWaiter extends HttpServlet {
     private ObjectMapper om = new ObjectMapper();
 
@@ -36,26 +37,24 @@ public class NotifyWaiter extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Notification> notifications = getNotifications(req, resp);
-        resp.reset();
-        resp.setContentType("application/json");
-        PrintWriter pw = resp.getWriter();
-        pw.println(om.writeValueAsString(notifications));
-        pw.flush();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        Notification notification = null;
+        boolean success = false;
+        Table table = null;
+        String s = null;
     }
 
-    private List<Notification> getNotifications(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<Notification> notifications;
+    private int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int tableID = -1;
         try {
-            notifications = (List<Notification>) req.getSession().getAttribute("notifications");
-            if (notifications.equals(null)) {
-                resp.sendError(400, "Nothing found");
+            tableID = Integer.parseInt(req.getParameter("tableID"));
+            if (tableID < 0) {
+                throw new NumberFormatException();
             }
-        } catch (NumberFormatException | IOException e) {
-            resp.sendError(400, "Nothing found");
-            throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid State integer.");
         }
-        return notifications;
+        return tableID;
     }
 }
