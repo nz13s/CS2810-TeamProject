@@ -3,10 +3,18 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used to deal with notification handling of staff members.
+ *
+ * @author Tony
+ * @author Jatin Khatra
+ * @author Bhavik Narang
+ */
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
     private List<Notification> messages;//TODO Discuss making a notification class
+    private List<Notification> activeJobMessages;
     private int staffID;
     private List<Table> tables;//TODO Remove if other method is decided better
 
@@ -21,23 +29,23 @@ public class StaffInstance {
     }
 
     /**
-     * Removes the notification at the specified index
+     * Removes the notification at the specified index from a given list.
      *
      * @param pos The index of the notification to remove
      */
-    public void removeNotification(int pos) {
-        if (pos >= 0 && pos < messages.size()) {
-            messages.remove(pos);
+    public void removeNotification(List<Notification> list, int pos) {
+        if (pos >= 0 && pos < list.size()) {
+            list.remove(pos);
         }
     }
 
     /**
-     * Adds a new notification to the notification queue for the staff member
+     * Adds a new notification to the given notification queue for the staff member
      *
      * @param newNotification A notification fot he staff member
      */
-    public void addNotification(Notification newNotification) {
-        messages.add(newNotification);
+    public void addNotification(List<Notification> list, Notification newNotification) {
+        list.add(newNotification);
     }
 
     /**
@@ -47,6 +55,15 @@ public class StaffInstance {
      */
     public List<Notification> getNotifications() {
         return this.messages;
+    }
+
+    /**
+     * Gets the active notifications for the staff member that they are working on currently
+     *
+     * @return The stored list of active messages for the staff member
+     */
+    public List<Notification> getActiveNotifications() {
+        return this.activeJobMessages;
     }
 
     /**
@@ -92,33 +109,29 @@ public class StaffInstance {
     }
 
     /**
-     * Returns a Notification object from a given message.
+     * Returns a Notification object from a given message from a given list.
      *
      * @param message message of the notification.
      * @return Notification based on the message.
      */
-
-    public Notification getNotificationFromMessage(String message) {
-
-        for (int i=0; i<messages.size(); i++) {
-            if (messages.get(i).getMessage().equals(message)) {
-                return messages.get(i);
+    public Notification getNotificationFromMessage(List<Notification> list, String message) {
+        for (Notification notification : list) {
+            if (notification.getMessage().equals(message)) {
+                return notification;
             }
         }
         return null;
     }
 
     /**
-     * Removes a notification based on a given message.
+     * Removes a notification based on a given message from a given list.
      *
      * @param message message of the notification.
      */
-
-    public void removeNotificationFromMessage(String message) {
-
-        for (int i=0; i<messages.size(); i++) {
-            if (messages.get(i).getMessage().equals(message)) {
-                messages.remove(i);
+    public void removeNotificationFromMessage(List<Notification> list, String message) {
+        for (int i=0; i<list.size(); i++) {
+            if (list.get(i).getMessage().equals(message)) {
+                list.remove(list.get(i));
             }
         }
     }
