@@ -30,10 +30,7 @@ public class TableNotificationToWaiters {
      * Adds table notifications to all waiter's notifications.
      */
 
-    public void addTableNotificationToAllStaff() {
-
-        //temp table object - will be changed to actual table object depending on how tables are going to be assigned.
-        Table table = new Table(1,1,false,null);
+    public void addTableNotificationToAllStaff(Table table) {
 
         for (StaffInstance staffInstance : staff) {
             staffInstance.addNotification(new Notification(table, "Table waiting for order confirmation"));
