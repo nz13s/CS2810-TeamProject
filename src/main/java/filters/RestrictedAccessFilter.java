@@ -16,8 +16,7 @@ public class RestrictedAccessFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
 
-
-        if (req.getAttribute("StaffEntity") != null) {
+        if (req.getSession().getAttribute("StaffEntity") != null) {
             //will add better/more verification later
             chain.doFilter(request, response);
             return;
