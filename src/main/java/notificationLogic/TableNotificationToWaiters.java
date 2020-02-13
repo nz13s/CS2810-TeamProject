@@ -13,6 +13,7 @@ import java.util.List;
  * @author Jatin Khatra
  */
 
+//TODO - REFACTOR WHEN POSSIBLE
 public class TableNotificationToWaiters {
 
     private ActiveStaff activeStaff;
