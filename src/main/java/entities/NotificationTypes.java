@@ -1,6 +1,6 @@
 package entities;
 
-public enum AllNotifications {
+public enum NotificationTypes {
 
     READY("Order Ready for Delivery"),
     ASSIST("Assistance Required"),
@@ -8,7 +8,7 @@ public enum AllNotifications {
 
     private String notification;
 
-    private AllNotifications(String notification){
+    private NotificationTypes(String notification){
         this.notification = notification;
     }
 

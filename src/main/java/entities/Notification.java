@@ -2,12 +2,13 @@ package entities;
 
 public class Notification {
 
+    private static int counter = 0;
+    private int notificationID;
+    private NotificationTypes type;
     private Table table;
     private String message;
     private Long time;
     private Boolean completed;
-    private int notificationID;
-    private static int counter = 0;
 
     /**
      * Constructor for an Notification used in the {@link StaffInstance}.
@@ -15,24 +16,11 @@ public class Notification {
      * @param t    The table of the notification
      * @param type The type of notification
      */
-    public Notification(Table t, String type) {
+    public Notification(Table t, NotificationTypes type) {
         this.table = t;
-        switch (type) {
-            case "Ready":
-                this.message = "Order Ready for Delivery";
-                break;
-            case "Assist":
-                this.message = "Assistance Required";
-                break;
-            case "Confirm":
-                this.message = "Order Ready for Payment";
-                break;
-            default:
-                this.message = type;
-        }
+        this.message = type.toString();
         this.time = System.currentTimeMillis();
         this.completed = false;
-
         notificationID = counter++;
     }
 
