@@ -103,4 +103,8 @@ public class ActiveStaff {
         }
         return null;
     }
+
+    public static List<StaffInstance> getStaff() {
+        return staff;
+    }
 }
