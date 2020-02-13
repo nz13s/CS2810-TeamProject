@@ -33,11 +33,7 @@ public class Notification {
         this.time = System.currentTimeMillis();
         this.completed = false;
 
-        if(this.counter == 0){
-            notificationID = 0;
-        }else{
-            notificationID = counter++;
-        }
+        notificationID = counter++;
     }
 
     /**
