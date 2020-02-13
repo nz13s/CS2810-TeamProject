@@ -134,7 +134,7 @@ public class ActiveStaff {
      * @return List of StaffInstance objects.
      */
 
-    public List<StaffInstance> getAllActiveStaff() {
+    public static List<StaffInstance> getAllActiveStaff() {
         return staff;
     }
 }

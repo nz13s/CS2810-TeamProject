@@ -18,7 +18,6 @@ import java.io.PrintWriter;
  *  GET - No params
  *  DELETE - int: notificationID
  */
-@WebServlet("/staff/notifications")
 public class StaffNotifications extends HttpServlet {
 
     private ObjectMapper om = new ObjectMapper();
@@ -69,7 +68,7 @@ public class StaffNotifications extends HttpServlet {
      * @return The StaffInstance associated with the session
      */
     private StaffInstance getStaffMember(HttpServletRequest req) {
-        StaffInstance staff = (StaffInstance) req.getSession().getAttribute("staffMember");
+        StaffInstance staff = (StaffInstance) req.getSession().getAttribute("StaffEntity");
         if (staff == null) {
 //            staff = new StaffInstance("Bob");
 //            //TODO Throw error and remove create instance since only staff should be able to get here
