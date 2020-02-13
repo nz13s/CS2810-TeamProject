@@ -6,7 +6,8 @@ public class Notification {
     private String message;
     private Long time;
     private Boolean completed;
-
+    private int notificationID;
+    private static int counter = 0;
 
     /**
      * Constructor for an Notification used in the {@link StaffInstance}.
@@ -31,6 +32,12 @@ public class Notification {
         }
         this.time = System.currentTimeMillis();
         this.completed = false;
+
+        if(this.counter == 0){
+            notificationID = 0;
+        }else{
+            notificationID = counter++;
+        }
     }
 
     /**
@@ -105,4 +112,7 @@ public class Notification {
         this.completed = completed;
     }
 
+    public int getNotificationID(){ return notificationID; }
+
+    public void setNotificationID(int notificationID){ this.notificationID = notificationID; }
 }
