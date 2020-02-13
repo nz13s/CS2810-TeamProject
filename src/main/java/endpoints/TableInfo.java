@@ -59,9 +59,8 @@ public class TableInfo extends HttpServlet {
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
-        TableInfo t = this;
         try {
-            pw.println(t.tablesToJSON());
+            pw.println(this.tablesToJSON());
         } catch (SQLException e) {
             pw.println(e.getMessage());
         }
