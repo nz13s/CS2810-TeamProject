@@ -6,7 +6,8 @@ import java.util.List;
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
-    private List<Notification> messages;//TODO Discuss making a notification class
+    private List<Notification> allMessages;//TODO Discuss making a notification class
+    private List<Notification> activeMessages;
     private int staffID;
     private List<Table> tables;//TODO Remove if other method is decided better
 
@@ -17,36 +18,65 @@ public class StaffInstance {
      */
     public StaffInstance(int staffID) {
         this.staffID = staffID;
-        messages = new ArrayList<>();
+        allMessages = new ArrayList<>();
     }
 
     /**
-     * Removes the notification at the specified index
+     * Removes the notification at the specified index from the all notifications list
      *
      * @param pos The index of the notification to remove
      */
     public void removeNotification(int pos) {
-        if (pos >= 0 && pos < messages.size()) {
-            messages.remove(pos);
+        if (pos >= 0 && pos < allMessages.size()) {
+            allMessages.remove(pos);
         }
     }
 
     /**
-     * Adds a new notification to the notification queue for the staff member
+     * Removes the notification from the active notification list
      *
-     * @param newNotification A notification fot he staff member
+     * @param pos The index of the notification to remove
      */
-    public void addNotification(Notification newNotification) {
-        messages.add(newNotification);
+    public void removeActiveNotification(int pos) {
+        if (pos >= 0 && pos < activeMessages.size()) {
+            activeMessages.remove(pos);
+        }
     }
 
     /**
-     * Gets the notifications for the staff member
+     * Adds a new notification to the all notification queue for the staff member
+     *
+     * @param newNotification A notification for the staff member
+     */
+    public void addNotification(Notification newNotification) {
+        allMessages.add(newNotification);
+    }
+
+    /**
+     * Adds a new notification to the active notification queue for the staff member
+     *
+     * @param newNotification A notification for the staff member
+     */
+    public void addActiveNotification(Notification newNotification) {
+        activeMessages.add(newNotification);
+    }
+
+    /**
+     * Gets all the notifications for the staff member
      *
      * @return The stored list of messages for the staff member
      */
     public List<Notification> getNotifications() {
-        return this.messages;
+        return this.allMessages;
+    }
+
+    /**
+     * Gets the active notifications for the staff member
+     *
+     * @return The stored list of messages for the staff member
+     */
+    public List<Notification> getActiveNotifications() {
+        return this.activeMessages;
     }
 
     /**
@@ -92,33 +122,60 @@ public class StaffInstance {
     }
 
     /**
-     * Returns a Notification object from a given message.
+     * Returns a Notification object from a given message from all notifications list
      *
      * @param message message of the notification.
      * @return Notification based on the message.
      */
-
     public Notification getNotificationFromMessage(String message) {
-
-        for (int i=0; i<messages.size(); i++) {
-            if (messages.get(i).getMessage().equals(message)) {
-                return messages.get(i);
+        for (Notification notification : allMessages) {
+            if (notification.getMessage().equals(message)) {
+                return notification;
             }
         }
         return null;
     }
 
     /**
-     * Removes a notification based on a given message.
+     * Returns a Notification object from a given message from the active messages list
+     *
+     * @param message message of the notification.
+     * @return Notification based on the message.
+     */
+    public Notification getNotificationFromActiveMessage(String message) {
+        for (Notification notification : allMessages) {
+            if (notification.getMessage().equals(message)) {
+                return notification;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Removes a notification based on a given message from the all messages list.
+     *
+     * @param message message of the notification.
+     */
+    public void removeNotificationFromMessage(String message) {
+
+        for (int i = 0; i< allMessages.size(); i++) {
+            if (allMessages.get(i).getMessage().equals(message)) {
+                allMessages.remove(allMessages.get(i));
+            }
+        }
+    }
+
+    /**
+     * Removes a notification based on a given message from the active messages list.
      *
      * @param message message of the notification.
      */
 
-    public void removeNotificationFromMessage(String message) {
+    public void removeNotificationFromActiveMessage(String message) {
 
-        for (int i=0; i<messages.size(); i++) {
-            if (messages.get(i).getMessage().equals(message)) {
-                messages.remove(i);
+        for (int i = 0; i< activeMessages.size(); i++) {
+            if (activeMessages.get(i).getMessage().equals(message)) {
+                activeMessages.remove(activeMessages.get(i));
             }
         }
     }
