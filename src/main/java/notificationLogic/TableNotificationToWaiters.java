@@ -46,7 +46,7 @@ public class TableNotificationToWaiters {
         for (int i=0; i<staff.size(); i++) {
 
             if (staff.get(i).getStaffID() == staffID) {
-                staff.get(i).getNotificationFromMessage("Table waiting for order confirmation").setCompleted(true);
+                staff.get(i).addActiveNotification(staff.get(i).getNotificationFromMessage("Table waiting for order confirmation"));
             }
         }
     }
@@ -59,9 +59,7 @@ public class TableNotificationToWaiters {
 
         for (int i=0; i<staff.size(); i++) {
 
-            if (!staff.get(i).getNotificationFromMessage("Table waiting for order confirmation").getCompleted()) {
-                staff.get(i).removeNotificationFromMessage("Table waiting for order confirmation");
-            }
+            staff.get(i).removeNotificationFromMessage("Table waiting for order confirmation");
         }
     }
 
