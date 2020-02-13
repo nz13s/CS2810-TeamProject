@@ -4,6 +4,7 @@ import entities.ActiveStaff;
 import entities.Notification;
 import entities.StaffInstance;
 import entities.Table;
+import entities.NotificationTypes;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class TableNotificationToWaiters {
     public void addTableNotificationToAllStaff(Table table) {
 
         for (StaffInstance staffInstance : staff) {
-            staffInstance.addNotification(new Notification(table, "Table waiting for order confirmation"));
+            staffInstance.addNotification(new Notification(table, NotificationTypes.CONFIRM));
         }
     }
 
