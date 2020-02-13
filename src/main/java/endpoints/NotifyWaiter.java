@@ -31,14 +31,13 @@ public class NotifyWaiter extends HttpServlet {
 
         if (t != null && type != null) {
             Notification n = new Notification(t, type);
-
             List<StaffInstance> active = ActiveStaff.getStaff();
             Random rand = new Random();
-            StaffInstance waiter = active.get(rand.nextInt(active.size()));
 
+            StaffInstance waiter = active.get(rand.nextInt(active.size()));
             ActiveStaff.addNotification(waiter.getStaffID(), n);
         } else {
-            resp.sendError(500, "Null value table or type");
+            resp.sendError(500, "Null value tableID or type");
         }
 
     }
