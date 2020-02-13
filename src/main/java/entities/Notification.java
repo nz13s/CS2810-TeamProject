@@ -112,7 +112,17 @@ public class Notification {
         this.completed = completed;
     }
 
+    /**
+     * Get the notificationID.
+     *
+     * @return notificationID
+     */
     public int getNotificationID(){ return notificationID; }
 
+    /**
+     * Sets the int of notificationID.
+     *
+     * @param notificationID int
+     */
     public void setNotificationID(int notificationID){ this.notificationID = notificationID; }
 }
