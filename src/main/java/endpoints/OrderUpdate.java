@@ -53,12 +53,10 @@ public class OrderUpdate extends HttpServlet {
 
         try {
             success = Database.ORDERS.updateOrderState(order, state);
-            switch (state) {
-                case 2: {
-                    Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
-                    Notification notifReady = new Notification(orderTable, "Ready");
-                    ActiveStaff.addNotification(1, notifReady);
-                }
+            if (state == 2) {
+                Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                Notification notifReady = new Notification(orderTable, "Ready");
+                ActiveStaff.addNotification(1, notifReady);
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
