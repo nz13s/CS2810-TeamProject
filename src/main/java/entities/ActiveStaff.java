@@ -16,10 +16,10 @@ public class ActiveStaff {
      * @param staffID The staffID, as stored in the database, to send the notification to
      * @param message The notification to pass to the specified staff member
      */
-    public static void addNotification(int staffID, Notification message) {
+    public static void addNotification(int staffID, Notification message, List<Notification> list) {
         StaffInstance employee = getStaffByID(staffID);
         if (employee != null) {
-            addNotification(employee, message);
+            addNotification(list, employee, message);
         }
         //TODO Some sort of error message if the staff member is not active
     }
@@ -30,8 +30,8 @@ public class ActiveStaff {
      * @param employee The staff member to send the notification to
      * @param message  The notification to pass to the specified staff member
      */
-    public static void addNotification(StaffInstance employee, Notification message) {
-        employee.addNotification(message);
+    public static void addNotification(List<Notification> list, StaffInstance employee, Notification message) {
+        employee.addNotification(list, message);
     }
 
     /**
