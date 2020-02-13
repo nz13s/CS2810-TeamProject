@@ -23,6 +23,7 @@ import java.util.Set;
 public class Tables {
 
     private PreparedStatement fetchTables;
+    private PreparedStatement getTableByID;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -37,6 +38,9 @@ public class Tables {
                 "SELECT restaurant_table.table_num, order_id, seats_available, occupied, time_ordered, order_confirmed, order_preparing, order_ready, order_served\n" +
                         "FROM restaurant_table LEFT JOIN orders ON restaurant_table.table_num = orders.table_num\n" +
                         "ORDER BY table_num");
+        getTableByID = connection.prepareStatement("Select * " +
+                "FROM resturant_table " +
+                "WHERE table_num = ?");
     }
 
     /**
@@ -72,6 +76,14 @@ public class Tables {
         }
         tables.forEach(tableState::addTable);
         return tableState;
+    }
+
+    public Table getTableByID(int tableID) throws SQLException {
+        getTableByID.setInt(1, tableID);
+        ResultSet resultset = getTableByID.executeQuery();
+        Table t = new Table(resultset.getInt("table_num"), resultset.getInt("seats_available"),
+                resultset.getBoolean("occupied"), null);
+        return t;
     }
 
 }
