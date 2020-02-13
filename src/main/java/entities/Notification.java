@@ -25,6 +25,19 @@ public class Notification {
     }
 
     /**
+     * Constructor for an Notification used in the {@link StaffInstance} USED FOR DEBUG ONLY.
+     *
+     * @param message The message to be shown
+     */
+    public Notification(String message) {
+        this.table = null;
+        this.message = message;
+        this.time = System.currentTimeMillis();
+        this.completed = false;
+        notificationID = counter++;
+    }
+
+    /**
      * Get the table to attend.
      *
      * @return The table
