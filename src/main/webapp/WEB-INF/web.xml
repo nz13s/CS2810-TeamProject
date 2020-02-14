@@ -94,6 +94,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>DebugAddNotification</servlet-name>
+        <servlet-class>endpoints.debug.DebugAddNotifications</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugAddNotification</servlet-name>
+        <url-pattern>/debug/addnotification</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ExampleRestricted</servlet-name>
         <servlet-class>endpoints.restricted.ExampleRestricted</servlet-class>
     </servlet>
@@ -136,6 +145,14 @@
     <servlet-mapping>
         <servlet-name>AcceptOrder</servlet-name>
         <url-pattern>/restricted/checkorder</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AssistTable</servlet-name>
+        <servlet-class>endpoints.NotifyWaiter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AssistTable</servlet-name>
+        <url-pattern>/assist</url-pattern>
     </servlet-mapping>
 
 </web-app>
