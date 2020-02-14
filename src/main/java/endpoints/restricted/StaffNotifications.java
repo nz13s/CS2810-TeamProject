@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.StaffInstance;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +57,7 @@ public class StaffNotifications extends HttpServlet {
             return;
         }
         StaffInstance staff = getStaffMember(req);
-        staff.removeNotification(ID);
+        staff.removeNotificationByID(ID);
     }
 
     /**
