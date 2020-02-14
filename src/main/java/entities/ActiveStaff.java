@@ -119,7 +119,7 @@ public class ActiveStaff {
      * @param staffID The int ID, as stored in the database, of the staff member to be located
      * @return The {@link StaffInstance} of the staff member with the specified staffID, null if not there/active
      */
-    private static StaffInstance getStaffByID(int staffID) {
+    public static StaffInstance getStaffByID(int staffID) {
         for (StaffInstance employee : staff) {
             if (employee.getStaffID() == staffID) {
                 return employee;
@@ -136,5 +136,20 @@ public class ActiveStaff {
 
     public static List<StaffInstance> getAllActiveStaff() {
         return staff;
+    }
+
+    /**
+     * Method returns whether the staff member specified is in the list of active staff
+     *
+     * @param staffID The int ID of the staff member as stored in the database
+     * @return True if the specified staff member is in the list of active staff, false otherwise
+     */
+    public static boolean isActive(int staffID) {
+        for (StaffInstance employee : staff) {
+            if (employee.getStaffID() == staffID) {
+                return true;
+            }
+        }
+        return false;
     }
 }

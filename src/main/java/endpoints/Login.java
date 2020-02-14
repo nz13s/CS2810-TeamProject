@@ -54,10 +54,15 @@ public class Login extends HttpServlet {
             HttpSession theSession = sessWrapper.genSession();
             resp.setHeader("X-Session-ID", theSession.getId());
             resp.getWriter().println("{\"userID\":" + userID + "}");
-            StaffInstance staff = new StaffInstance(userID);
-            ActiveStaff.addStaff(staff);
-            theSession.setAttribute("StaffEntity", staff);
 
+            StaffInstance staff;
+            if(!ActiveStaff.isActive(userID)){
+                staff = new StaffInstance(userID);
+                ActiveStaff.addStaff(staff);
+            }else{
+                staff = ActiveStaff.getStaffByID(userID);
+            }
+            theSession.setAttribute("StaffEntity", staff);
         }
     }
 }
