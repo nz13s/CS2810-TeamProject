@@ -2,10 +2,7 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.ActiveStaff;
-import entities.Notification;
-import entities.StaffInstance;
-import entities.Table;
+import entities.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,8 +27,8 @@ public class NotifyWaiter extends HttpServlet {
         String type = getType(req);
 
         if (t != null && type != null) {
-            Notification n = new Notification(t, type);
-            List<StaffInstance> active = ActiveStaff.getStaff();
+            Notification n = new Notification(t, NotificationTypes.ASSIST);
+            List<StaffInstance> active = ActiveStaff.getAllActiveStaff();
             Random rand = new Random();
 
             StaffInstance waiter = active.get(rand.nextInt(active.size()));
