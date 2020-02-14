@@ -6,6 +6,7 @@ import CategoryType from "../entities/CategoryType";
 import QueueType from "../entities/QueueType";
 import OrderItem from "../entities/OrderItem";
 import Ingredient from "../entities/Ingredient";
+import Notification from "../entities/Notification";
 
 export default class API {
   static async validateSession(elevated = false): Promise<boolean> {
@@ -162,6 +163,31 @@ export default class API {
     await client.makeRequest("POST", "/restricted/update", {
       orderID: orderID,
       state: state
+    });
+  }
+
+  static async getNotifications(): Promise<Array<Notification>> {
+    const response = await client.makeRequest(
+      "GET",
+      "/restricted/staffnotifications"
+    );
+
+    return response.data.map(
+      (notification: any) =>
+        new Notification(
+          notification.notificationID,
+          notification.table
+            ? `Table #${notification.table.tableNum}`
+            : "Attention",
+          notification.message,
+          new Date(0)
+        )
+    );
+  }
+
+  static async delNotification(notificationID: number): Promise<void> {
+    await client.makeRequest("DELETE", "/restricted/staffnotifications", {
+      notificationID: notificationID
     });
   }
 }

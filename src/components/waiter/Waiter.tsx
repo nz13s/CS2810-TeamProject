@@ -13,29 +13,36 @@ import {
 import WaiterManagement from "./WaiterManagement";
 import WaiterEdit from "./WaiterEdit";
 import Notification from "../../entities/Notification";
+import API from "../../client/api";
 
 interface State {
   notifications: Array<Notification>;
 }
 
 export default class Waiter extends React.Component<any, State> {
+  interval: number;
+
   constructor(props: any) {
     super(props);
 
     this.state = {
-      notifications: [
-        new Notification(
-          1,
-          "Food Serving",
-          "Bat soup to be served for all guests at table #1337"
-        ),
-        new Notification(
-          2,
-          "Attention",
-          "Someone ate the bat soup and now the floor needs a wiping"
-        )
-      ]
+      notifications: []
     };
+
+    API.getNotifications().then(notifications =>
+      this.setState({ notifications })
+    );
+    this.interval = setInterval(
+      () =>
+        API.getNotifications().then(notifications =>
+          this.setState({ notifications })
+        ),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {
@@ -68,7 +75,9 @@ export default class Waiter extends React.Component<any, State> {
                           <Card.Footer>
                             <Button
                               variant="success"
-                              onClick={() => console.log("CLICKED")}>
+                              onClick={() =>
+                                API.delNotification(notification.id)
+                              }>
                               Dismiss
                             </Button>
                           </Card.Footer>
