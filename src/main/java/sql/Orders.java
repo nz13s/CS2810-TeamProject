@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Orders Class deals with all order related queries and methods.
@@ -142,42 +144,35 @@ public class Orders {
      * @throws SQLException if an error occurred
      */
     public ArrayList<Order> getOrders(Long order_ready, Long order_served) throws SQLException {
-        ArrayList<Order> queue = new ArrayList<>();
-        ArrayList<Order> newQueue = new ArrayList<>();
+        HashMap<Integer, Order> orders = new HashMap<>();
         ordersGet.setLong(1, order_ready);
         ordersGet.setLong(2, order_served);
 
         ResultSet resultSet = ordersGet.executeQuery();
 
         while (resultSet.next()) {
-            ArrayList<Item> l = new ArrayList<>();
             //o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity
             Food food = new Food(resultSet.getInt("food_id"), resultSet.getString("food_name"),
                     resultSet.getString("food_description"), resultSet.getInt("calories"),
                     null, true, resultSet.getInt("category_id"),null);
-            l.add(new Item(food, resultSet.getInt("quantity")));
-            queue.add(new IndexedOrder(
-                    resultSet.getInt("order_id"),
-                    resultSet.getLong("time_ordered"),
-                    resultSet.getLong("order_confirmed"),
-                    resultSet.getLong("order_preparing"),
-                    resultSet.getLong("order_ready"),
-                    resultSet.getLong("order_served"),
-                    resultSet.getInt("table_num"),
-                    l));
-        }
-
-        for (int i = 0; i < queue.size(); i++) {
-            Order a = queue.get(i);
-            for (int j = 0; j < queue.size(); j++) {
-                Order b = queue.get(j);
-                if (a.getOrderID() == b.getOrderID() && a != b) {
-                    a.getFoodItems().add(b.getFoodItems().get(0));
-                    queue.remove(b);
-                }
+            int orderID = resultSet.getInt("order_id");
+            if(orders.containsKey(orderID)){
+                orders.get(orderID).addFoodItem(new Item(food, resultSet.getInt("quantity")));
+            }else{
+                ArrayList<Item> items = new ArrayList<>();
+                items.add(new Item(food, resultSet.getInt("quantity")));
+                orders.put(orderID, new IndexedOrder(
+                        resultSet.getInt("order_id"),
+                        resultSet.getLong("time_ordered"),
+                        resultSet.getLong("order_confirmed"),
+                        resultSet.getLong("order_preparing"),
+                        resultSet.getLong("order_ready"),
+                        resultSet.getLong("order_served"),
+                        resultSet.getInt("table_num"),
+                        items));
             }
         }
-        return queue;
+        return new ArrayList<>(orders.values());
 
     }
 
