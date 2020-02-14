@@ -1,10 +1,7 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.ActiveStaff;
-import entities.Notification;
-import entities.Order;
-import entities.Table;
+import entities.*;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServlet;
@@ -55,8 +52,8 @@ public class OrderUpdate extends HttpServlet {
             success = Database.ORDERS.updateOrderState(order, state);
             if (state == 2) {
                 Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
-                Notification notifReady = new Notification(orderTable, "Ready");
-                ActiveStaff.addNotification(1, notifReady);
+                Notification notifReady = new Notification(orderTable, NotificationTypes.READY);
+                ActiveStaff.addNotification(2, notifReady);
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
