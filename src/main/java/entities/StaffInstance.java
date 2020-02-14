@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class StaffInstance {
@@ -26,10 +27,19 @@ public class StaffInstance {
      *
      * @param pos The index of the notification to remove
      */
-    public void removeNotification(int pos) {
+    public void removeNotificationByPos(int pos) {
         if (pos >= 0 && pos < allMessages.size()) {
             allMessages.remove(pos);
         }
+    }
+
+    /**
+     * Removes the notification with the specified ID the notifications list
+     *
+     * @param id The ID of the notification to remove
+     */
+    public void removeNotificationByID(int id) {
+        allMessages.removeIf(notification -> notification.getNotificationID() == id);
     }
 
     /**
