@@ -24,9 +24,8 @@ public class NotifyWaiter extends HttpServlet {
         } catch (SQLException e) {
             resp.sendError(500, "Error getting TableID from database.");
         }
-        String type = getType(req);
 
-        if (t != null && type != null) {
+        if (t != null) {
             Notification n = new Notification(t, NotificationTypes.ASSIST);
             List<StaffInstance> active = ActiveStaff.getAllActiveStaff();
             Random rand = new Random();
@@ -34,7 +33,7 @@ public class NotifyWaiter extends HttpServlet {
             StaffInstance waiter = active.get(rand.nextInt(active.size()));
             ActiveStaff.addNotification(waiter.getStaffID(), n);
         } else {
-            resp.sendError(500, "Null value tableID or type");
+            resp.sendError(500, "Null value tableID");
         }
 
     }
@@ -51,10 +50,5 @@ public class NotifyWaiter extends HttpServlet {
         return tableID;
     }
 
-    private String getType(HttpServletRequest req) {
-        String type = null;
-        type = req.getParameter("type");
-        return type;
-    }
 
 }
