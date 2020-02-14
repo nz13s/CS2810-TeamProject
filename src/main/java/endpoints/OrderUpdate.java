@@ -1,7 +1,10 @@
 package endpoints;
 
 import databaseInit.Database;
+import entities.ActiveStaff;
+import entities.Notification;
 import entities.Order;
+import entities.Table;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +18,7 @@ import java.sql.SQLException;
  * Class for handling the updating of order states. {@link Order}
  *
  * @author Tony Delchev
+ * @author Bhavik Narang
  */
 public class OrderUpdate extends HttpServlet {
 
@@ -49,6 +53,11 @@ public class OrderUpdate extends HttpServlet {
 
         try {
             success = Database.ORDERS.updateOrderState(order, state);
+            if (state == 2) {
+                Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                Notification notifReady = new Notification(orderTable, "Ready");
+                ActiveStaff.addNotification(1, notifReady);
+            }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
         }

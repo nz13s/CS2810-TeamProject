@@ -1,10 +1,12 @@
 package sql;
 
+import databaseInit.Database;
 import entities.Item;
 import entities.Order;
 import entities.Table;
 import entities.TableState;
 
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +25,7 @@ import java.util.Set;
 public class Tables {
 
     private PreparedStatement fetchTables;
-    private PreparedStatement getTableByID;
+    private PreparedStatement tableById;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -38,9 +40,11 @@ public class Tables {
                 "SELECT restaurant_table.table_num, order_id, seats_available, occupied, time_ordered, order_confirmed, order_preparing, order_ready, order_served\n" +
                         "FROM restaurant_table LEFT JOIN orders ON restaurant_table.table_num = orders.table_num\n" +
                         "ORDER BY table_num");
-        getTableByID = connection.prepareStatement("Select * " +
-                "FROM resturant_table " +
-                "WHERE table_num = ?");
+
+        tableById = connection.prepareStatement(
+                "SELECT table_num, seats_available, occupied\n" +
+                        "FROM restaurant_table\n" +
+                        "WHERE table_num = ?");
     }
 
     /**
@@ -66,7 +70,7 @@ public class Tables {
                     resultSet.getInt("table_num"),
                     new ArrayList<Item>());
             Table t = tables.stream().filter(tab -> tab.getTableNum() == order.getTableNum()).findFirst()
-                    .orElse(new Table(resultSet.getInt("table_num"), resultSet.getInt("seats_available"), resultSet.getBoolean("occupied"),null));
+                    .orElse(new Table(resultSet.getInt("table_num"), resultSet.getInt("seats_available"), resultSet.getBoolean("occupied"), null));
 
             // if no orders exist for a given table
             if (order.getOrderID() != 0) {
@@ -78,12 +82,33 @@ public class Tables {
         return tableState;
     }
 
-    public Table getTableByID(int tableID) throws SQLException {
-        getTableByID.setInt(1, tableID);
-        ResultSet resultset = getTableByID.executeQuery();
-        Table t = new Table(resultset.getInt("table_num"), resultset.getInt("seats_available"),
-                resultset.getBoolean("occupied"), null);
-        return t;
+    /**
+     * Selects the table record with all of its orders matching the table_num
+     *
+     * @param table_num table number
+     * @return Table object
+     * @throws SQLException if an error occurred
+     */
+    @Nullable
+    public Table getTableByID(int table_num) throws SQLException {
+        ArrayList<Order> allOrders = Database.ORDERS.getOrders(0L, 0L);
+        tableById.setInt(1, table_num);
+        ResultSet resultSet = tableById.executeQuery();
+        if (resultSet.next()) {
+            Table t = new Table(
+                    resultSet.getInt("table_num"),
+                    resultSet.getInt("seats_available"),
+                    resultSet.getBoolean("occupied"),
+                    new ArrayList<>()
+            );
+            for (Order order : allOrders) {
+                if (order.getTableNum() == t.getTableNum()) {
+                    t.addOrder(order);
+                }
+            }
+            return t;
+        }
+        return null;
     }
 
 }
