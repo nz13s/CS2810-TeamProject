@@ -30,6 +30,8 @@ public class TableNotificationToWaiters {
 
     /**
      * Adds table notifications to all waiter's notifications.
+     *
+     * @param table table to be assigned to the new notification.
      */
 
     public void addTableNotificationToAllStaff(Table table) {
@@ -40,7 +42,24 @@ public class TableNotificationToWaiters {
     }
 
     /**
+     * Adds a table assignment notification to a given staff, by their ID.
+     *
+     * @param table table to be assigned to the waiter.
+     * @param staffID ID of the staff to be assigned a table.
+     */
+
+    public void addTableToStaff(Table table, int staffID) {
+        for (int i=0; i<staff.size(); i++) {
+            if (staff.get(i).getStaffID() == staffID) {
+                staff.get(i).addActiveNotification(new Notification(table, NotificationTypes.ASSIGN));
+            }
+        }
+    }
+
+    /**
      * Staff accepts the notification and is assigned to the table.
+     *
+     * @param staffID ID of the staff that accepts the notification.
      */
 
     public void acceptNotification(int staffID) {
