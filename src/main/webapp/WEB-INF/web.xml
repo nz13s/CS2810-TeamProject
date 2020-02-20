@@ -155,4 +155,13 @@
         <url-pattern>/assist</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TableInfo</servlet-name>
+        <servlet-class>endpoints.TableInfo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableInfo</servlet-name>
+        <url-pattern>/tables</url-pattern>
+    </servlet-mapping>
+
 </web-app>
