@@ -3,7 +3,10 @@ package endpoints;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import databaseInit.Database;
+import entities.StaffInstance;
+import entities.Table;
 import entities.TableState;
+import notificationLogic.TableNotificationToWaiters;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,6 +68,28 @@ public class TableInfo extends HttpServlet {
             pw.println(e.getMessage());
         }
         pw.flush();
+    }
+
+    /**
+     * Method that updates the notification list via a POST method from frontend.
+     *
+     * @param req server request.
+     * @param resp server response.
+     * @throws IOException
+     */
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int tableNum = Integer.parseInt(req.getParameter("tableNum"));
+        StaffInstance staff = (StaffInstance) req.getSession().getAttribute("staffEntity");
+        int staffID = staff.getStaffID();
+        Table table = null;
+        try {
+            table = Database.TABLES.getTableByID(tableNum);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        TableNotificationToWaiters notif = new TableNotificationToWaiters();
+        notif.addTableToStaff(table,staffID);
     }
 
 }
