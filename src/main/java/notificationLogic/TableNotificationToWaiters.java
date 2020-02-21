@@ -41,15 +41,4 @@ public class TableNotificationToWaiters {
             }
         }
     }
-
-    /**
-     * Removes the notifications from staff who have not accepted the notification.
-     */
-
-    public void removeTableNotificationFromStaff() {
-        for (StaffInstance staffInstance : staff) {
-            staffInstance.removeNotificationFromType(NotificationTypes.ASSIGN);
-        }
-    }
-
 }
