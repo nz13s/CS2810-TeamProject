@@ -42,6 +42,15 @@ public class StaffInstance {
     }
 
     /**
+     * Removes an active notification with the specified ID the notifications list
+     *
+     * @param id The ID of the notification to remove
+     */
+    public void removeActiveNotificationByID(int id) {
+        activeMessages.removeIf(notification -> notification.getNotificationID() == id);
+    }
+
+    /**
      * Removes the notification from the active notification list
      *
      * @param pos The index of the notification to remove
