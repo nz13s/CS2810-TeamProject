@@ -122,4 +122,22 @@ public class Notification {
      * @param notificationID int
      */
     public void setNotificationID(int notificationID){ this.notificationID = notificationID; }
+
+    /**
+     * Gets the object's notification type.
+     *
+     * @return the type of the notification.
+     */
+    public NotificationTypes getType() {
+        return type;
+    }
+
+    /**
+     * Sets the object's notification type.
+     *
+     * @param type type of the notification that is to be set.
+     */
+    public void setType(NotificationTypes type) {
+        this.type = type;
+    }
 }
