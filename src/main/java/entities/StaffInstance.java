@@ -1,7 +1,6 @@
 package entities;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class StaffInstance {
@@ -156,6 +155,38 @@ public class StaffInstance {
         for (Notification notification : allMessages) {
             if (notification.getMessage().equals(message)) {
                 return notification;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns a notification based on the notificationID.
+     *
+     * @param notificationID ID of the notification.
+     * @return Notification based on ID.
+     */
+
+    public Notification getNotificationByID(int notificationID) {
+        for (Notification allMessage : allMessages) {
+            if (allMessage.getNotificationID() == notificationID) {
+                return allMessage;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns an active notification based on the notificationID.
+     *
+     * @param notificationID ID of the notification.
+     * @return Notification based on ID.
+     */
+
+    public Notification getActiveNotificationByID(int notificationID) {
+        for (Notification activeMessages : activeMessages) {
+            if (activeMessages.getNotificationID() == notificationID) {
+                return activeMessages;
             }
         }
         return null;
