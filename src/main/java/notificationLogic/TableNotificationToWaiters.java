@@ -28,18 +28,6 @@ public class TableNotificationToWaiters {
     }
 
     /**
-     * Adds table notifications to all waiter's notifications.
-     *
-     * @param table table to be assigned to the new notification.
-     */
-
-    public void addTableNotificationToAllStaff(Table table) {
-        for (StaffInstance staffInstance : staff) {
-            staffInstance.addNotification(new Notification(table, NotificationTypes.CONFIRM));
-        }
-    }
-
-    /**
      * Adds a table assignment notification to a given staff, by their ID.
      *
      * @param table table to be assigned to the waiter.
