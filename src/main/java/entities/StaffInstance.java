@@ -193,6 +193,38 @@ public class StaffInstance {
     }
 
     /**
+     * Returns a notification based on the type of a notification.
+     *
+     * @param type the notification's type.
+     * @return notification object based on the type given.
+     */
+
+    public Notification getNotificationByEnum(NotificationTypes type) {
+        for (Notification allMessage : allMessages) {
+            if (allMessage.getType() == type) {
+                return allMessage;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns an active notification based on the type of a notification.
+     *
+     * @param type the notification's type.
+     * @return notification object based on the type given.
+     */
+
+    public Notification getActiveNotificationByEnum(NotificationTypes type) {
+        for (Notification activeMessages : activeMessages) {
+            if (activeMessages.getType() == type) {
+                return activeMessages;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Removes a notification based on a given message from the all messages list.
      *
      * @param message message of the notification.
