@@ -17,7 +17,6 @@ import java.util.List;
 //TODO - REFACTOR WHEN POSSIBLE
 public class TableNotificationToWaiters {
 
-    private ActiveStaff activeStaff;
     private List<StaffInstance> staff;
 
     /**
@@ -25,7 +24,7 @@ public class TableNotificationToWaiters {
      */
 
     public TableNotificationToWaiters() {
-        staff = activeStaff.getAllActiveStaff();
+        staff = ActiveStaff.getAllActiveStaff();
     }
 
     /**
@@ -35,7 +34,6 @@ public class TableNotificationToWaiters {
      */
 
     public void addTableNotificationToAllStaff(Table table) {
-
         for (StaffInstance staffInstance : staff) {
             staffInstance.addNotification(new Notification(table, NotificationTypes.CONFIRM));
         }
@@ -49,9 +47,9 @@ public class TableNotificationToWaiters {
      */
 
     public void addTableToStaff(Table table, int staffID) {
-        for (int i=0; i<staff.size(); i++) {
-            if (staff.get(i).getStaffID() == staffID) {
-                staff.get(i).addActiveNotification(new Notification(table, NotificationTypes.ASSIGN));
+        for (StaffInstance staffInstance : staff) {
+            if (staffInstance.getStaffID() == staffID) {
+                staffInstance.addActiveNotification(new Notification(table, NotificationTypes.ASSIGN));
             }
         }
     }
@@ -63,11 +61,9 @@ public class TableNotificationToWaiters {
      */
 
     public void acceptNotification(int staffID) {
-
-        for (int i=0; i<staff.size(); i++) {
-
-            if (staff.get(i).getStaffID() == staffID) {
-                staff.get(i).addActiveNotification(staff.get(i).getNotificationFromMessage("Table waiting for order confirmation"));
+        for (StaffInstance staffInstance : staff) {
+            if (staffInstance.getStaffID() == staffID) {
+                staffInstance.addActiveNotification(staffInstance.getNotificationFromMessage("Table waiting for order confirmation"));
             }
         }
     }
@@ -77,10 +73,8 @@ public class TableNotificationToWaiters {
      */
 
     public void removeTableNotificationFromStaff() {
-
-        for (int i=0; i<staff.size(); i++) {
-
-            staff.get(i).removeNotificationFromMessage("Table waiting for order confirmation");
+        for (StaffInstance staffInstance : staff) {
+            staffInstance.removeNotificationFromMessage("Table waiting for order confirmation");
         }
     }
 
