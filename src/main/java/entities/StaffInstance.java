@@ -101,36 +101,6 @@ public class StaffInstance {
     }
 
     /**
-     * Returns a Notification object from a given message from all notifications list
-     *
-     * @param message message of the notification.
-     * @return Notification based on the message.
-     */
-    public Notification getNotificationFromMessage(String message) {
-        for (Notification notification : allMessages) {
-            if (notification.getMessage().equals(message)) {
-                return notification;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns a Notification object from a given message from the active messages list
-     *
-     * @param message message of the notification.
-     * @return Notification based on the message.
-     */
-    public Notification getNotificationFromActiveMessage(String message) {
-        for (Notification notification : allMessages) {
-            if (notification.getMessage().equals(message)) {
-                return notification;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Returns a notification based on the notificationID.
      *
      * @param notificationID ID of the notification.
