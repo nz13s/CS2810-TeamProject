@@ -32,10 +32,10 @@ public class TableNotificationToWaiters {
      * Adds table notifications to all waiter's notifications.
      */
 
-    public void addTableNotificationToAllStaff(Table table) {
+    public void addTableNotificationToAllStaff(Table table, int orderID) {
 
         for (StaffInstance staffInstance : staff) {
-            staffInstance.addNotification(new Notification(table, NotificationTypes.CONFIRM));
+            staffInstance.addNotification(new Notification(table, NotificationTypes.CONFIRM, orderID));
         }
     }
 
