@@ -37,7 +37,7 @@ public class TableNotificationToWaiters {
     public void addTableToStaff(Table table, int staffID) {
         for (StaffInstance staffInstance : staff) {
             if (staffInstance.getStaffID() == staffID) {
-                staffInstance.addActiveNotification(new Notification(table, NotificationTypes.ASSIGN));
+                staffInstance.addNotification(new Notification(table, NotificationTypes.ASSIGN));
             }
         }
     }
