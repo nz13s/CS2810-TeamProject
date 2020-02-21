@@ -17,6 +17,7 @@ import java.io.PrintWriter;
  * Spec:
  *  GET - No params
  *  DELETE - int: notificationID
+ *  DELETE - String: notificationType
  */
 public class StaffNotifications extends HttpServlet {
 
