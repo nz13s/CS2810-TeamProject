@@ -1,6 +1,7 @@
 package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.NotificationTypes;
 import entities.StaffInstance;
 
 import javax.servlet.ServletException;
@@ -50,8 +51,11 @@ public class StaffNotifications extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int ID;
+        NotificationTypes type;
         try {
             ID = Integer.parseInt(req.getParameter("notificationID"));
+            String tempType = req.getParameter("notificationType").toUpperCase();
+            type = NotificationTypes.valueOf(tempType.replaceAll("\\s",""));
         } catch (NumberFormatException e) {
             resp.sendError(400, "Invalid ID.");
             return;
