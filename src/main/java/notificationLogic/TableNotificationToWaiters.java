@@ -55,20 +55,6 @@ public class TableNotificationToWaiters {
     }
 
     /**
-     * Staff accepts the notification and is assigned to the table.
-     *
-     * @param staffID ID of the staff that accepts the notification.
-     */
-
-    public void acceptNotification(int staffID) {
-        for (StaffInstance staffInstance : staff) {
-            if (staffInstance.getStaffID() == staffID) {
-                staffInstance.addActiveNotification(staffInstance.getNotificationFromMessage("Table waiting for order confirmation"));
-            }
-        }
-    }
-
-    /**
      * Removes the notifications from staff who have not accepted the notification.
      */
 
