@@ -25,20 +25,6 @@ public class ActiveStaff {
     }
 
     /**
-     * Adds the inputted notification to the specified staff member by their staffID in their active jobs list.
-     *
-     * @param staffID The staffID, as stored in the database, to send the notification to
-     * @param message The notification to pass to the specified staff member
-     */
-    public static void addActiveNotification(int staffID, Notification message) {
-        StaffInstance employee = getStaffByID(staffID);
-        if (employee != null) {
-            addActiveNotification(employee, message);
-        }
-        //TODO Some sort of error message if the staff member is not active
-    }
-
-    /**
      * Adds the inputted notification to the specified staff member
      *
      * @param employee The staff member to send the notification to
@@ -46,16 +32,6 @@ public class ActiveStaff {
      */
     public static void addNotification(StaffInstance employee, Notification message) {
         employee.addNotification(message);
-    }
-
-    /**
-     * Adds the inputted notification to the specified staff member in their active jobs list
-     *
-     * @param employee The staff member to send the notification to
-     * @param message  The notification to pass to the specified staff member
-     */
-    public static void addActiveNotification(StaffInstance employee, Notification message) {
-        employee.addActiveNotification(message);
     }
 
     /**
