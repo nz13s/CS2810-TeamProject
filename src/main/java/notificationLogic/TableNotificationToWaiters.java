@@ -74,7 +74,7 @@ public class TableNotificationToWaiters {
 
     public void removeTableNotificationFromStaff() {
         for (StaffInstance staffInstance : staff) {
-            staffInstance.removeNotificationFromMessage("Table waiting for order confirmation");
+            staffInstance.removeNotificationFromType(NotificationTypes.ASSIGN);
         }
     }
 
