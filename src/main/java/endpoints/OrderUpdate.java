@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 
 /**
@@ -53,7 +54,28 @@ public class OrderUpdate extends HttpServlet {
             if (state == 2) {
                 Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
                 Notification notifReady = new Notification(orderTable, NotificationTypes.READY);
-                ActiveStaff.addNotification(2, notifReady);
+
+                //check every staff member's list.
+                //if they have a notification that matches the tableNum of the order's table,
+                //then their staff ID should be acquired.
+
+                assert orderTable != null;
+                int tableNum = orderTable.getTableNum();
+                int staffID = 0;
+
+                List<StaffInstance> allStaff = ActiveStaff.getAllActiveStaff();
+
+                for (StaffInstance staffInstance : allStaff) {
+                    List<Notification> oneStaffNotification = staffInstance.getNotifications();
+                    for (Notification notification : oneStaffNotification) {
+                        if (notification.getTable().getTableNum() == tableNum) {
+                            staffID = staffInstance.getStaffID();
+                            break;
+                        }
+                    }
+                }
+
+                ActiveStaff.addNotification(staffID, notifReady);
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
