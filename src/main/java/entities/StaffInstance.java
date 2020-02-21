@@ -234,31 +234,21 @@ public class StaffInstance {
     }
 
     /**
-     * Removes a notification based on a given message from the all messages list.
+     * Removes a notification based on a given type from the all messages list.
      *
-     * @param message message of the notification.
+     * @param type type of the notification.
      */
-    public void removeNotificationFromMessage(String message) {
-
-        for (int i = 0; i< allMessages.size(); i++) {
-            if (allMessages.get(i).getMessage().equals(message)) {
-                allMessages.remove(allMessages.get(i));
-            }
-        }
+    public void removeNotificationFromType(NotificationTypes type) {
+        allMessages.removeIf(notification -> notification.getType() == type);
     }
 
     /**
-     * Removes a notification based on a given message from the active messages list.
+     * Removes a notification based on a given type from the active messages list.
      *
-     * @param message message of the notification.
+     * @param type type of the notification.
      */
 
-    public void removeNotificationFromActiveMessage(String message) {
-
-        for (int i = 0; i< activeMessages.size(); i++) {
-            if (activeMessages.get(i).getMessage().equals(message)) {
-                activeMessages.remove(activeMessages.get(i));
-            }
-        }
+    public void removeNotificationFromActiveMessage(NotificationTypes type) {
+        activeMessages.removeIf(notification -> notification.getType() == type);
     }
 }
