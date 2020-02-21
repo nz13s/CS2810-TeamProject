@@ -157,11 +157,11 @@
 
     <servlet>
         <servlet-name>TableInfo</servlet-name>
-        <servlet-class>endpoints.TableInfo</servlet-class>
+        <servlet-class>endpoints.restricted.TableInfo</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TableInfo</servlet-name>
-        <url-pattern>/tables</url-pattern>
+        <url-pattern>/restricted/tables</url-pattern>
     </servlet-mapping>
 
 </web-app>
