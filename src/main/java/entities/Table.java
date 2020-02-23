@@ -10,6 +10,7 @@ public class Table {
   private int seatsAvailable;
   private boolean occupied;
   private List<Order> orders; //orders from this specific entities.Table
+  private StaffInstance waiter;
 
   public Table(int tableNum, int seatsAvailable, boolean occupied, @Nullable List<Order> orders) {
     if (orders == null) orders = new ArrayList<>();
@@ -62,5 +63,11 @@ public class Table {
     setSeatsAvailable(seatsAvailable++);
   }
 
+  public StaffInstance getWaiter() {
+    return waiter;
+  }
 
+  public void setWaiter(StaffInstance waiter) {
+    this.waiter = waiter;
+  }
 }
