@@ -128,4 +128,20 @@ public class ActiveStaff {
         }
         return false;
     }
+
+    public static boolean addTableToStaff(Table table) {
+        for (StaffInstance staffInstance : staff) {
+            if (staffInstance.getTables().size() < 3
+                    && !staffInstance.hasTable(table)
+                    && table.getWaiter() == null) {
+
+                staffInstance.addTable(table);
+                staffInstance.addNotification(new Notification(table, NotificationTypes.ASSIGN));
+                table.setWaiter(staffInstance);
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

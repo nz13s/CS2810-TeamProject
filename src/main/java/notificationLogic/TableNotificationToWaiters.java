@@ -1,6 +1,7 @@
 package notificationLogic;
 
-import entities.*;
+import entities.ActiveStaff;
+import entities.StaffInstance;
 
 import java.util.List;
 
@@ -29,15 +30,5 @@ public class TableNotificationToWaiters {
      * @param table table to be assigned to the waiter.
      */
 
-    public boolean addTableToStaff(Table table) {
-        for (StaffInstance staffInstance : staff) {
-            if (staffInstance.getTables().size() < 3 && !staffInstance.hasTable(table)) {
-                staffInstance.addTable(table);
-                staffInstance.addNotification(new Notification(table, NotificationTypes.ASSIGN));
-                table.setWaiter(staffInstance);
-                return true;
-            }
-        }
-        return false;
-    }
+
 }
