@@ -91,6 +91,19 @@ public class StaffInstance {
         return null;
     }
 
+    public boolean hasTable(Table newTable) {
+        for (Table t : tables) {
+            if (t == newTable) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Table> getTables() {
+        return tables;
+    }
+
     /**
      * Returns the staffs ID as stored in the database.
      *
