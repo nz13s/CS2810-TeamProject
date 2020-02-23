@@ -93,9 +93,11 @@ public class StaffInstance {
     }
 
     public boolean hasTable(Table newTable) {
-        for (Table t : tables) {
-            if (t == newTable) {
-                return true;
+        if (!tables.isEmpty()) {
+            for (Table t : tables) {
+                if (t == newTable) {
+                    return true;
+                }
             }
         }
         return false;
