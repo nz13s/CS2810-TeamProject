@@ -3,12 +3,10 @@ package endpoints.restricted;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import databaseInit.Database;
-import entities.StaffInstance;
+import entities.ActiveStaff;
 import entities.Table;
 import entities.TableState;
-import notificationLogic.TableNotificationToWaiters;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +20,6 @@ import java.sql.SQLException;
  * @author Jatin
  */
 
-@WebServlet("/tables")
 public class TableInfo extends HttpServlet {
 
     private ObjectMapper mapper;
@@ -53,7 +50,7 @@ public class TableInfo extends HttpServlet {
     /**
      * Method that GETs the JSON object.
      *
-     * @param req server request.
+     * @param req  server request.
      * @param resp server response.
      * @throws IOException
      */
@@ -73,23 +70,38 @@ public class TableInfo extends HttpServlet {
     /**
      * Method that updates the notification list via a POST method from frontend.
      *
-     * @param req server request.
+     * @param req  server request.
      * @param resp server response.
      * @throws IOException
      */
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int tableNum = Integer.parseInt(req.getParameter("tableNum"));
-        StaffInstance staff = (StaffInstance) req.getSession().getAttribute("staffEntity");
-        int staffID = staff.getStaffID();
         Table table = null;
+        boolean success = false;
+
         try {
-            table = Database.TABLES.getTableByID(tableNum);
+            table = Database.TABLES.getTableByID(getTable(req, resp));
         } catch (SQLException e) {
-            e.printStackTrace();
+            resp.sendError(400, "Invalid tableNum");
         }
-        TableNotificationToWaiters notif = new TableNotificationToWaiters();
-        notif.addTableToStaff(table,staffID);
+        if (table != null) {
+            success = ActiveStaff.addTableToStaff(table);
+        }
+        if (!success) {
+            resp.sendError(500, "Failed to add table to waiter");
+        }
     }
 
+    private int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int table = -1;
+        try {
+            table = Integer.parseInt(req.getParameter("tableNum"));
+            if (table < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid tableNum integer.");
+        }
+        return table;
+    }
 }
