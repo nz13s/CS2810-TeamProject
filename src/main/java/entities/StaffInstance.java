@@ -18,6 +18,7 @@ public class StaffInstance {
     public StaffInstance(int staffID) {
         this.staffID = staffID;
         allMessages = new ArrayList<>();
+        tables = new ArrayList<Table>();
     }
 
     /**
@@ -153,4 +154,5 @@ public class StaffInstance {
     public void removeNotificationFromType(NotificationTypes type) {
         allMessages.removeIf(notification -> notification.getType() == type);
     }
+
 }
