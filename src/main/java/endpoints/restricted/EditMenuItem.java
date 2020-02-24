@@ -22,7 +22,9 @@ import java.util.function.Consumer;
  * <p>
  * Spec:
  * GET - int: id
- * POST - boolean: availability, int: calories, int: category, String: description, String: name, BigDecimal: price
+ * POST - int: id then one of the two following:
+ *  - boolean: availability (changes the availability of a food item)
+ *  - int: calories, int: category, String: description, String: name, BigDecimal: price (Creates a new food item)
  * Not all parameters need to be passed for the POST request only the ones that are being changed
  * DELETE - int: id
  */
