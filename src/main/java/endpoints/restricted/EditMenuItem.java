@@ -19,12 +19,12 @@ import java.util.function.Consumer;
 
 /**
  * Endpoint for the frontend to call to get {@link Food} items from the database to edit
- *
+ * <p>
  * Spec:
- *  GET - int: id
- *  POST - boolean: availability, int: calories, int: category, String: description, String: name, BigDecimal: price
- *      Not all parameters need to be passed for the POST request only the ones that are being changed
- *  DELETE - int: id
+ * GET - int: id
+ * POST - boolean: availability, int: calories, int: category, String: description, String: name, BigDecimal: price
+ * Not all parameters need to be passed for the POST request only the ones that are being changed
+ * DELETE - int: id
  */
 public class EditMenuItem extends HttpServlet {
 
@@ -83,63 +83,100 @@ public class EditMenuItem extends HttpServlet {
         } catch (NumberFormatException e) {
             return;
         }
-        Map<String, String[]> params = req.getParameterMap();
-        for (String param : params.keySet()) {
+        Food food = null;
+        try {
+            food = Database.FOODS.getFoodByID(foodID);
+            if (food == null) {
+                resp.sendError(500, "Unable to retrieve food item to update.");
+                return;
+            }
+        } catch (SQLException e) {
+            resp.sendError(500, "Unable to retrieve food item to update.");
+            return;
+        }
+        String availability = req.getParameter("availability");
+        if (availability != null) {
             try {
-                switch (param) {
-                    case "availability":
+                boolean val = Boolean.parseBoolean(availability);
+                Database.FOODS.updateAvailability(foodID, val);
+            } catch (SQLException e) {
+                resp.sendError(500, "Unable to change availability of food item.");
+            }
+        } else {
+            Map<String, String[]> params = req.getParameterMap();
+            for (String param : params.keySet()) {
+                try {
+                    switch (param) {
+                    /*case "availability":
                         if (params.get(param) != null) {
                             boolean val = Boolean.parseBoolean(params.get(param)[0]);
                             Database.FOODS.updateAvailability(foodID, val);
                         } else {
                             resp.sendError(500, "No value passed with: " + param);
                         }
-                        break;
-                    case "calories":
-                        if (params.get(param) != null) {
-                            int val = Integer.parseInt(params.get(param)[0]);
-                            Database.FOODS.updateCalories(foodID, val);
-                        } else {
-                            resp.sendError(500, "No value passed with: " + param);
-                        }
-                        break;
-                    case "category":
-                        if (params.get(param) != null) {
-                            int val = Integer.parseInt(params.get(param)[0]);
-                            Database.FOODS.updateCategoryId(foodID, val);
-                        } else {
-                            resp.sendError(500, "No value passed with: " + param);
-                        }
-                        break;
-                    case "description":
-                        if (params.get(param) != null) {
-                            Database.FOODS.updateFoodDescription(foodID, params.get(param)[0]);
-                        } else {
-                            resp.sendError(500, "No value passed with: " + param);
-                        }
-                        break;
-                    case "name":
-                        if (params.get(param) != null) {
-                            Database.FOODS.updateFoodName(foodID, params.get(param)[0]);
-                        } else {
-                            resp.sendError(500, "No value passed with: " + param);
-                        }
-                        break;
-                    case "price":
-                        if (params.get(param) != null) {
-                            BigDecimal val = new BigDecimal(params.get(param)[0]);
-                            Database.FOODS.updatePrice(foodID, val);
-                        } else {
-                            resp.sendError(500, "No value passed with: " + param);
-                        }
-                        break;
-                    default:
-                        resp.sendError(400, "Invalid parameter passed: " + param);
+                        break;*/
+                        case "calories":
+                            if (params.get(param) != null) {
+                                int val = Integer.parseInt(params.get(param)[0]);
+                                //Database.FOODS.updateCalories(foodID, val);
+                                food.setCalories(val);
+                            } else {
+                                resp.sendError(500, "No value passed with: " + param);
+                            }
+                            break;
+                        case "category":
+                            if (params.get(param) != null) {
+                                int val = Integer.parseInt(params.get(param)[0]);
+                                //Database.FOODS.updateCategoryId(foodID, val);
+                                food.setCategoryID(val);
+                            } else {
+                                resp.sendError(500, "No value passed with: " + param);
+                            }
+                            break;
+                        case "description":
+                            if (params.get(param) != null) {
+                                //Database.FOODS.updateFoodDescription(foodID, params.get(param)[0]);
+                                food.setFoodDescription(params.get(param)[0]);
+                            } else {
+                                resp.sendError(500, "No value passed with: " + param);
+                            }
+                            break;
+                        case "name":
+                            if (params.get(param) != null) {
+                                //Database.FOODS.updateFoodName(foodID, params.get(param)[0]);
+                                food.setFoodName(params.get(param)[0]);
+                            } else {
+                                resp.sendError(500, "No value passed with: " + param);
+                            }
+                            break;
+                        case "price":
+                            if (params.get(param) != null) {
+                                BigDecimal val = new BigDecimal(params.get(param)[0]);
+                                //Database.FOODS.updatePrice(foodID, val);
+                                food.setPrice(val);
+                            } else {
+                                resp.sendError(500, "No value passed with: " + param);
+                            }
+                            break;
+                        default:
+                            resp.sendError(400, "Invalid parameter passed: " + param);
+                    }
                 }
+                /*catch (SQLException e) {
+                    resp.sendError(500, "Error in database changing: " + param);
+                } */ catch (NumberFormatException e) {
+                    resp.sendError(400, "Invalid number passed for value: " + param);
+                }
+            }
+            try {
+                Database.FOODS.updateAvailability(foodID, false);
             } catch (SQLException e) {
-                resp.sendError(500, "Error in database changing: " + param);
-            } catch (NumberFormatException e) {
-                resp.sendError(400, "Invalid number passed for value: " + param);
+                resp.sendError(500, "Unable to set previous version to unavailable.");
+            }
+            try {
+                Database.FOODS.newFood(food);
+            } catch (SQLException e) {
+                resp.sendError(500, "Unable to add new food item.");
             }
         }
     }
