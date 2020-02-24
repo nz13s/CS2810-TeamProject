@@ -1,14 +1,13 @@
 package sql;
 
 import entities.Food;
+import entities.Item;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.CheckReturnValue;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Class that stores SQL queries related to the food table.
@@ -26,6 +25,7 @@ public class Foods {
     private PreparedStatement updatePriceById;
     private PreparedStatement updateAvailabilityById;
     private PreparedStatement updateCategoryIDById;
+    private PreparedStatement newFood;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -68,6 +68,10 @@ public class Foods {
                 "UPDATE food " +
                         "SET category_id = ? " +
                         "WHERE food_id = ?");
+
+        newFood = connection.prepareStatement(
+                "INSERT INTO food (food_name, food_description, calories, price, available, category_id) "
+                        + "VALUES (?, ?, ?, ?, ?, ?)");
     }
 
     /**
@@ -100,7 +104,7 @@ public class Foods {
      * Method that updates the food_name of a food based on the ID.
      *
      * @param foodID foodID of the food.
-     * @param name name of the food.
+     * @param name   name of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
     public void updateFoodName(int foodID, String name) throws SQLException {
@@ -112,7 +116,7 @@ public class Foods {
     /**
      * Method that updates the food_description of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID      foodID of the food.
      * @param description description of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -125,7 +129,7 @@ public class Foods {
     /**
      * Method that updates the calories of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID   foodID of the food.
      * @param calories calories of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -139,7 +143,7 @@ public class Foods {
      * Method that updates the price of a food based on the ID.
      *
      * @param foodID foodID of the food.
-     * @param price price of the food.
+     * @param price  price of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
     public void updatePrice(int foodID, BigDecimal price) throws SQLException {
@@ -151,7 +155,7 @@ public class Foods {
     /**
      * Method that updates the availability of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID       foodID of the food.
      * @param availability availability of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -164,7 +168,7 @@ public class Foods {
     /**
      * Method that updates the category of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID   foodID of the food.
      * @param category category of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -172,5 +176,21 @@ public class Foods {
         updateCategoryIDById.setInt(1, category);
         updateCategoryIDById.setInt(2, foodID);
         updateCategoryIDById.executeUpdate();
+    }
+
+    /**
+     * Method to add a new Food to the database.
+     *
+     * @param food The new Food item to add to the database.
+     * @throws SQLException If a database access error occurs or this method is called on a closed connection.
+     */
+    public void newFood(Food food) throws SQLException {
+        newFood.setString(1, food.getFoodName());
+        newFood.setString(2, food.getFoodDescription());
+        newFood.setInt(3, food.getCalories());
+        newFood.setBigDecimal(4, food.getPrice());
+        newFood.setBoolean(5, true);
+        newFood.setInt(6, food.getCategoryID());
+        newFood.execute();
     }
 }
