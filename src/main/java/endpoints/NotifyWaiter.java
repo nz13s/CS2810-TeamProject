@@ -9,13 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Random;
+
+
+
+
 /**
  * Class for customer to call for assistance from waiter, adds notification to waiter.
  *
  * @author Tony
  */
+
 public class NotifyWaiter extends HttpServlet {
     /**
      * Validates that there is Active staff and that there is a table for this TableID.
@@ -28,29 +31,34 @@ public class NotifyWaiter extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        Table t = null;
-        Random rand = new Random();
-        List<StaffInstance> active = ActiveStaff.getAllActiveStaff();
 
-        if (active.size() == 0) {
-            resp.sendError(500, "No current active staff.");
-        }
-
-        StaffInstance waiter = active.get(rand.nextInt(active.size()));
-
+        Table table = null;
         try {
-            t = Database.TABLES.getTableByID(getTable(req, resp));
+            table = Database.TABLES.getTableByID(getTable(req, resp));
         } catch (SQLException e) {
             resp.sendError(500, "Error getting Table from database.");
         }
 
-        if (t != null && ActiveStaff.isActive(waiter.getStaffID())) {
-            Notification n = new Notification(t, NotificationTypes.ASSIST);
-            ActiveStaff.addNotification(waiter.getStaffID(), n);
+
+        if (table != null) {
+            Notification n = new Notification(table, NotificationTypes.ASSIST);
+            if (table.getWaiter() == null) {
+                if (ActiveStaff.findTableWaiter(table) != null) {
+                    table.setWaiter(ActiveStaff.findTableWaiter(table));
+                } else {
+                    Notification notif = new Notification(table, NotificationTypes.NEED);
+                    ActiveStaff.notifyAll(notif);
+                    TableState.addNeedWaiter(table);
+                    ActiveStaff.notifyAll(n);
+                }
+            }
+            ActiveStaff.addNotification(table.getWaiter(), n);
+
         } else {
             resp.sendError(500, "Null value Table.");
         }
     }
+
 
     /**
      * Gets the tableID int from frontend as parameter.
@@ -59,6 +67,7 @@ public class NotifyWaiter extends HttpServlet {
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @return The table ID
      */
+
     private int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int tableID = -1;
         try {

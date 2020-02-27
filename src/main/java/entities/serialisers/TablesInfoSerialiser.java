@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * @author Jatin
  */
-
+//TODO this can be removed?
 public class TablesInfoSerialiser extends StdSerializer<TableState> {
 
     public TablesInfoSerialiser(){
@@ -26,7 +26,7 @@ public class TablesInfoSerialiser extends StdSerializer<TableState> {
     @Override
     public void serialize(TableState tableState, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("table_state", tableState.getTableList());
+        jsonGenerator.writeObjectField("table_state", TableState.getTableList());
         jsonGenerator.writeEndObject();
     }
 }
