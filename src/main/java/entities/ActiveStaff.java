@@ -129,7 +129,14 @@ public class ActiveStaff {
         return false;
     }
 
-    public static boolean addTableToStaff(Table table) {
+    /**
+     * Method Adds the table to a Random staff from the currently Active Staff,
+     * Whose table list is < 3. Sets table to occupied and removes from NeedWaiter List.
+     *
+     * @param table The table that needs a waiter
+     * @return true if successful
+     */
+    public static boolean addTableToRandomStaff(Table table) {
         for (StaffInstance staffInstance : staff) {
             if (staffInstance.getTables().size() < 3
                     && !staffInstance.hasTable(table)
@@ -138,10 +145,63 @@ public class ActiveStaff {
                 staffInstance.addTable(table);
                 staffInstance.addNotification(new Notification(table, NotificationTypes.ASSIGN));
                 table.setWaiter(staffInstance);
+                table.setOccupied(true);
+                TableState.removeNeedWaiter(table);
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Method Adds the table to a Specified staff from the currently Active Staff,
+     * Sets table to occupied and removes from NeedWaiter List.
+     *
+     * @param table The table that needs a waiter
+     * @return true if successful
+     */
+    public static boolean addTableToStaff(Table table, StaffInstance staff) {
+        if (!staff.hasTable(table)
+                && table.getWaiter() == null) {
+            staff.addTable(table);
+            staff.addNotification(new Notification(table, NotificationTypes.ASSIGN));
+            table.setWaiter(staff);
+            table.setOccupied(true);
+            TableState.removeNeedWaiter(table);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method sends a notification to all Active staff.
+     *
+     * @param notif The notification
+     * @return false if no ActiveStaff
+     */
+    public static boolean notifyAll(Notification notif) {
+        if (staff.size() > 0) {
+            for (StaffInstance staffInstance : staff) {
+                addNotification(staffInstance, notif);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method finds a Waiter that is assigned to a table from Active staff.
+     *
+     * @param t The table
+     * @return null if no Waiter is assigned this table.
+     */
+    public static StaffInstance findTableWaiter(Table t) {
+        for (StaffInstance staffInstance : staff) {
+            if (staffInstance.getTables().contains(t)) {
+                return staffInstance;
+            }
+        }
+        return null;
     }
 
 }
