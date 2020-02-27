@@ -5,15 +5,16 @@ public enum NotificationTypes {
     READY("Order Ready for Delivery"),
     ASSIST("Assistance Required"),
     CONFIRM("Order Ready for Payment"),
-    ASSIGN("Table number assigned successfully");
+    ASSIGN("Table number assigned successfully"),
+    NEED("Table needs a waiter.");
 
     private String notification;
 
-    private NotificationTypes(String notification){
+    NotificationTypes(String notification) {
         this.notification = notification;
     }
 
-    public String toString(){
+    public String toString() {
         return this.notification;
     }
 
