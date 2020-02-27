@@ -54,11 +54,16 @@ public class OrderUpdate extends HttpServlet {
                 Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
                 Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
                 assert orderTable != null;
-
+                // If there is no Waiter assigned to a table and No Waiter has the table in their list,
+                // table is assigned to random Waiter.
                 if (orderTable.getWaiter() == null) {
-                    ActiveStaff.addTableToStaff(orderTable);
+                    if (ActiveStaff.findTableWaiter(orderTable) != null) {
+                        orderTable.setWaiter(ActiveStaff.findTableWaiter(orderTable));
+                    } else {
+                        ActiveStaff.addTableToRandomStaff(orderTable);
+                    }
                 }
-
+                //Sends notification "order is ready" to the waiter.
                 ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
             }
         } catch (SQLException e) {
