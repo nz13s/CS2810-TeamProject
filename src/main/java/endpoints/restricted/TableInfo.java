@@ -40,9 +40,9 @@ public class TableInfo extends HttpServlet {
      */
 
     public String tablesToJSON() throws SQLException, IOException {
-
-        TableState tableState = Database.TABLES.fetchTables();
-        return mapper.writeValueAsString(tableState);
+        //TODO The initial load of tables from DB into the list.
+        Database.TABLES.fetchTables();
+        return mapper.writeValueAsString(TableState.getTableList());
     }
 
     /**

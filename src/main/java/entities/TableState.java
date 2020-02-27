@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class TableState {
 
-    private static ArrayList<Table> tables;
-    private static ArrayList<Table> tableNeedWaiter;
+    private static ArrayList<Table> tables = new ArrayList<>();
+    private static ArrayList<Table> tableNeedWaiter = new ArrayList<>();
 
 
     /**
