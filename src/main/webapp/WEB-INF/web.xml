@@ -121,6 +121,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>NewMenuItem</servlet-name>
+        <servlet-class>endpoints.restricted.NewFoodItem</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewMenuItem</servlet-name>
+        <url-pattern>/restricted/newmenuitem</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>StaffNotifications</servlet-name>
         <servlet-class>endpoints.restricted.StaffNotifications</servlet-class>
     </servlet>
