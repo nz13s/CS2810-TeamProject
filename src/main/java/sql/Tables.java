@@ -54,8 +54,8 @@ public class Tables {
      * @throws SQLException thrown if sql logic is incorrect.
      */
 
-    public TableState fetchTables() throws SQLException {
-        TableState tableState = new TableState();
+    public void fetchTables() throws SQLException {
+        // TableState tableState = new TableState();
         ResultSet resultSet = fetchTables.executeQuery();
         Set<Table> tables = new HashSet<>();
 
@@ -78,8 +78,8 @@ public class Tables {
             }
             tables.add(t);
         }
-        tables.forEach(tableState::addTable);
-        return tableState;
+        tables.forEach(TableState::addTable);
+
     }
 
     /**
