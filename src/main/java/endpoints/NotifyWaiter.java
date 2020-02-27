@@ -2,10 +2,7 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.ActiveStaff;
-import entities.Notification;
-import entities.NotificationTypes;
-import entities.Table;
+import entities.*;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +24,18 @@ public class NotifyWaiter extends HttpServlet {
         if (table != null) {
             Notification n = new Notification(table, NotificationTypes.ASSIST);
             if (table.getWaiter() == null) {
-                ActiveStaff.addTableToStaff(table);
+                if (ActiveStaff.findTableWaiter(table) != null) {
+                    table.setWaiter(ActiveStaff.findTableWaiter(table));
+                } else {
+                    Notification notif = new Notification(table, NotificationTypes.NEED);
+                    ActiveStaff.notifyAll(notif);
+                    TableState.addNeedWaiter(table);
+                    ActiveStaff.notifyAll(n);
+                }
             }
+
             ActiveStaff.addNotification(table.getWaiter(), n);
+
         } else {
             resp.sendError(500, "Null value tableID");
         }
