@@ -1,9 +1,12 @@
 package endpoints.restricted;
 
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
 import entities.*;
+import entities.serialisers.TablesInfoSerialiser;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +32,9 @@ public class TableInfo extends HttpServlet {
     public TableInfo() {
         mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        SimpleModule module = new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
+        module.addSerializer(TableState.class, new TablesInfoSerialiser());
+        mapper.registerModule(module);
     }
 
     /**

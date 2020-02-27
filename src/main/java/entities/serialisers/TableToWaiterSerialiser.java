@@ -7,6 +7,11 @@ import entities.TableState;
 
 import java.io.IOException;
 
+/**
+ * Class to serialise the table state, to pass to the Frontend.
+ *
+ */
+
 public class TableToWaiterSerialiser extends StdSerializer<TableState> {
     public TableToWaiterSerialiser(Class<TableState> table_State) {
         super(table_State);
