@@ -55,9 +55,10 @@ public class Tables {
      */
 
     public void fetchTables() throws SQLException {
-        // TableState tableState = new TableState();
+       // TableState tableState = new TableState();
         ResultSet resultSet = fetchTables.executeQuery();
         Set<Table> tables = new HashSet<>();
+        TableState.removeAllTables();
 
         while (resultSet.next()) {
             Order order = new Order(

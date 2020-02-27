@@ -35,7 +35,6 @@ public class TableToWaiter extends HttpServlet {
      */
     public String tablesToJSON() throws SQLException, IOException {
         //TODO The initial load of tables from DB into the list.
-        Database.TABLES.fetchTables();
         return mapper.writeValueAsString(TableState.getNeedWaiter());
     }
 

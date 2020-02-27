@@ -170,7 +170,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>TableToWaiter</servlet-name>
-        <url-pattern>/waitertables</url-pattern>
+        <url-pattern>/restricted/waitertables</url-pattern>
     </servlet-mapping>
 
 </web-app>

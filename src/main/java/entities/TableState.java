@@ -132,4 +132,9 @@ public class TableState {
         tables.add(table);
     }
 
+    public static void removeAllTables() {
+        tables.removeAll(tables);
+    }
+
+
 }
