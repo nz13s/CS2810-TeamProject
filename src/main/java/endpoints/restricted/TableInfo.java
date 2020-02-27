@@ -3,9 +3,7 @@ package endpoints.restricted;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import databaseInit.Database;
-import entities.ActiveStaff;
-import entities.Table;
-import entities.TableState;
+import entities.*;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -68,11 +66,12 @@ public class TableInfo extends HttpServlet {
     }
 
     /**
-     * Method that updates the notification list via a POST method from frontend.
+     * The Post method, Validates frontend input, gets Table from Database,
+     * Sends off a notification to all active staff and adds the table to NeedWaiter list.
      *
-     * @param req  server request.
-     * @param resp server response.
-     * @throws IOException
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @throws IOException If an input or output exception occurs
      */
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -85,13 +84,23 @@ public class TableInfo extends HttpServlet {
             resp.sendError(400, "Invalid tableNum");
         }
         if (table != null) {
-            success = ActiveStaff.addTableToStaff(table);
+            Notification n = new Notification(table, NotificationTypes.NEED);
+            success = ActiveStaff.notifyAll(n);
+            TableState.addNeedWaiter(table);
+
         }
         if (!success) {
-            resp.sendError(500, "Failed to add table to waiter");
+            resp.sendError(500, "Failed to send waiters notification");
         }
     }
 
+    /**
+     * Gets tableNum as Parameter, parse to Integer and send an error for any exceptions.
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @throws IOException If an input or output exception occurs
+     */
     private int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int table = -1;
         try {
