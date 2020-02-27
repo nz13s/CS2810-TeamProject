@@ -88,6 +88,7 @@ public class TableInfo extends HttpServlet {
             success = ActiveStaff.notifyAll(n);
             TableState.addNeedWaiter(table);
 
+
         }
         if (!success) {
             resp.sendError(500, "Failed to send waiters notification");
