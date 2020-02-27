@@ -112,8 +112,15 @@ public class TableState {
      *
      * @param t The table
      */
+    //TODO Tony Find better way for this:
     public static void removeNeedWaiter(Table t) {
-        tableNeedWaiter.remove(t);
+        Table remove = null;
+        for (Table table : tableNeedWaiter) {
+            if (table.getTableNum() == t.getTableNum()) {
+                remove = table;
+            }
+        }
+        tableNeedWaiter.remove(remove);
     }
 
     /**
