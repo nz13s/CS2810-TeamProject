@@ -164,4 +164,13 @@
         <url-pattern>/restricted/tables</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TableToWaiter</servlet-name>
+        <servlet-class>endpoints.restricted.TableToWaiter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableToWaiter</servlet-name>
+        <url-pattern>/waitertables</url-pattern>
+    </servlet-mapping>
+
 </web-app>

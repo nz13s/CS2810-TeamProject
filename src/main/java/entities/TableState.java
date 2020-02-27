@@ -14,30 +14,27 @@ public class TableState {
     private static ArrayList<Table> tableNeedWaiter = new ArrayList<>();
 
 
-    /**
+    /*
      * Constructor that initialises the list of tables.
      */
+//    public TableState() {
+//        tables = new ArrayList<Table>();
+//    }
 
-    /*    public TableState() {
-        tables = new ArrayList<Table>();
-    }
-     */
 
-    /**
+    /*
      * Constructor that initialises the list of tables, given by the parameter.
      */
-/*
-    public TableState(ArrayList<Table> tables) {
-       this.tables = tables;
-    }
-*/
+//    public TableState(ArrayList<Table> tables) {
+//        this.tables = tables;
+//    }
+
 
     /**
      * Returns the number of tables in the restaurant.
      *
      * @return number of tables in the restaurant.
      */
-
     public static int size() {
         return tables.size();
     }
@@ -47,7 +44,6 @@ public class TableState {
      *
      * @return list of tables.
      */
-
     public static ArrayList<Table> getTableList() {
         return tables;
     }
@@ -69,7 +65,7 @@ public class TableState {
     public static ArrayList<Table> getTableOccupied() {
         ArrayList<Table> occupied = new ArrayList<>();
         for (Table t : tables) {
-            if (t.isOccupied() == true) {
+            if (t.isOccupied()) {
                 occupied.add(t);
             }
         }
@@ -84,7 +80,7 @@ public class TableState {
     public static ArrayList<Table> getTableFree() {
         ArrayList<Table> freeTables = new ArrayList<>();
         for (Table t : tables) {
-            if (t.isOccupied() == false) {
+            if (!t.isOccupied()) {
                 freeTables.add(t);
             }
         }
@@ -112,7 +108,7 @@ public class TableState {
     }
 
     /**
-     * Removes a table to the NeedWaiter list.
+     * Removes a table from the NeedWaiter list.
      *
      * @param t The table
      */
