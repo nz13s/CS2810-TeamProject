@@ -1,6 +1,14 @@
 import React from "react";
-import {Button, Col, Container, Form, InputGroup, Navbar, Row} from "react-bootstrap";
-import {WaiterEditStyle} from "./WaiterEdit.styled";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Navbar,
+  Row
+} from "react-bootstrap";
+import { WaiterEditStyle } from "./WaiterEdit.styled";
 
 export default class WaiterEdit extends React.Component<any, any> {
   constructor(props: any) {
@@ -14,7 +22,7 @@ export default class WaiterEdit extends React.Component<any, any> {
       <WaiterEditStyle>
         <Container fluid className="mx-2">
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
-            <Navbar.Brand href="/#/">Oaxaca Waiter Edit</Navbar.Brand>
+            <Navbar.Brand href="/#/">Oaxaca Menu Edit</Navbar.Brand>
           </Navbar>
 
           <Row className="d-flex justify-content-center">
@@ -29,13 +37,15 @@ export default class WaiterEdit extends React.Component<any, any> {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
-                      type="text"
+                      type="number"
                       aria-describedby="inputGroupPrepend"
                       required
                     />
                   </InputGroup>
                 </Form.Group>
-                <Button variant="danger" type="submit">Remove</Button>
+                <Button variant="danger" type="submit">
+                  Remove
+                </Button>
               </Form>
             </Col>
             <Col xs="4">
@@ -109,18 +119,20 @@ export default class WaiterEdit extends React.Component<any, any> {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
-                      type="text"
+                      type="number"
                       aria-describedby="inputGroupPrepend"
                       required
                     />
                   </InputGroup>
                 </Form.Group>
-                <Button variant="success" type="submit">Add</Button>
+                <Button variant="success" type="submit">
+                  Add
+                </Button>
               </Form>
             </Col>
           </Row>
         </Container>
       </WaiterEditStyle>
-    )
+    );
   }
 }
