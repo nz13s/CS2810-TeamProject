@@ -70,7 +70,7 @@ export default class Login extends React.Component<any, State> {
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
-                    type="text"
+                    type="password"
                     aria-describedby="inputGroupPrepend"
                     required
                   />
