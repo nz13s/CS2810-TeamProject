@@ -19,6 +19,8 @@ import java.sql.SQLException;
  */
 public class OrderUpdate extends HttpServlet {
 
+    private CustomerNotifications cNotifications = new CustomerNotifications();
+
     /**
      * Validates the orderID and depending on the State(0-3), calls update method
      * with Different parameters for each state. Displays adequate error if fail.
@@ -67,9 +69,15 @@ public class OrderUpdate extends HttpServlet {
                 ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
 
                 // add notification to the customer's list.
-                CustomerNotifications cNotifications = new CustomerNotifications();
                 cNotifications.addNotification(nfReady);
             }
+
+            else if (state == 1) {
+                Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                Notification nfPreparing = new Notification(orderTable, NotificationTypes.PREPARING);
+                cNotifications.addNotification(nfPreparing);
+            }
+
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
         }
