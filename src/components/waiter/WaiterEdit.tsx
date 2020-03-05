@@ -3,10 +3,13 @@ import {
   Button,
   Col,
   Container,
+  DropdownButton,
   Form,
+  FormControl,
   InputGroup,
   Navbar,
-  Row
+  Row,
+  Dropdown
 } from "react-bootstrap";
 import { WaiterEditStyle } from "./WaiterEdit.styled";
 
@@ -81,7 +84,7 @@ export default class WaiterEdit extends React.Component<any, any> {
                   </InputGroup>
                 </Form.Group>
 
-                <Form.Group controlId="itemDescription">
+                <Form.Group controlId="itemCalories">
                   <InputGroup>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroupPrepend">
@@ -96,18 +99,39 @@ export default class WaiterEdit extends React.Component<any, any> {
                   </InputGroup>
                 </Form.Group>
 
-                <Form.Group controlId="itemDescription">
+                <Form.Group controlId="itemIngredients">
                   <InputGroup>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroupPrepend">
-                        Allergens
+                        Ingredients
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <Form.Control
-                      type="text"
-                      aria-describedby="inputGroupPrepend"
-                      required
+                    <FormControl
+                      aria-label="Ingredients"
+                      aria-describedby="basic-addon2"
                     />
+
+                    <DropdownButton
+                      as={InputGroup.Append}
+                      variant="primary"
+                      title="+"
+                      id="input-group-dropdown-2">
+                      {[
+                        "Black Beans",
+                        "Chicken",
+                        "Tomato",
+                        "Cord",
+                        "Doritos",
+                        "Wheat"
+                      ].map((ingredient, idx) => (
+                        <Dropdown.Item
+                          key={idx}
+                          as="button"
+                          onClick={() => console.log(ingredient)}>
+                          {ingredient}
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
                   </InputGroup>
                 </Form.Group>
 
