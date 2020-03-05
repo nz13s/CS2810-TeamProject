@@ -65,6 +65,10 @@ public class OrderUpdate extends HttpServlet {
                 }
                 //Sends notification "order is ready" to the waiter.
                 ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
+
+                // add notification to the customer's list.
+                CustomerNotifications cNotifications = new CustomerNotifications();
+                cNotifications.addNotification(nfReady);
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
