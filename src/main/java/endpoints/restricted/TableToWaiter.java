@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
+import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
 
@@ -82,7 +83,7 @@ public class TableToWaiter extends HttpServlet {
         boolean success = false;
 
         try {
-            table = Database.TABLES.getTableByID(getTable(req, resp));
+            table = Database.TABLES.getTableByID(GlobalMethods.getTable(req, resp));
         } catch (SQLException e) {
             resp.sendError(400, "Invalid tableNum");
         }

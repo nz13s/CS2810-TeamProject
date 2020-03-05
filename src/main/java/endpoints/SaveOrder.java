@@ -60,6 +60,8 @@ public class SaveOrder extends HttpServlet {
         }
         if (tableSeated == null) {
             resp.sendError(400, "Invalid Table Num");
+            return;
+
         } else {
             Notification n = new Notification(tableSeated, NotificationTypes.CONFIRM);
 

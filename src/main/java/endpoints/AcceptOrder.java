@@ -9,7 +9,6 @@ import entities.Order;
 import entities.serialisers.OrderSerialiser;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,7 +89,6 @@ public class AcceptOrder extends HttpServlet {
         } catch (NumberFormatException e) {
             return;
         }
-        //TODO Need this method please
         try {
             Database.ORDERS.confirmOrder(orderID);
         } catch (SQLException e) {
