@@ -42,6 +42,7 @@ export default class WaiterManagement extends React.Component<any, any> {
                     </InputGroup.Prepend>
                     <Form.Control
                       type="number"
+                      placeholder="1"
                       aria-describedby="inputGroupPrepend"
                       required
                     />
