@@ -38,4 +38,14 @@ public class CustomerNotifications {
         notifications.add(notification);
     }
 
+    /**
+     * Removes a notification from the list, based on a given ID.
+     *
+     * @param id ID of the notification to be removed.
+     */
+
+    public void removeNotificationByID(int id) {
+        notifications.removeIf(notification -> notification.getNotificationID() == id);
+    }
+
 }
