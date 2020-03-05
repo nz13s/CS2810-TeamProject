@@ -132,8 +132,25 @@ public class TableState {
         tables.add(table);
     }
 
+    /**
+     * removes all tables.
+     */
     public static void removeAllTables() {
         tables.removeAll(tables);
+    }
+
+    /**
+     * Gets table by ID from list of tables.
+     *
+     * @param ID The table ID
+     */
+    public static Table getTableByID(int ID) {
+        for (Table table : tables) {
+            if (table.getTableNum() == ID) {
+                return table;
+            }
+        }
+        return null;
     }
 
 
