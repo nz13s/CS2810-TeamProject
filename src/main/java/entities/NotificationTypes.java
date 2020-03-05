@@ -6,7 +6,8 @@ public enum NotificationTypes {
     ASSIST("Assistance Required"),
     CONFIRM("Order Ready for Payment"),
     ASSIGN("Table number assigned successfully"),
-    NEED("Table needs a waiter.");
+    NEED("Table needs a waiter."),
+    PREPARING("Order is being prepared");
 
     private String notification;
 
