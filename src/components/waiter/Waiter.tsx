@@ -94,7 +94,8 @@ export default class Waiter extends React.Component<any, State> {
                       <Button
                         block
                         className="waiter_button"
-                        variant="outline-danger">
+                        variant="outline-danger"
+                        onClick={() => clearInterval(this.interval)}>
                         Edit Menu
                       </Button>
                     </Link>
@@ -104,7 +105,8 @@ export default class Waiter extends React.Component<any, State> {
                       <Button
                         block
                         className="waiter_button"
-                        variant="outline-warning">
+                        variant="outline-warning"
+                        onClick={() => clearInterval(this.interval)}>
                         Table Management
                       </Button>
                     </Link>
