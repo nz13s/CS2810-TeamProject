@@ -72,6 +72,12 @@ public class OrderUpdate extends HttpServlet {
                 cNotifications.addNotification(nfReady);
             }
 
+            else if (state == 0) {
+                Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                Notification nfConfirmed = new Notification(orderTable, NotificationTypes.CONFIRMED);
+                cNotifications.addNotification(nfConfirmed);
+            }
+
             else if (state == 1) {
                 Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
                 Notification nfPreparing = new Notification(orderTable, NotificationTypes.PREPARING);
