@@ -3,6 +3,7 @@ package endpoints.restricted;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import databaseInit.Database;
 import entities.Food;
+import entities.Ingredient;
 import entities.StaffInstance;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -23,8 +25,8 @@ import java.util.function.Consumer;
  * Spec:
  * GET - int: id
  * POST - int: id then one of the two following:
- *  - boolean: availability (changes the availability of a food item)
- *  - int: calories, int: category, String: description, String: name, BigDecimal: price (Creates a new food item)
+ * - boolean: availability (changes the availability of a food item)
+ * - int: calories, int: category, String: description, String: name, BigDecimal: price (Creates a new food item)
  * Not all parameters need to be passed for the POST request only the ones that are being changed
  * DELETE - int: id
  */
@@ -74,6 +76,7 @@ public class EditMenuItem extends HttpServlet {
      * @throws ServletException
      * @throws IOException      If an input or output exception occurs
      */
+    //TODO Method for completely new food
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (!validStaff(req, resp)) {
@@ -123,7 +126,8 @@ public class EditMenuItem extends HttpServlet {
                                 //Database.FOODS.updateCalories(foodID, val);
                                 food.setCalories(val);
                             } else {
-                                resp.sendError(500, "No value passed with: " + param);
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
                             }
                             break;
                         case "category":
@@ -132,7 +136,8 @@ public class EditMenuItem extends HttpServlet {
                                 //Database.FOODS.updateCategoryId(foodID, val);
                                 food.setCategoryID(val);
                             } else {
-                                resp.sendError(500, "No value passed with: " + param);
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
                             }
                             break;
                         case "description":
@@ -140,7 +145,8 @@ public class EditMenuItem extends HttpServlet {
                                 //Database.FOODS.updateFoodDescription(foodID, params.get(param)[0]);
                                 food.setFoodDescription(params.get(param)[0]);
                             } else {
-                                resp.sendError(500, "No value passed with: " + param);
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
                             }
                             break;
                         case "name":
@@ -148,7 +154,8 @@ public class EditMenuItem extends HttpServlet {
                                 //Database.FOODS.updateFoodName(foodID, params.get(param)[0]);
                                 food.setFoodName(params.get(param)[0]);
                             } else {
-                                resp.sendError(500, "No value passed with: " + param);
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
                             }
                             break;
                         case "price":
@@ -157,23 +164,35 @@ public class EditMenuItem extends HttpServlet {
                                 //Database.FOODS.updatePrice(foodID, val);
                                 food.setPrice(val);
                             } else {
-                                resp.sendError(500, "No value passed with: " + param);
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
+                            }
+                            break;
+                        case "ingredients":
+                            if (params.get(param) != null) {
+                                String[] ingredients = params.get(param);
+                                for (String ingredientID : ingredients) {
+                                    food.addIngredient(new Ingredient(foodID, Integer.parseInt(ingredientID)));
+                                }
+                            } else {
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
                             }
                             break;
                         default:
                             resp.sendError(400, "Invalid parameter passed: " + param);
+                            return;
                     }
-                }
-                /*catch (SQLException e) {
-                    resp.sendError(500, "Error in database changing: " + param);
-                } */ catch (NumberFormatException e) {
-                    resp.sendError(400, "Invalid number passed for value: " + param);
+                } catch (NumberFormatException e) {
+                    resp.sendError(400, "Invalid integer passed for value: " + param);
+                    return;
                 }
             }
             try {
                 Database.FOODS.updateAvailability(foodID, false);
             } catch (SQLException e) {
                 resp.sendError(500, "Unable to set previous version to unavailable.");
+                return;
             }
             try {
                 Database.FOODS.newFood(food);

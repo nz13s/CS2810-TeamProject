@@ -28,6 +28,17 @@ public class Ingredient {
     }
 
     /**
+     * Constructor for an Ingredient ONLY TO BE USED when adding or editing a food in the database
+     * @param foodID The ID of the food
+     * @param ingredientID The ID of the ingredient referenced as stored in the database
+     */
+    //TODO Change FoodClass to take different form of Ingredient so this method is not used
+    public Ingredient(int foodID, int ingredientID){
+        this.foodID = foodID;
+        this.ingredientID = ingredientID;
+    }
+
+    /**
      * Returns the ID of the ingredient.
      *
      * @return ID of the ingredient.
