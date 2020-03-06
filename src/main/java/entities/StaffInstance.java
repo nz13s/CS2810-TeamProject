@@ -1,5 +1,7 @@
 package entities;
 
+import websockets.NotificationSocket;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +62,7 @@ public class StaffInstance {
      */
     public void addNotification(Notification newNotification) {
         allMessages.add(newNotification);
+        NotificationSocket.broadcastNotification(newNotification); //just for testing purposes
     }
 
     /**
