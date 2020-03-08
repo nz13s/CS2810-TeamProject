@@ -73,7 +73,11 @@ public class NotificationSocket {
         }
         Object o = sess.getAttribute("StaffEntity");
         if (o == null) {
-            socket.session.getAsyncRemote().sendText("Not authenticated\n");
+            try {
+                socket.session.getAsyncRemote().sendText("Not authenticated\n");
+                socket.session.close();
+            } catch (IOException e) {
+            }
             return;
         }
         socket.instance = (StaffInstance) o;
