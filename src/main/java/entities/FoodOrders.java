@@ -1,6 +1,6 @@
 package entities;
 
-public class FoodOrders {
+public class FoodOrders implements ISerialisable {
 
     private int orderID;
     private int foodID;

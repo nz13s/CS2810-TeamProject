@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class Food {
+public class Food implements ISerialisable {
   private int foodID;
   private String foodName;
   private String foodDescription;

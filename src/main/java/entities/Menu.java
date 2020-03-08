@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author Jatin
  */
 
-public class Menu {
+public class Menu implements ISerialisable {
 
   private ArrayList<Category> menu;
 

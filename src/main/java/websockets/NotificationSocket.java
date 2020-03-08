@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/socket")
+@ServerEndpoint("/staffsocket")
 public class NotificationSocket {
 
     //apparently an implied default constructor isn't enough. Yikes.
@@ -86,22 +86,22 @@ public class NotificationSocket {
         registeredStaff.remove(socket);
     }
 
-    public static void pushNotification(StaffInstance staff, Notification notification) {
+    public static void pushNotification(StaffInstance staff, SocketMessage message) {
         registeredStaff.stream().filter(sock -> sock.instance == staff).forEach(sock ->
                 {
                     try {
-                        sock.session.getAsyncRemote().sendText(objectMapper.writeValueAsString(notification) + "\n");
+                        sock.session.getAsyncRemote().sendText(objectMapper.writeValueAsString(message) + "\n");
                     } catch (IOException ignored) {
                     }
                 }
         );
     }
 
-    public static void broadcastNotification(Notification notification) {
+    public static void broadcastNotification(SocketMessage message) {
         registeredStaff.forEach(sock ->
                 {
                     try {
-                        sock.session.getAsyncRemote().sendText(objectMapper.writeValueAsString(notification) + "\n");
+                        sock.session.getAsyncRemote().sendText(objectMapper.writeValueAsString(message) + "\n");
                     } catch (IOException ignored) {
                     }
                 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 
-public class IndexedOrder extends Order {
+public class IndexedOrder extends Order implements ISerialisable {
 
     private int rank;
     private CATEGORY_TYPE category;

@@ -62,7 +62,6 @@ public class StaffInstance {
      */
     public void addNotification(Notification newNotification) {
         allMessages.add(newNotification);
-        NotificationSocket.broadcastNotification(newNotification); //just for testing purposes
     }
 
     /**

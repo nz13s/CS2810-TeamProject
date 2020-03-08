@@ -2,7 +2,7 @@ package entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Notification {
+public class Notification implements ISerialisable {
 
     private static int counter = 0;
     private int notificationID;

@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Order implements IFakeable {
+public class Order implements IFakeable, ISerialisable {
     private int orderID;
     private long timeOrdered = 0;
     private long orderConfirmed = 0;
