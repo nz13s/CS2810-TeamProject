@@ -7,9 +7,11 @@ import filters.HttpSessionCollector;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.naming.PartialResultException;
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -90,8 +92,9 @@ public class NotificationSocket {
         registeredStaff.remove(socket);
     }
 
-    public static void pushNotification(StaffInstance staff, SocketMessage message) {
-        registeredStaff.stream().filter(sock -> sock.instance == staff).forEach(sock ->
+    public static void pushNotification(SocketMessage message, StaffInstance... staff) {
+        List<StaffInstance> toPush = Arrays.asList(staff);
+        registeredStaff.stream().filter(sock -> toPush.contains(sock.instance)).forEach(sock ->
                 {
                     try {
                         sock.session.getAsyncRemote().sendText(objectMapper.writeValueAsString(message) + "\n");

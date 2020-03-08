@@ -1,18 +1,18 @@
 package entities;
 
-import websockets.NotificationSocket;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This class represents a single staff member.
+ */
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
     private List<Notification> allMessages;//TODO Discuss making a notification class
     private List<Notification> activeMessages;
     private int staffID;
-    private List<Table> tables;//TODO Remove if other method is decided better
+    private List<Table> managedTables;//TODO Remove if other method is decided better
 
     /**
      * Creates a new staff instance for a session used by a staff member
@@ -97,7 +97,7 @@ public class StaffInstance {
      * @param newTable The new table that the staff member is looking after
      */
     public void addTable(Table newTable) {
-        this.tables.add(newTable);
+        this.managedTables.add(newTable);
     }
 
     /**
@@ -106,7 +106,7 @@ public class StaffInstance {
      * @param tableToRemove The table to remove from the staff members list of tables
      */
     public void removeTable(Table tableToRemove) {
-        this.tables.remove(tableToRemove);
+        this.managedTables.remove(tableToRemove);
     }
 
     /**
@@ -116,12 +116,7 @@ public class StaffInstance {
      * @return The table specified by the table number, null if the staff member is not in charge of that table
      */
     public Table getTable(int tableNum) {
-        for (Table table : tables) {
-            if (table.getTableNum() == tableNum) {
-                return table;
-            }
-        }
-        return null;
+        return managedTables.stream().filter(table -> table.tableNum == tableNum).findFirst().orElse(null);
     }
 
     /**
@@ -185,10 +180,14 @@ public class StaffInstance {
 
     public void removeNotificationFromActiveMessage(String message) {
 
-        for (int i = 0; i< activeMessages.size(); i++) {
+        for (int i = 0; i < activeMessages.size(); i++) {
             if (activeMessages.get(i).getMessage().equals(message)) {
                 activeMessages.remove(activeMessages.get(i));
             }
         }
+    }
+
+    public List<Table> getManagedTables() {
+        return managedTables;
     }
 }

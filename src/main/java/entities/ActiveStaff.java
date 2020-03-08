@@ -48,6 +48,10 @@ public class ActiveStaff {
         employee.addNotification(message);
     }
 
+    public static StaffInstance[] findStaffForTable(int tableNum) {
+        return (StaffInstance[]) staff.stream().filter(member -> member.getTable(tableNum) != null).toArray();
+    }
+
     /**
      * Adds the inputted notification to the specified staff member in their active jobs list
      *

@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table {
+public class Table implements IFakeable {
   public int tableNum;
   private int seatsAvailable;
   private boolean occupied;
@@ -63,4 +63,8 @@ public class Table {
   }
 
 
+  @Override
+  public boolean isFake() {
+    return orders == null;
+  }
 }

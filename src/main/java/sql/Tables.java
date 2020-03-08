@@ -111,4 +111,28 @@ public class Tables {
         return null;
     }
 
+    /**
+     * Gets a table, optionally populating it with the orders
+     *
+     * @param tableNum num of table to fetch
+     * @param populate if true -> calls the other overload with additional data filling
+     * @return an {@link entities.IFakeable} Table.
+     * @throws SQLException upon a connection error.
+     */
+    @Nullable
+    public Table getTableByID(int tableNum, boolean populate) throws SQLException {
+        if (populate) return getTableByID(tableNum);
+        tableById.setInt(1, tableNum);
+        ResultSet resultSet = tableById.executeQuery();
+        if (resultSet.next()) {
+            return new Table(
+                    resultSet.getInt("table_num"),
+                    resultSet.getInt("seats_available"),
+                    resultSet.getBoolean("occupied"),
+                    null
+            );
+        }
+        return null;
+    }
+
 }

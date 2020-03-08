@@ -2,11 +2,15 @@ package endpoints;
 
 import databaseInit.Database;
 import entities.*;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -50,9 +54,15 @@ public class OrderUpdate extends HttpServlet {
 
         try {
             success = Database.ORDERS.updateOrderState(order, state);
+            NotificationSocket.broadcastNotification(new SocketMessage(order, SocketMessageType.UPDATE));
             if (state == 2) {
-                Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                Table orderTable = Database.TABLES.getTableByID(order.getTableNum(), false);
+                if (orderTable == null) {
+                    resp.sendError(500, "Unable to update order.");
+                    return;
+                }
                 Notification notifReady = new Notification(orderTable, NotificationTypes.READY);
+                NotificationSocket.pushNotification(new SocketMessage(notifReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
                 ActiveStaff.addNotification(2, notifReady);
             }
         } catch (SQLException e) {
