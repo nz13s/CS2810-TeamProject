@@ -5,6 +5,9 @@ import databaseInit.Database;
 import entities.NotificationTypes;
 import entities.Order;
 import entities.StaffInstance;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
@@ -82,6 +85,7 @@ public class StaffNotifications extends HttpServlet {
             }
         }
         StaffInstance staff = getStaffMember(req);
+        NotificationSocket.pushNotification(new SocketMessage(staff.getNotificationById(ID), SocketMessageType.DELETE), staff);
         staff.removeNotificationByID(ID);
     }
 

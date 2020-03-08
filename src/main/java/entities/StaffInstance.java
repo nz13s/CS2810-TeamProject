@@ -45,6 +45,13 @@ public class StaffInstance {
     }
 
     /**
+     * Gets notification by its ID
+     */
+    public Notification getNotificationById(int notificationId) {
+        return allMessages.stream().filter(msg -> msg.getNotificationID() == notificationId).findFirst().orElse(null);
+    }
+
+    /**
      * Removes the notification from the active notification list
      *
      * @param pos The index of the notification to remove

@@ -3,6 +3,9 @@ package endpoints;
 
 import databaseInit.Database;
 import entities.*;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,8 +33,10 @@ public class NotifyWaiter extends HttpServlet {
             List<StaffInstance> active = ActiveStaff.getAllActiveStaff();
             Random rand = new Random();
 
-            StaffInstance waiter = active.get(rand.nextInt(active.size()));
+            StaffInstance waiter = active.get(rand.nextInt(active.size())); //todo: need to actually decide on the waiter
+
             ActiveStaff.addNotification(waiter.getStaffID(), n);
+            NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), waiter);
         } else {
             resp.sendError(500, "Null value tableID");
         }
