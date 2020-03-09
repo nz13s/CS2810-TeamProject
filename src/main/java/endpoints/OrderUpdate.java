@@ -41,6 +41,7 @@ public class OrderUpdate extends HttpServlet {
             order = getOrder(req);
         } catch (SQLException e) {
             resp.sendError(500, "Could not get OrderID.");
+            return;
         }
 
         if (order == null) {
@@ -50,6 +51,7 @@ public class OrderUpdate extends HttpServlet {
 
         if (state > 3 || state < 0) {
             resp.sendError(400, "Unexpected State Value.");
+            return;
         }
 
         try {
@@ -67,10 +69,12 @@ public class OrderUpdate extends HttpServlet {
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
+            return;
         }
 
         if (!success) {
             resp.sendError(500, "Unable to update order.");
+            return;
         }
     }
 
