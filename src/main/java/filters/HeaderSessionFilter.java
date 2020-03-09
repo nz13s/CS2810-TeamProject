@@ -34,6 +34,7 @@ public class HeaderSessionFilter implements Filter {
             }
         }
         resp.setHeader("X-Session-ID", session.getId());
+        session.setMaxInactiveInterval(60 * 60 * 24 /* 1 day */);
         chain.doFilter(wrapper, response);
     }
 }
