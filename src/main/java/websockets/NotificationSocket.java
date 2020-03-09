@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/staffsocket")
+@ServerEndpoint("/sockets/staff")
 public class NotificationSocket {
 
     //apparently an implied default constructor isn't enough. Yikes.
