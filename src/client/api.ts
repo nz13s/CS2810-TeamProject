@@ -27,6 +27,10 @@ export default class API {
     localStorage.setItem("session", headers["x-session-id"]);
   }
 
+  static async getSocket(): Promise<void> {
+    client.makeSocket();
+  }
+
   static async login(username: string, password: string): Promise<boolean> {
     try {
       const { headers } = await client.makeRequest("POST", "/login", {
