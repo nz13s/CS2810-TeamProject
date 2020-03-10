@@ -21,21 +21,8 @@ export default class Client {
 
   static makeSocket(): WebSocket {
     const sessionID = localStorage.getItem("session");
-    const socket = new WebSocket(
+    return new WebSocket(
       `wss://${Client.baseURL}/sockets/staff?X-Session-ID=${sessionID}`
     );
-
-    socket.onmessage = e => {
-      const data = e.data;
-
-      switch (data.type) {
-        case "UPDATE":
-          const content = data.content;
-          console.log(content);
-          break;
-      }
-    };
-
-    return socket;
   }
 }
