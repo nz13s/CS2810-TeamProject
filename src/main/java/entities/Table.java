@@ -10,6 +10,7 @@ public class Table implements IFakeable {
   private int seatsAvailable;
   private boolean occupied;
   private List<Order> orders; //orders from this specific entities.Table
+  private StaffInstance waiter;
 
   public Table(int tableNum, int seatsAvailable, boolean occupied, @Nullable List<Order> orders) {
     if (orders == null) orders = new ArrayList<>();
@@ -62,9 +63,15 @@ public class Table implements IFakeable {
     setSeatsAvailable(seatsAvailable++);
   }
 
+  public StaffInstance getWaiter() {
+    return waiter;
+  }
 
   @Override
   public boolean isFake() {
     return orders == null;
+  }
+  public void setWaiter(StaffInstance waiter) {
+    this.waiter = waiter;
   }
 }

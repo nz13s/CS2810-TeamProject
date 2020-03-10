@@ -35,7 +35,7 @@ public class Foods {
      */
     public Foods(Connection connection) throws SQLException {
         foodById = connection.prepareStatement(
-                "SELECT food_id, food_name, food_description, calories, price, available, category_id "
+                "SELECT food_id, food_name, food_description, calories, price, available, category_id, image_url "
                         + "FROM food "
                         + "WHERE food_id = ?");
 
@@ -91,7 +91,8 @@ public class Foods {
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
                     resultSet.getInt("category_id"),
-                    null);
+                    null,
+                    resultSet.getString("image_url"));
         }
         return null;
     }

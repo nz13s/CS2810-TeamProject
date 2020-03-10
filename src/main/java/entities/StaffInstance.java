@@ -22,6 +22,7 @@ public class StaffInstance {
     public StaffInstance(int staffID) {
         this.staffID = staffID;
         allMessages = new ArrayList<>();
+        tables = new ArrayList<Table>();
     }
 
     /**
@@ -72,30 +73,12 @@ public class StaffInstance {
     }
 
     /**
-     * Adds a new notification to the active notification queue for the staff member
-     *
-     * @param newNotification A notification for the staff member
-     */
-    public void addActiveNotification(Notification newNotification) {
-        activeMessages.add(newNotification);
-    }
-
-    /**
      * Gets all the notifications for the staff member
      *
      * @return The stored list of messages for the staff member
      */
     public List<Notification> getNotifications() {
         return this.allMessages;
-    }
-
-    /**
-     * Gets the active notifications for the staff member
-     *
-     * @return The stored list of messages for the staff member
-     */
-    public List<Notification> getActiveNotifications() {
-        return this.activeMessages;
     }
 
     /**
@@ -126,6 +109,21 @@ public class StaffInstance {
         return managedTables.stream().filter(table -> table.tableNum == tableNum).findFirst().orElse(null);
     }
 
+    public boolean hasTable(Table newTable) {
+        if (!managedTables.isEmpty()) {
+            for (Table t : managedTables) {
+                if (t == newTable) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Table> getTables() {
+        return managedTables;
+    }
+
     /**
      * Returns the staffs ID as stored in the database.
      *
@@ -138,63 +136,42 @@ public class StaffInstance {
     /**
      * Returns a Notification object from a given message from all notifications list
      *
-     * @param message message of the notification.
-     * @return Notification based on the message.
+     * @param notificationID ID of the notification.
+     * @return Notification based on ID.
      */
-    public Notification getNotificationFromMessage(String message) {
-        for (Notification notification : allMessages) {
-            if (notification.getMessage().equals(message)) {
-                return notification;
+
+    public Notification getNotificationByID(int notificationID) {
+        for (Notification allMessage : allMessages) {
+            if (allMessage.getNotificationID() == notificationID) {
+                return allMessage;
             }
         }
         return null;
     }
 
     /**
-     * Returns a Notification object from a given message from the active messages list
+     * Returns a notification based on the type of a notification.
      *
-     * @param message message of the notification.
-     * @return Notification based on the message.
+     * @param type the notification's type.
+     * @return notification object based on the type given.
      */
-    public Notification getNotificationFromActiveMessage(String message) {
-        for (Notification notification : allMessages) {
-            if (notification.getMessage().equals(message)) {
-                return notification;
+
+    public Notification getNotificationByEnum(NotificationTypes type) {
+        for (Notification allMessage : allMessages) {
+            if (allMessage.getType() == type) {
+                return allMessage;
             }
         }
         return null;
     }
 
     /**
-     * Removes a notification based on a given message from the all messages list.
+     * Removes a notification based on a given type from the all messages list.
      *
-     * @param message message of the notification.
+     * @param type type of the notification.
      */
-    public void removeNotificationFromMessage(String message) {
-
-        for (int i = 0; i< allMessages.size(); i++) {
-            if (allMessages.get(i).getMessage().equals(message)) {
-                allMessages.remove(allMessages.get(i));
-            }
-        }
+    public void removeNotificationFromType(NotificationTypes type) {
+        allMessages.removeIf(notification -> notification.getType() == type);
     }
 
-    /**
-     * Removes a notification based on a given message from the active messages list.
-     *
-     * @param message message of the notification.
-     */
-
-    public void removeNotificationFromActiveMessage(String message) {
-
-        for (int i = 0; i < activeMessages.size(); i++) {
-            if (activeMessages.get(i).getMessage().equals(message)) {
-                activeMessages.remove(activeMessages.get(i));
-            }
-        }
-    }
-
-    public List<Table> getManagedTables() {
-        return managedTables;
-    }
 }

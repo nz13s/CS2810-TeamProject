@@ -167,4 +167,14 @@ public class Notification implements ISerialisable {
     public NotificationTypes getType() {
         return type;
     }
+
+
+    /**
+     * Sets the object's notification type.
+     *
+     * @param type type of the notification that is to be set.
+     */
+    public void setType(NotificationTypes type) {
+        this.type = type;
+    }
 }
