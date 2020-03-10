@@ -58,6 +58,7 @@ public class OrderUpdate extends HttpServlet {
 
         try {
             success = Database.ORDERS.updateOrderState(order, state);
+            ((IndexedOrder) order).updateState();
             NotificationSocket.broadcastNotification(new SocketMessage(order, SocketMessageType.UPDATE));
             if (state == 2) {
                 Table orderTable = Database.TABLES.getTableByID(order.getTableNum(), false);
