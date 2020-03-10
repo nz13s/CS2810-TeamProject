@@ -60,8 +60,6 @@ export default class Kitchen extends React.Component<any, State> {
         content.rank
       );
 
-      console.log("ADDING");
-
       // Remove old
       const orders = _.cloneDeep(this.state.orders).map(cat =>
         cat.filter(i => i.id !== item.id)
