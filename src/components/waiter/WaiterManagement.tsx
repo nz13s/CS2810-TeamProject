@@ -58,23 +58,31 @@ export default class WaiterManagement extends React.Component<any, any> {
               <h2>Tables</h2>
 
               <CardGroup>
-                {Array(9).fill(1).map((_table, idx) =>
-                  <Card key={idx} bg="dark" text="white" className="mb-3 mr-2">
-                    <Card.Body>
-                      <Card.Title>Table #{_.random(1, 20, false)}</Card.Title>
-                      <Card.Text>Table near the terrace</Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                      {Math.random() < 0.5 ?
-                        <small className="text-muted">Reserved at {_.random(1, 24, false)}:37</small>
-                      :
-                        <Button variant="success" block>
-                          Reserve
-                        </Button>
-                      }
-                    </Card.Footer>
-                  </Card>
-                )}
+                {Array(9)
+                  .fill(1)
+                  .map((_table, idx) => (
+                    <Card
+                      key={idx}
+                      bg="dark"
+                      text="white"
+                      className="mb-3 mr-2">
+                      <Card.Body>
+                        <Card.Title>Table #{_.random(1, 20, false)}</Card.Title>
+                        <Card.Text>Table near the terrace</Card.Text>
+                      </Card.Body>
+                      <Card.Footer>
+                        {Math.random() < 0.5 ? (
+                          <small className="text-muted">
+                            Reserved at {_.random(1, 24, false)}:37
+                          </small>
+                        ) : (
+                          <Button variant="success" block>
+                            Reserve
+                          </Button>
+                        )}
+                      </Card.Footer>
+                    </Card>
+                  ))}
               </CardGroup>
             </Col>
           </Row>

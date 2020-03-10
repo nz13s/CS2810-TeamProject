@@ -65,7 +65,7 @@ export default class API {
                 )
             ),
             item.calories,
-            "https://d1ralsognjng37.cloudfront.net/b9b225fe-fc45-4170-b217-78863c2de64e"
+            item.imageURL || "https://eda.yandex/s3/assets/fallback-pattern-9d2103a870e23618a16bcf4f8b5efa54.svg"
           )
       );
 
