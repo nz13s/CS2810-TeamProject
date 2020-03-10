@@ -1,10 +1,7 @@
 package notificationLogic;
 
 import entities.ActiveStaff;
-import entities.Notification;
 import entities.StaffInstance;
-import entities.Table;
-import entities.NotificationTypes;
 
 import java.util.List;
 
@@ -17,7 +14,6 @@ import java.util.List;
 //TODO - REFACTOR WHEN POSSIBLE
 public class TableNotificationToWaiters {
 
-    private ActiveStaff activeStaff;
     private List<StaffInstance> staff;
 
     /**
@@ -25,44 +21,14 @@ public class TableNotificationToWaiters {
      */
 
     public TableNotificationToWaiters() {
-        staff = activeStaff.getAllActiveStaff();
+        staff = ActiveStaff.getAllActiveStaff();
     }
 
     /**
-     * Adds table notifications to all waiter's notifications.
+     * Adds a table assignment notification to a given staff, by their ID.
+     *
+     * @param table table to be assigned to the waiter.
      */
 
-    public void addTableNotificationToAllStaff(Table table) {
-
-        for (StaffInstance staffInstance : staff) {
-            staffInstance.addNotification(new Notification(table, NotificationTypes.CONFIRM));
-        }
-    }
-
-    /**
-     * Staff accepts the notification and is assigned to the table.
-     */
-
-    public void acceptNotification(int staffID) {
-
-        for (int i=0; i<staff.size(); i++) {
-
-            if (staff.get(i).getStaffID() == staffID) {
-                staff.get(i).addActiveNotification(staff.get(i).getNotificationFromMessage("Table waiting for order confirmation"));
-            }
-        }
-    }
-
-    /**
-     * Removes the notifications from staff who have not accepted the notification.
-     */
-
-    public void removeTableNotificationFromStaff() {
-
-        for (int i=0; i<staff.size(); i++) {
-
-            staff.get(i).removeNotificationFromMessage("Table waiting for order confirmation");
-        }
-    }
 
 }

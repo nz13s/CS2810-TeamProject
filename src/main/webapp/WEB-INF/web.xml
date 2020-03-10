@@ -164,4 +164,22 @@
         <url-pattern>/assist</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TableInfo</servlet-name>
+        <servlet-class>endpoints.restricted.TableInfo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableInfo</servlet-name>
+        <url-pattern>/restricted/tables</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TableToWaiter</servlet-name>
+        <servlet-class>endpoints.restricted.TableToWaiter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableToWaiter</servlet-name>
+        <url-pattern>/restricted/waitertables</url-pattern>
+    </servlet-mapping>
+
 </web-app>

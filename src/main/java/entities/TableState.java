@@ -10,31 +10,32 @@ import java.util.ArrayList;
 
 public class TableState {
 
-    private ArrayList<Table> tables;
+    private static ArrayList<Table> tables = new ArrayList<>();
+    private static ArrayList<Table> tableNeedWaiter = new ArrayList<>();
 
-    /**
+
+    /*
      * Constructor that initialises the list of tables.
      */
+//    public TableState() {
+//        tables = new ArrayList<Table>();
+//    }
 
-    public TableState() {
-        tables = new ArrayList<Table>();
-    }
 
-    /**
+    /*
      * Constructor that initialises the list of tables, given by the parameter.
      */
+//    public TableState(ArrayList<Table> tables) {
+//        this.tables = tables;
+//    }
 
-    public TableState(ArrayList<Table> tables) {
-       this.tables = tables;
-    }
 
     /**
      * Returns the number of tables in the restaurant.
      *
      * @return number of tables in the restaurant.
      */
-
-    public int size() {
+    public static int size() {
         return tables.size();
     }
 
@@ -43,13 +44,97 @@ public class TableState {
      *
      * @return list of tables.
      */
-
-    public ArrayList<Table> getTableList() {
+    public static ArrayList<Table> getTableList() {
         return tables;
     }
 
-    public void addTable(Table table) {
+    /**
+     * Sets the list of tables in Restaurant.
+     *
+     * @param tables the List of tables from Database.
+     */
+    public static void setTables(ArrayList<Table> tables) {
+        TableState.tables = tables;
+    }
+
+    /**
+     * Gets the list of all tables that are occupied.
+     *
+     * @return occupied the List of tables occupied.
+     */
+    public static ArrayList<Table> getTableOccupied() {
+        ArrayList<Table> occupied = new ArrayList<>();
+        for (Table t : tables) {
+            if (t.isOccupied()) {
+                occupied.add(t);
+            }
+        }
+        return occupied;
+    }
+
+    /**
+     * Gets the list of all tables that are occupied.
+     *
+     * @return freeTables the List of tables that are free.
+     */
+    public static ArrayList<Table> getTableFree() {
+        ArrayList<Table> freeTables = new ArrayList<>();
+        for (Table t : tables) {
+            if (!t.isOccupied()) {
+                freeTables.add(t);
+            }
+        }
+        return freeTables;
+    }
+
+    /**
+     * Gets the tableNeedWaiter list.
+     *
+     * @return tableNeedWaiter the List of tables waiting to be assigned.
+     */
+    public static ArrayList<Table> getNeedWaiter() {
+        return tableNeedWaiter;
+    }
+
+    /**
+     * Adds a table to the NeedWaiter list.
+     *
+     * @param t The table
+     */
+    public static void addNeedWaiter(Table t) {
+        if (!tableNeedWaiter.contains(t)) {
+            tableNeedWaiter.add(t);
+        }
+    }
+
+    /**
+     * Removes a table from the NeedWaiter list.
+     *
+     * @param t The table
+     */
+    //TODO Tony Find better way for this:
+    public static void removeNeedWaiter(Table t) {
+        Table remove = null;
+        for (Table table : tableNeedWaiter) {
+            if (table.getTableNum() == t.getTableNum()) {
+                remove = table;
+            }
+        }
+        tableNeedWaiter.remove(remove);
+    }
+
+    /**
+     * Adds a table to the tables list.
+     *
+     * @param table The table
+     */
+    public static void addTable(Table table) {
         tables.add(table);
     }
+
+    public static void removeAllTables() {
+        tables.removeAll(tables);
+    }
+
 
 }
