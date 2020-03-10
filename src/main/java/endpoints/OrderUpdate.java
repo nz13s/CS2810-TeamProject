@@ -7,12 +7,14 @@ import websockets.SocketMessage;
 import websockets.SocketMessageType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 
 /**
@@ -64,7 +66,7 @@ public class OrderUpdate extends HttpServlet {
                     return;
                 }
                 Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
-                NotificationSocket.pushNotification(new SocketMessage(notifReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
+                NotificationSocket.pushNotification(new SocketMessage(nfReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
                 assert orderTable != null;
                 // If there is no Waiter assigned to a table and No Waiter has the table in their list,
                 // table is assigned to random Waiter.
@@ -96,12 +98,11 @@ public class OrderUpdate extends HttpServlet {
      * @return The sessions Basket or null if none exists
      */
 
-    @Nonnull
+    @Nullable
     private Order getOrder(HttpServletRequest req) throws SQLException {
         int orderID = Integer.parseInt(req.getParameter("orderID"));
-        Order order = Database.ORDERS.getOrderByID(orderID);
-        assert order != null;
-        return order;
+        List<Order> queue = OrdersToFrontend.getOrderQueue();
+        return queue.stream().filter(item -> item.getOrderID() == orderID).findFirst().orElse(null);
     }
 
     /**
