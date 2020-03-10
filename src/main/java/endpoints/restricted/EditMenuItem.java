@@ -179,6 +179,8 @@ public class EditMenuItem extends HttpServlet {
                                 return;
                             }
                             break;
+                        case "id":
+                            break;
                         default:
                             resp.sendError(400, "Invalid parameter passed: " + param);
                             return;
