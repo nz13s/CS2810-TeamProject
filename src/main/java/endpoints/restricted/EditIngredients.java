@@ -112,6 +112,6 @@ public class EditIngredients extends HttpServlet {
      * @return The StaffInstance associated with the session
      */
     private StaffInstance getStaffMember(HttpServletRequest req) {
-        return (StaffInstance) req.getSession().getAttribute("staffMember");
+        return (StaffInstance) req.getSession().getAttribute("StaffEntity");
     }
 }
