@@ -36,11 +36,13 @@ public class OrderUpdate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Order order = null;
+        Order oldOrder = null;
         boolean success = false;
         int state = getState(req, resp);
 
         try {
             order = getOrder(req);
+            oldOrder = order;
         } catch (SQLException e) {
             resp.sendError(500, "Could not get OrderID.");
             return;
@@ -58,28 +60,32 @@ public class OrderUpdate extends HttpServlet {
 
         try {
             success = Database.ORDERS.updateOrderState(order, state);
-            ((IndexedOrder) order).updateState();
-            NotificationSocket.broadcastNotification(new SocketMessage(order, SocketMessageType.UPDATE));
-            if (state == 2) {
-                Table orderTable = Database.TABLES.getTableByID(order.getTableNum(), false);
-                if (orderTable == null) {
-                    resp.sendError(500, "Unable to update order.");
-                    return;
-                }
-                Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
-                NotificationSocket.pushNotification(new SocketMessage(nfReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
-                assert orderTable != null;
-                // If there is no Waiter assigned to a table and No Waiter has the table in their list,
-                // table is assigned to random Waiter.
-                if (orderTable.getWaiter() == null) {
-                    if (ActiveStaff.findTableWaiter(orderTable) != null) {
-                        orderTable.setWaiter(ActiveStaff.findTableWaiter(orderTable));
-                    } else {
-                        ActiveStaff.addTableToRandomStaff(orderTable);
+            order = getOrder(req);
+            if (order != null) {
+                NotificationSocket.broadcastNotification(new SocketMessage(order, SocketMessageType.UPDATE));
+                if (state == 2) {
+                    Table orderTable = Database.TABLES.getTableByID(order.getTableNum(), false);
+                    if (orderTable == null) {
+                        resp.sendError(500, "Unable to update order.");
+                        return;
                     }
+                    Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
+                    NotificationSocket.pushNotification(new SocketMessage(nfReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
+
+                    // If there is no Waiter assigned to a table and No Waiter has the table in their list,
+                    // table is assigned to random Waiter.
+                    if (orderTable.getWaiter() == null) {
+                        if (ActiveStaff.findTableWaiter(orderTable) != null) {
+                            orderTable.setWaiter(ActiveStaff.findTableWaiter(orderTable));
+                        } else {
+                            ActiveStaff.addTableToRandomStaff(orderTable);
+                        }
+                    }
+                    //Sends notification "order is ready" to the waiter.
+                    ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
                 }
-                //Sends notification "order is ready" to the waiter.
-                ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
+            } else {
+                NotificationSocket.broadcastNotification(new SocketMessage(oldOrder, SocketMessageType.DELETE));
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
