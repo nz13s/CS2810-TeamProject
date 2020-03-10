@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export default class Client {
   static servlet = `api`;
   static baseURL = `tomcat.xhex.uk/${Client.servlet}`;
@@ -22,26 +21,19 @@ export default class Client {
 
   static makeSocket(): WebSocket {
     const sessionID = localStorage.getItem("session");
-    const socket = new WebSocket(`wss://${Client.baseURL}/sockets/staff?X-Session-ID=${sessionID}`);
+    const socket = new WebSocket(
+      `wss://${Client.baseURL}/sockets/staff?X-Session-ID=${sessionID}`
+    );
 
-    socket.onerror = (e) => {
-      console.log("Errored");
-      console.log(e);
-    };
+    socket.onmessage = e => {
+      const data = e.data;
 
-    socket.onopen = (e) => {
-      console.log("Opened");
-      console.log(e);
-    };
-
-    socket.onclose = (e) => {
-      console.log("Closed");
-      console.log(e);
-    };
-
-    socket.onmessage = (e) => {
-      console.log("Message");
-      console.log(e);
+      switch (data.type) {
+        case "UPDATE":
+          const content = data.content;
+          console.log(content);
+          break;
+      }
     };
 
     return socket;

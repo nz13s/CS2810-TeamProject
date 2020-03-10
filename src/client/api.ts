@@ -27,8 +27,8 @@ export default class API {
     localStorage.setItem("session", headers["x-session-id"]);
   }
 
-  static async getSocket(): Promise<void> {
-    client.makeSocket();
+  static getSocket(): WebSocket {
+    return client.makeSocket();
   }
 
   static async login(username: string, password: string): Promise<boolean> {
@@ -69,7 +69,8 @@ export default class API {
                 )
             ),
             item.calories,
-            item.imageURL || "https://eda.yandex/s3/assets/fallback-pattern-9d2103a870e23618a16bcf4f8b5efa54.svg"
+            item.imageURL ||
+              "https://eda.yandex/s3/assets/fallback-pattern-9d2103a870e23618a16bcf4f8b5efa54.svg"
           )
       );
 

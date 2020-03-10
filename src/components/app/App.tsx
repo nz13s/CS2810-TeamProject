@@ -23,14 +23,9 @@ export default class App extends React.Component<any, State> {
     };
 
     API.getSession().then(() =>
-        API.validateSession(true)
-          .then(authed => {
-            this.setState({authenticated: authed});
-
-            if (authed)
-              API.getSocket();
-          }
-        )
+      API.validateSession(true).then(authed =>
+        this.setState({ authenticated: authed })
+      )
     );
   }
 

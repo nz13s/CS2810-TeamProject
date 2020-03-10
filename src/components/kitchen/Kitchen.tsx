@@ -15,13 +15,15 @@ import {
 import OrderItem from "../../entities/OrderItem";
 import QueueType from "../../entities/QueueType";
 import API from "../../client/api";
+import MenuItem from "../../entities/MenuItem";
+import CategoryType from "../../entities/CategoryType";
 
 interface State {
   orders: QueueType;
 }
 
 export default class Kitchen extends React.Component<any, State> {
-  interval: number;
+  socket: WebSocket;
 
   constructor(props: any) {
     super(props);
@@ -31,10 +33,57 @@ export default class Kitchen extends React.Component<any, State> {
     };
 
     API.getQueue().then(queue => this.setState({ orders: queue }));
-    this.interval = setInterval(
-      () => API.getQueue().then(queue => this.setState({ orders: queue })),
-      1000
-    );
+
+    this.socket = API.getSocket();
+    this.socket.onmessage = e => {
+      const { messageType, content } = JSON.parse(e.data);
+      if (messageType !== "UPDATE") return;
+
+      const item = new OrderItem(
+        content.orderID,
+        content.foodItems.flatMap(({ food, amount }: any) => {
+          const menuItem = new MenuItem(
+            food.foodID,
+            food.foodName,
+            food.foodDescription,
+            0,
+            [],
+            0,
+            ""
+          );
+          return Array(amount).fill(menuItem);
+        }),
+        new Date(content.timeOrdered),
+        new Date(content.orderConfirmed),
+        new Date(content.orderPreparing),
+        new Date(content.orderReady),
+        content.rank
+      );
+
+      console.log("ADDING");
+
+      // Remove old
+      const orders = _.cloneDeep(this.state.orders).map(cat =>
+        cat.filter(i => i.id !== item.id)
+      );
+
+      // Add new
+      const category = content.category as CategoryType;
+      switch (category) {
+        case CategoryType.CONFIRMED:
+        case CategoryType.ORDERED:
+          orders[0].push(item);
+          break;
+        case CategoryType.PREPARING:
+          orders[1].push(item);
+          break;
+        case CategoryType.READY:
+          orders[2].push(item);
+          break;
+      }
+
+      this.setState({ orders: orders });
+    };
   }
 
   async moveItem(currentIndex: number, delta: number, item: OrderItem) {
@@ -42,7 +91,7 @@ export default class Kitchen extends React.Component<any, State> {
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    this.socket.close();
   }
 
   render() {
