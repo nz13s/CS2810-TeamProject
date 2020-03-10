@@ -1,6 +1,8 @@
 package entities;
 
-public class Notification {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class Notification implements ISerialisable {
 
     private static int counter = 0;
     private int notificationID;
@@ -10,6 +12,8 @@ public class Notification {
     private Long time;
     private Boolean completed;
 
+    private int orderID = -1;
+
     /**
      * Constructor for an Notification used in the {@link StaffInstance}.
      *
@@ -17,6 +21,7 @@ public class Notification {
      * @param type The type of notification
      */
     public Notification(Table t, NotificationTypes type) {
+        this.type = type;
         this.table = t;
         this.message = type.toString();
         this.time = System.currentTimeMillis();
@@ -25,11 +30,25 @@ public class Notification {
     }
 
     /**
+     * Constructor for an Notification used in the {@link StaffInstance}.
+     *
+     * @param t    The table of the notification
+     * @param type The type of notification
+     */
+    public Notification(Table t, NotificationTypes type, int orderID) {
+        this(t, type);
+        if (type != NotificationTypes.CONFIRM)
+            throw new IllegalStateException("orderID given for a non-confirming notif");
+        this.orderID = orderID;
+    }
+
+    /**
      * Constructor for an Notification used in the {@link StaffInstance} USED FOR DEBUG ONLY.
      *
      * @param message The message to be shown
      */
     public Notification(String message) {
+        this.type = NotificationTypes.CUSTOM;
         this.table = null;
         this.message = message;
         this.time = System.currentTimeMillis();
@@ -114,23 +133,41 @@ public class Notification {
      *
      * @return notificationID
      */
-    public int getNotificationID(){ return notificationID; }
+    public int getNotificationID() {
+        return notificationID;
+    }
 
     /**
      * Sets the int of notificationID.
      *
      * @param notificationID int
      */
-    public void setNotificationID(int notificationID){ this.notificationID = notificationID; }
+    public void setNotificationID(int notificationID) {
+        this.notificationID = notificationID;
+    }
 
     /**
-     * Gets the object's notification type.
+     * Gets the orderID if this notification supports it. May throw an IllegalStateException if type is not CONFIRM
+     * {@link Notification#getType()}
      *
-     * @return the type of the notification.
+     * @return the orderID of this notification
+     */
+    @JsonIgnore //don't leak the orderID
+    public int getOrderID() {
+        if (type != NotificationTypes.CONFIRM)
+            throw new IllegalStateException("Notification does not have an OrderID set");
+        return orderID;
+    }
+
+    /**
+     * Get the type of notification.  Useful for determining if {@link Notification#getOrderID()} will throw.
+     *
+     * @return
      */
     public NotificationTypes getType() {
         return type;
     }
+
 
     /**
      * Sets the object's notification type.

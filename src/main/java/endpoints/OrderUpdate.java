@@ -2,11 +2,15 @@ package endpoints;
 
 import databaseInit.Database;
 import entities.*;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -37,6 +41,7 @@ public class OrderUpdate extends HttpServlet {
             order = getOrder(req);
         } catch (SQLException e) {
             resp.sendError(500, "Could not get OrderID.");
+            return;
         }
 
         if (order == null) {
@@ -46,13 +51,20 @@ public class OrderUpdate extends HttpServlet {
 
         if (state > 3 || state < 0) {
             resp.sendError(400, "Unexpected State Value.");
+            return;
         }
 
         try {
             success = Database.ORDERS.updateOrderState(order, state);
+            NotificationSocket.broadcastNotification(new SocketMessage(order, SocketMessageType.UPDATE));
             if (state == 2) {
-                Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                Table orderTable = Database.TABLES.getTableByID(order.getTableNum(), false);
+                if (orderTable == null) {
+                    resp.sendError(500, "Unable to update order.");
+                    return;
+                }
                 Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
+                NotificationSocket.pushNotification(new SocketMessage(notifReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
                 assert orderTable != null;
                 // If there is no Waiter assigned to a table and No Waiter has the table in their list,
                 // table is assigned to random Waiter.
@@ -68,10 +80,12 @@ public class OrderUpdate extends HttpServlet {
             }
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
+            return;
         }
 
         if (!success) {
             resp.sendError(500, "Unable to update order.");
+            return;
         }
     }
 

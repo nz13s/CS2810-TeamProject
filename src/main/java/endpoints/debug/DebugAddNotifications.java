@@ -3,6 +3,9 @@ package endpoints.debug;
 import entities.ActiveStaff;
 import entities.Notification;
 import entities.StaffInstance;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +47,8 @@ public class DebugAddNotifications extends HttpServlet {
             resp.sendError(400, "No message for Notification.");
             return;
         }
-        ActiveStaff.addNotification(ID, new Notification(message));
+        Notification toSend = new Notification(message);
+        ActiveStaff.addNotification(ID, toSend);
+        NotificationSocket.pushNotification(new SocketMessage(toSend, SocketMessageType.CREATE), ActiveStaff.getStaffByID(ID));
     }
 }

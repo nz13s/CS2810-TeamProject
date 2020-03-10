@@ -14,6 +14,11 @@ public class HeaderSessionFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
 
+        if (req.getServletPath().startsWith("/sockets/")) { //allow web sockets without headers specified.
+            chain.doFilter(request, response);
+            return;
+        }
+
         SessionRepositoryRequestWrapper wrapper = new SessionRepositoryRequestWrapper(req);
         HttpSession session = wrapper.getSession();
         if (req.getServletPath().equalsIgnoreCase("/hello")) {
@@ -29,6 +34,7 @@ public class HeaderSessionFilter implements Filter {
             }
         }
         resp.setHeader("X-Session-ID", session.getId());
+        session.setMaxInactiveInterval(60 * 60 * 24 /* 1 day */);
         chain.doFilter(wrapper, response);
     }
 }
