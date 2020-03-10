@@ -2,6 +2,7 @@ package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import databaseInit.Database;
+import entities.FoodIngredients;
 import entities.Ingredient;
 import entities.StaffInstance;
 
@@ -26,7 +27,7 @@ public class EditIngredients extends HttpServlet {
     private ObjectMapper om = new ObjectMapper();
 
     /**
-     * Gets all the {@link Ingredient}'s in the database
+     * Gets all the {@link FoodIngredients}'s in the database
      *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
@@ -38,10 +39,10 @@ public class EditIngredients extends HttpServlet {
         if (!validStaff(req, resp)) {
             return;
         }
-        List<Ingredient> ingredients = null;
+        List<FoodIngredients> ingredients = null;
         try {
             //TODO Stop calling database here
-            ingredients = Database.FOOD_INGREDIENTS.getAll();
+            ingredients = Database.FOOD_INGREDIENTS.getAllIngredients();
         } catch (SQLException e) {
             resp.sendError(500, "Unable to retrieve ingredients list.");
             return;
@@ -54,7 +55,7 @@ public class EditIngredients extends HttpServlet {
     }
 
     /**
-     * Adds a new {@link Ingredient} to the database
+     * Adds a new {@link FoodIngredients} to the database
      *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
@@ -79,7 +80,7 @@ public class EditIngredients extends HttpServlet {
         boolean isAllergen = Boolean.parseBoolean(allergenS);
         try {
             //TODO Stop calling database here
-            Database.FOOD_INGREDIENTS.addNew(ingredient, isAllergen);
+            Database.FOOD_INGREDIENTS.addIngredient(ingredient, isAllergen);
         } catch (SQLException e) {
             resp.sendError(500, "Unable to add new ingredient to the ingredients list.");
             return;
