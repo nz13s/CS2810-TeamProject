@@ -3,6 +3,9 @@ package endpoints;
 
 import databaseInit.Database;
 import entities.*;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +53,7 @@ public class NotifyWaiter extends HttpServlet {
                     ActiveStaff.notifyAll(notif);
                     TableState.addNeedWaiter(table);
                     ActiveStaff.notifyAll(n);
+                    NotificationSocket.broadcastNotification(new SocketMessage(n, SocketMessageType.CREATE));
                 }
             }
             ActiveStaff.addNotification(table.getWaiter(), n);

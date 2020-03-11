@@ -154,7 +154,7 @@ public class Orders {
             //o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity
             Food food = new Food(resultSet.getInt("food_id"), resultSet.getString("food_name"),
                     resultSet.getString("food_description"), resultSet.getInt("calories"),
-                    null, true, resultSet.getInt("category_id"),null);
+                    null, true, resultSet.getInt("category_id"), null, null);
             int orderID = resultSet.getInt("order_id");
             if(orders.containsKey(orderID)){
                 orders.get(orderID).addFoodItem(new Item(food, resultSet.getInt("quantity")));

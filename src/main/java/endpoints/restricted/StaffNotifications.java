@@ -1,14 +1,23 @@
 package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import databaseInit.Database;
+import entities.NotificationTypes;
+import entities.Order;
 import entities.StaffInstance;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Endpoint for the frontend to call to get the notifications for a sessions {@link StaffInstance}
@@ -16,6 +25,7 @@ import java.io.PrintWriter;
  * Spec:
  *  GET - No params
  *  DELETE - int: notificationID
+ *  DELETE - String: notificationType
  */
 public class StaffNotifications extends HttpServlet {
 
@@ -50,13 +60,32 @@ public class StaffNotifications extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int ID;
+        NotificationTypes type;
         try {
             ID = Integer.parseInt(req.getParameter("notificationID"));
+            String tempType = req.getParameter("notificationType").toUpperCase();
+            type = NotificationTypes.valueOf(tempType.replaceAll("\\s",""));
         } catch (NumberFormatException e) {
             resp.sendError(400, "Invalid ID.");
             return;
         }
+        if (type==NotificationTypes.READY){
+            Order o = null;
+            try {
+                o = getOrder(req);
+            } catch (SQLException e) {
+                resp.sendError(500, "Could not get Order.");
+            }
+            try {
+                Database.ORDERS.updateOrderServedByID(Objects.requireNonNull(o).getOrderID());
+            }  catch (SQLException e) {
+                resp.sendError(500, "Unable to update order.");
+            } catch (NullPointerException d) {
+                resp.sendError(500, "Could not get Order.");
+            }
+        }
         StaffInstance staff = getStaffMember(req);
+        NotificationSocket.pushNotification(new SocketMessage(staff.getNotificationById(ID), SocketMessageType.DELETE), staff);
         staff.removeNotificationByID(ID);
     }
 
@@ -76,4 +105,19 @@ public class StaffNotifications extends HttpServlet {
         }
         return staff;
     }
+
+    /**
+     * Gets the orderID from frontend as parameter.
+     *
+     * @param req The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @return The sessions Basket or null if none exists
+     */
+    @Nonnull
+    private Order getOrder(HttpServletRequest req) throws SQLException {
+        int orderID = Integer.parseInt(req.getParameter("orderID"));
+        Order order = Database.ORDERS.getOrderByID(orderID);
+        assert order != null;
+        return order;
+    }
 }
+

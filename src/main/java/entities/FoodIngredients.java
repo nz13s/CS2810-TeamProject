@@ -1,6 +1,6 @@
 package entities;
 
-public class FoodIngredients {
+public class FoodIngredients implements ISerialisable {
   private int foodID;
   private String ingredients;
   private boolean isAllergen;

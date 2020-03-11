@@ -3,12 +3,16 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents a single staff member.
+ */
 public class StaffInstance {
 
     //TODO Ask about this being a database thing for persistence/loss of connection?
     private List<Notification> allMessages;//TODO Discuss making a notification class
+    private List<Notification> activeMessages;
     private int staffID;
-    private List<Table> tables;//TODO Remove if other method is decided better
+    private List<Table> managedTables;//TODO Remove if other method is decided better
 
     /**
      * Creates a new staff instance for a session used by a staff member
@@ -18,7 +22,7 @@ public class StaffInstance {
     public StaffInstance(int staffID) {
         this.staffID = staffID;
         allMessages = new ArrayList<>();
-        tables = new ArrayList<Table>();
+        managedTables = new ArrayList<Table>();
     }
 
     /**
@@ -39,6 +43,24 @@ public class StaffInstance {
      */
     public void removeNotificationByID(int id) {
         allMessages.removeIf(notification -> notification.getNotificationID() == id);
+    }
+
+    /**
+     * Gets notification by its ID
+     */
+    public Notification getNotificationById(int notificationId) {
+        return allMessages.stream().filter(msg -> msg.getNotificationID() == notificationId).findFirst().orElse(null);
+    }
+
+    /**
+     * Removes the notification from the active notification list
+     *
+     * @param pos The index of the notification to remove
+     */
+    public void removeActiveNotification(int pos) {
+        if (pos >= 0 && pos < activeMessages.size()) {
+            activeMessages.remove(pos);
+        }
     }
 
     /**
@@ -65,7 +87,7 @@ public class StaffInstance {
      * @param newTable The new table that the staff member is looking after
      */
     public void addTable(Table newTable) {
-        this.tables.add(newTable);
+        this.managedTables.add(newTable);
     }
 
     /**
@@ -74,7 +96,7 @@ public class StaffInstance {
      * @param tableToRemove The table to remove from the staff members list of tables
      */
     public void removeTable(Table tableToRemove) {
-        this.tables.remove(tableToRemove);
+        this.managedTables.remove(tableToRemove);
     }
 
     /**
@@ -84,17 +106,12 @@ public class StaffInstance {
      * @return The table specified by the table number, null if the staff member is not in charge of that table
      */
     public Table getTable(int tableNum) {
-        for (Table table : tables) {
-            if (table.getTableNum() == tableNum) {
-                return table;
-            }
-        }
-        return null;
+        return managedTables.stream().filter(table -> table.tableNum == tableNum).findFirst().orElse(null);
     }
 
     public boolean hasTable(Table newTable) {
-        if (!tables.isEmpty()) {
-            for (Table t : tables) {
+        if (!managedTables.isEmpty()) {
+            for (Table t : managedTables) {
                 if (t == newTable) {
                     return true;
                 }
@@ -104,7 +121,7 @@ public class StaffInstance {
     }
 
     public List<Table> getTables() {
-        return tables;
+        return managedTables;
     }
 
     /**
@@ -117,7 +134,7 @@ public class StaffInstance {
     }
 
     /**
-     * Returns a notification based on the notificationID.
+     * Returns a Notification object from a given message from all notifications list
      *
      * @param notificationID ID of the notification.
      * @return Notification based on ID.

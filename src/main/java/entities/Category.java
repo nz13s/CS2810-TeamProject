@@ -10,7 +10,7 @@ import java.util.Objects;
  * Class that contains all foods that are under the given category name.
  */
 
-public class Category {
+public class Category implements ISerialisable {
 
   private int categoryNumber;
   private String categoryName;
