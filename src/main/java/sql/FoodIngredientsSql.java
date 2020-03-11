@@ -37,7 +37,7 @@ public class FoodIngredientsSql {
                 "SELECT ingredient_id, ingredient, allergen FROM ingredients;"
         );
         addNewIngredients = connection.prepareStatement(
-                "INSERT INTO ingredients(ingredient, allergen) values(ingredient, allergen);", PreparedStatement.RETURN_GENERATED_KEYS
+                "INSERT INTO ingredients(ingredient, allergen) values(?, ?);", PreparedStatement.RETURN_GENERATED_KEYS
         );
     }
 
