@@ -77,7 +77,7 @@ public class Order implements IFakeable, ISerialisable {
      */
     public void addFoodItem(int ID, int amount) throws SQLException{
         try {
-            Food food = Database.FOODS.getFoodByID(ID);
+            Food food = Database.FOODS.getFoodByID(ID, false);
             if (alreadyInOrder(food)) {
                 Item item = getItem(food);
                 if (item == null) {
@@ -100,7 +100,7 @@ public class Order implements IFakeable, ISerialisable {
      */
     public void removeFoodItem(int ID, int amount) {
         try {
-            Food food = Database.FOODS.getFoodByID(ID);
+            Food food = Database.FOODS.getFoodByID(ID, false);
             if (alreadyInOrder(food)) {
                 Item item = getItem(food);
                 if (item == null) {

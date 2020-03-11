@@ -52,7 +52,7 @@ public class EditMenuItem extends HttpServlet {
         Food menuItem;
         try {
             //TODO Stop calling database here
-            menuItem = Database.FOODS.getFoodByID(foodID);
+            menuItem = Database.FOODS.getFoodByID(foodID, true);
         } catch (SQLException e) {
             resp.sendError(500, "Unable to retrieve menu item.");
             return;

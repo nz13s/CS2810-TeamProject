@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class OrderUpdate extends HttpServlet {
 
+    private CustomerNotifications cNotifications = new CustomerNotifications();
+
     /**
      * Validates the orderID and depending on the State(0-3), calls update method
      * with Different parameters for each state. Displays adequate error if fail.
@@ -83,10 +85,21 @@ public class OrderUpdate extends HttpServlet {
                     }
                     //Sends notification "order is ready" to the waiter.
                     ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
+                } else if (state == 0) {
+                    Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                    Notification nfConfirmed = new Notification(orderTable, NotificationTypes.CONFIRMED);
+                    cNotifications.addNotification(nfConfirmed);
+                } else if (state == 1) {
+                    Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
+                    Notification nfPreparing = new Notification(orderTable, NotificationTypes.PREPARING);
+                    cNotifications.addNotification(nfPreparing);
                 }
             } else {
                 NotificationSocket.broadcastNotification(new SocketMessage(oldOrder, SocketMessageType.DELETE));
             }
+
+
+
         } catch (SQLException e) {
             resp.sendError(500, "Unable to update order.");
             return;
