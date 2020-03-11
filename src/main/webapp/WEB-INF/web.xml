@@ -121,6 +121,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>EditIngredients</servlet-name>
+        <servlet-class>endpoints.restricted.EditIngredients</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditIngredients</servlet-name>
+        <url-pattern>/restricted/editingredients</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>NewMenuItem</servlet-name>
         <servlet-class>endpoints.restricted.NewFoodItem</servlet-class>
     </servlet>
