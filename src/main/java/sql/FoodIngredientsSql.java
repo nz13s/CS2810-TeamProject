@@ -54,7 +54,7 @@ public class FoodIngredientsSql {
         ResultSet resultSet = getAllIngredients.executeQuery();
         while (resultSet.next()) {
             ingredients.add(new FoodIngredients(
-                    resultSet.getInt("food_id"),
+                    resultSet.getInt("ingredient_id"),
                     resultSet.getString("ingredient"),
                     resultSet.getBoolean("allergen")
             ));
