@@ -96,15 +96,15 @@ public class CustomerNotifications extends HttpServlet {
             resp.sendError(400, "Invalid table number.");
         }
 
-        ArrayList<Notification> list = new ArrayList<>();
+        ArrayList<Notification> tableNotifications = new ArrayList<>();
         ArrayList<Notification> allCNotifications = cNotifications.getNotifications();
 
-        for (Notification allCNotification : allCNotifications) {
-            if (allCNotification.getTable().getTableNum() == tableNum) {
-                list.add(allCNotification);
+        for (Notification notification : allCNotifications) {
+            if (notification.getTable().getTableNum() == tableNum) {
+                tableNotifications.add(notification);
             }
         }
-        return list;
-    }
 
+        return tableNotifications;
+    }
 }
