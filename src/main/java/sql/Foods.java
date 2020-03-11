@@ -29,6 +29,7 @@ public class Foods {
     private PreparedStatement updateAvailabilityById;
     private PreparedStatement updateCategoryIDById;
     private PreparedStatement newFood;
+    private PreparedStatement linkFoodIngredient;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -74,13 +75,17 @@ public class Foods {
 
         newFood = connection.prepareStatement(
                 "INSERT INTO food (food_name, food_description, calories, price, available, category_id, image_url) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+
+        linkFoodIngredient = connection.prepareStatement(
+                "INSERT INTO food_ingredients (food_id, ingredient_id) "
+                        + "VALUES (?, ?)");
     }
 
     /**
      * Method that gets a food based on the ID and populates it with ingredients if needed
      *
-     * @param foodID foodID of the food.
+     * @param foodID   foodID of the food.
      * @param populate if the ingredients needs to be populated with the foods or not.
      * @return Food object, based on the sql query output.
      * @throws SQLException thrown if sql logic is wrong.
@@ -88,9 +93,9 @@ public class Foods {
     @CheckForNull
     @CheckReturnValue
     public Food getFoodByID(int foodID, boolean populate) throws SQLException {
-        if (!populate){
+        if (!populate) {
             return getFoodByIDNoPopulateIngredients(foodID);
-        } else{
+        } else {
             return getFoodByIDPopulateIngredients(foodID);
         }
     }
@@ -250,5 +255,24 @@ public class Foods {
         newFood.setInt(6, food.getCategoryID());
         newFood.setString(7, food.getImageURL());
         newFood.execute();
+        ResultSet resultSet = newFood.getGeneratedKeys();
+        resultSet.next();
+        linkIngredients(resultSet.getInt("food_id"), food.getIngredients());
+    }
+
+    /**
+     * Method to link all the {@link Ingredient}'s passed in to the {@link Food} item they are passed with
+     *
+     * @param foodID      The ID of the new food item as stored in the database
+     * @param ingredients An Arraylist of the ingredients in the food item
+     * @throws SQLException If a database access error occurs or this method is called on a closed connection.
+     */
+    private void linkIngredients(int foodID, ArrayList<Ingredient> ingredients) throws SQLException {
+        for (Ingredient ingredient : ingredients) {
+            linkFoodIngredient.setInt(1, foodID);
+            linkFoodIngredient.setInt(2, ingredient.getIngredientID());
+            linkFoodIngredient.addBatch();
+        }
+        linkFoodIngredient.executeBatch();
     }
 }
