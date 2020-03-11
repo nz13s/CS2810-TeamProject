@@ -29,7 +29,7 @@ public class Categories {
     private PreparedStatement foodByCatId;
     private PreparedStatement getAllCatId;
     private PreparedStatement fetchMenu;
-    private PreparedStatement fetchIngredients;
+    private static PreparedStatement fetchIngredients;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -111,7 +111,7 @@ public class Categories {
         return list;
     }
 
-    public ArrayList<Ingredient> fetchIngredients() throws SQLException {
+    public static ArrayList<Ingredient> fetchIngredients() throws SQLException {
         ArrayList<Ingredient> list = new ArrayList<Ingredient>();
         ResultSet resultSet = fetchIngredients.executeQuery();
 

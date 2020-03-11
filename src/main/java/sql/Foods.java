@@ -1,6 +1,7 @@
 package sql;
 
 import entities.Food;
+import entities.Ingredient;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.CheckReturnValue;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Class that stores SQL queries related to the food table.
@@ -111,6 +113,40 @@ public class Foods {
                     resultSet.getInt("category_id"),
                     null,
                     resultSet.getString("image_url"));
+        }
+        return null;
+    }
+
+    /**
+     * Method that gets a food based on the ID.
+     *
+     * @param foodID foodID of the food.
+     * @return Food object, based on the sql query output.
+     * @throws SQLException thrown if sql logic is wrong.
+     */
+    @CheckForNull
+    @CheckReturnValue
+    public Food getFoodByIDPopulateIngredients(int foodID) throws SQLException {
+        foodById.setInt(1, foodID);
+        ResultSet resultSet = foodById.executeQuery();
+        ArrayList<Ingredient> ingredients = Categories.fetchIngredients();
+        if (resultSet.next()) {
+            Food food = new Food(
+                    resultSet.getInt("food_id"),
+                    resultSet.getString("food_name"),
+                    resultSet.getString("food_description"),
+                    resultSet.getInt("calories"),
+                    resultSet.getBigDecimal("price"),
+                    resultSet.getBoolean("available"),
+                    resultSet.getInt("category_id"),
+                    new ArrayList<Ingredient>(),
+                    resultSet.getString("image_url"));
+
+            for (Ingredient ingredient : ingredients) {
+                if (food.getFoodID() == ingredient.getFoodID()) {
+                    food.addIngredient(ingredient);
+                }
+            }
         }
         return null;
     }
