@@ -17,8 +17,6 @@ import java.util.ArrayList;
  * @author Jatin Khatra
  */
 
-//TODO - POST METHOD AND DELETE METHOD.
-
 public class CustomerNotifications extends HttpServlet {
 
     private ObjectMapper mapper;
@@ -53,6 +51,31 @@ public class CustomerNotifications extends HttpServlet {
     }
 
     /**
+     * DELETEs a customer notification based on a given notificationID.
+     *
+     * @param req servlet request.
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException if input/output error occurs.
+     */
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int notificationID = -1;
+
+        try {
+            notificationID = Integer.parseInt(req.getParameter("notificationID"));
+            if (notificationID < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid ID entered.");
+        }
+
+        cNotifications.removeNotificationByID(notificationID);
+    }
+
+    /**
      * Method that gets all notifications for a given table number, and adds it to a list.
      *
      * @param req servlet request.
@@ -75,7 +98,7 @@ public class CustomerNotifications extends HttpServlet {
 
         ArrayList<Notification> list = new ArrayList<>();
 
-        for(int i=0; i<cNotifications.getNotifications().size(); i++) {
+        for (int i=0; i<cNotifications.getNotifications().size(); i++) {
             if (cNotifications.getNotifications().get(i).getTable().getTableNum() == tableNum) {
                 list.add(cNotifications.getNotifications().get(i));
             }
