@@ -8,6 +8,9 @@ import databaseInit.Database;
 import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -90,8 +93,9 @@ public class TableToWaiter extends HttpServlet {
         if (table != null) {
             assert staff != null;
             success = ActiveStaff.addTableToStaff(table, staff);
-            Notification n = new Notification(table, NotificationTypes.ASSIGN);
-            ActiveStaff.addNotification(staff, n);
+            Notification notif = new Notification(table, NotificationTypes.ASSIGN);
+            ActiveStaff.addNotification(staff, notif);
+            NotificationSocket.pushNotification(new SocketMessage(notif, SocketMessageType.CREATE), staff);
             TableState.removeNeedWaiter(table);
         }
         if (!success) {
