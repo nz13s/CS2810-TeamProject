@@ -71,6 +71,24 @@ public class Foods {
     }
 
     /**
+     * Method that gets a food based on the ID and populates it with ingredients if needed
+     *
+     * @param foodID foodID of the food.
+     * @param populate if the ingredients needs to be populated with the foods or not.
+     * @return Food object, based on the sql query output.
+     * @throws SQLException thrown if sql logic is wrong.
+     */
+    @CheckForNull
+    @CheckReturnValue
+    public Food getFoodByID(int foodID, boolean populate) throws SQLException {
+        if (!populate){
+            return getFoodByIDNoPopulateIngredients(foodID);
+        } else{
+            return getFoodByIDPopulateIngredients(foodID);
+        }
+    }
+
+    /**
      * Method that gets a food based on the ID.
      *
      * @param foodID foodID of the food.
@@ -79,7 +97,7 @@ public class Foods {
      */
     @CheckForNull
     @CheckReturnValue
-    public Food getFoodByID(int foodID) throws SQLException {
+    public Food getFoodByIDNoPopulateIngredients(int foodID) throws SQLException {
         foodById.setInt(1, foodID);
         ResultSet resultSet = foodById.executeQuery();
         if (resultSet.next()) {
