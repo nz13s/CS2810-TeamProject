@@ -1,5 +1,6 @@
 package sql;
 
+import databaseInit.Database;
 import entities.Food;
 import entities.Ingredient;
 
@@ -129,7 +130,7 @@ public class Foods {
     public Food getFoodByIDPopulateIngredients(int foodID) throws SQLException {
         foodById.setInt(1, foodID);
         ResultSet resultSet = foodById.executeQuery();
-        ArrayList<Ingredient> ingredients = Categories.fetchIngredients();
+        ArrayList<Ingredient> ingredients = Database.CATEGORIES.fetchIngredients();
         if (resultSet.next()) {
             Food food = new Food(
                     resultSet.getInt("food_id"),
