@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  * GET - int: id
  * POST - int: id then one of the two following:
  * - boolean: availability (changes the availability of a food item)
- * - int: calories, int: category, String: description, String: name, BigDecimal: price (Creates a new food item)
+ * - int: calories, int: category, String: description, String: name, BigDecimal: price, String: image (Creates a new food item)
  * Not all parameters need to be passed for the POST request only the ones that are being changed
  * DELETE - int: id
  */
@@ -174,6 +174,15 @@ public class EditMenuItem extends HttpServlet {
                                 for (String ingredientID : ingredients) {
                                     food.addIngredient(new Ingredient(foodID, Integer.parseInt(ingredientID)));
                                 }
+                            } else {
+                                resp.sendError(400, "No value passed with: " + param);
+                                return;
+                            }
+                            break;
+                        case "image":
+                            if (params.get(param) != null) {
+                                String url = params.get(param)[0];
+                                food.setImageURL(url);
                             } else {
                                 resp.sendError(400, "No value passed with: " + param);
                                 return;
