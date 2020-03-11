@@ -191,4 +191,13 @@
         <url-pattern>/restricted/waitertables</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CustomerNotifications</servlet-name>
+        <servlet-class>endpoints.restricted.CustomerNotifications</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CustomerNotifications</servlet-name>
+        <url-pattern>/restricted/customernotifications</url-pattern>
+    </servlet-mapping>
+
 </web-app>
