@@ -73,8 +73,8 @@ public class Foods {
                         "WHERE food_id = ?");
 
         newFood = connection.prepareStatement(
-                "INSERT INTO food (food_name, food_description, calories, price, available, category_id) "
-                        + "VALUES (?, ?, ?, ?, ?, ?)");
+                "INSERT INTO food (food_name, food_description, calories, price, available, category_id, image_url) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)");
     }
 
     /**
@@ -248,6 +248,7 @@ public class Foods {
         newFood.setBigDecimal(4, food.getPrice());
         newFood.setBoolean(5, true);
         newFood.setInt(6, food.getCategoryID());
+        newFood.setString(7, food.getImageURL());
         newFood.execute();
     }
 }
