@@ -97,13 +97,13 @@ public class CustomerNotifications extends HttpServlet {
         }
 
         ArrayList<Notification> list = new ArrayList<>();
+        ArrayList<Notification> allCNotifications = cNotifications.getNotifications();
 
-        for (int i=0; i<cNotifications.getNotifications().size(); i++) {
-            if (cNotifications.getNotifications().get(i).getTable().getTableNum() == tableNum) {
-                list.add(cNotifications.getNotifications().get(i));
+        for (Notification allCNotification : allCNotifications) {
+            if (allCNotification.getTable().getTableNum() == tableNum) {
+                list.add(allCNotification);
             }
         }
-
         return list;
     }
 
