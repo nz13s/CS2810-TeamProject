@@ -29,6 +29,8 @@ public class Foods {
     private PreparedStatement updatePriceById;
     private PreparedStatement updateAvailabilityById;
     private PreparedStatement updateCategoryIDById;
+    private PreparedStatement newFood;
+    private PreparedStatement linkFoodIngredient;
 
     /**
      * Constructor that holds the SQL queries that are going to be used.
@@ -71,6 +73,14 @@ public class Foods {
                 "UPDATE food " +
                         "SET category_id = ? " +
                         "WHERE food_id = ?");
+
+        newFood = connection.prepareStatement(
+                "INSERT INTO food (food_name, food_description, calories, price, available, category_id, image_url) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+
+        linkFoodIngredient = connection.prepareStatement(
+                "INSERT INTO food_ingredients (food_id, ingredient_id) "
+                        + "VALUES (?, ?)");
     }
 
     /**
@@ -86,7 +96,7 @@ public class Foods {
     public Food getFoodByID(int foodID, boolean populateIngredients) throws SQLException {
         if (!populateIngredients){
             return getFoodByIDNoPopulateIngredients(foodID);
-        } else{
+        } else {
             return getFoodByIDPopulateIngredients(foodID);
         }
     }
@@ -148,6 +158,7 @@ public class Foods {
                     food.addIngredient(ingredient);
                 }
             }
+            return food;
         }
         return null;
     }
@@ -156,7 +167,7 @@ public class Foods {
      * Method that updates the food_name of a food based on the ID.
      *
      * @param foodID foodID of the food.
-     * @param name name of the food.
+     * @param name   name of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
     public void updateFoodName(int foodID, String name) throws SQLException {
@@ -168,7 +179,7 @@ public class Foods {
     /**
      * Method that updates the food_description of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID      foodID of the food.
      * @param description description of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -181,7 +192,7 @@ public class Foods {
     /**
      * Method that updates the calories of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID   foodID of the food.
      * @param calories calories of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -195,7 +206,7 @@ public class Foods {
      * Method that updates the price of a food based on the ID.
      *
      * @param foodID foodID of the food.
-     * @param price price of the food.
+     * @param price  price of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
     public void updatePrice(int foodID, BigDecimal price) throws SQLException {
@@ -207,7 +218,7 @@ public class Foods {
     /**
      * Method that updates the availability of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID       foodID of the food.
      * @param availability availability of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -220,7 +231,7 @@ public class Foods {
     /**
      * Method that updates the category of a food based on the ID.
      *
-     * @param foodID foodID of the food.
+     * @param foodID   foodID of the food.
      * @param category category of the food.
      * @throws SQLException thrown if sql logic is wrong.
      */
@@ -228,5 +239,41 @@ public class Foods {
         updateCategoryIDById.setInt(1, category);
         updateCategoryIDById.setInt(2, foodID);
         updateCategoryIDById.executeUpdate();
+    }
+
+    /**
+     * Method to add a new Food to the database.
+     *
+     * @param food The new Food item to add to the database.
+     * @throws SQLException If a database access error occurs or this method is called on a closed connection.
+     */
+    public void newFood(Food food) throws SQLException {
+        newFood.setString(1, food.getFoodName());
+        newFood.setString(2, food.getFoodDescription());
+        newFood.setInt(3, food.getCalories());
+        newFood.setBigDecimal(4, food.getPrice());
+        newFood.setBoolean(5, true);
+        newFood.setInt(6, food.getCategoryID());
+        newFood.setString(7, food.getImageURL());
+        newFood.execute();
+        ResultSet resultSet = newFood.getGeneratedKeys();
+        resultSet.next();
+        linkIngredients(resultSet.getInt("food_id"), food.getIngredients());
+    }
+
+    /**
+     * Method to link all the {@link Ingredient}'s passed in to the {@link Food} item they are passed with
+     *
+     * @param foodID      The ID of the new food item as stored in the database
+     * @param ingredients An Arraylist of the ingredients in the food item
+     * @throws SQLException If a database access error occurs or this method is called on a closed connection.
+     */
+    private void linkIngredients(int foodID, ArrayList<Ingredient> ingredients) throws SQLException {
+        for (Ingredient ingredient : ingredients) {
+            linkFoodIngredient.setInt(1, foodID);
+            linkFoodIngredient.setInt(2, ingredient.getIngredientID());
+            linkFoodIngredient.addBatch();
+        }
+        linkFoodIngredient.executeBatch();
     }
 }
