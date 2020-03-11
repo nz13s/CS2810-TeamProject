@@ -76,14 +76,14 @@ public class Foods {
      * Method that gets a food based on the ID and populates it with ingredients if needed
      *
      * @param foodID foodID of the food.
-     * @param populate if the ingredients needs to be populated with the foods or not.
+     * @param populateIngredients if the ingredients needs to be populated with the foods or not.
      * @return Food object, based on the sql query output.
      * @throws SQLException thrown if sql logic is wrong.
      */
     @CheckForNull
     @CheckReturnValue
-    public Food getFoodByID(int foodID, boolean populate) throws SQLException {
-        if (!populate){
+    public Food getFoodByID(int foodID, boolean populateIngredients) throws SQLException {
+        if (!populateIngredients){
             return getFoodByIDNoPopulateIngredients(foodID);
         } else{
             return getFoodByIDPopulateIngredients(foodID);
