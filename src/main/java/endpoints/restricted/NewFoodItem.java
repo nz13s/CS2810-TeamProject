@@ -2,6 +2,7 @@ package endpoints.restricted;
 
 import databaseInit.Database;
 import entities.Food;
+import entities.Ingredient;
 import entities.StaffInstance;
 
 import javax.servlet.ServletException;
@@ -11,12 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Endpoint for the frontend to call to add a new {@link Food} items to the database
  * <p>
  * Spec:
- * POST - String: name, int: calories, int: category, String: description, BigDecimal: price (Creates a new food item)
+ * POST - String: name, int: calories, int: category, String: description, BigDecimal: price, List(Int): ingredients, String: image (Creates a new food item)
  */
 public class NewFoodItem extends HttpServlet {
 
@@ -38,8 +40,13 @@ public class NewFoodItem extends HttpServlet {
         int category = Integer.parseInt(req.getParameter("category"));
         String description = req.getParameter("description");
         BigDecimal price = new BigDecimal(req.getParameter("price"));
-        //TODO Ingredients
-        Food food = new Food(-1, foodName, description, calories, price, true, category, null, null);
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        String[] ingredientsString = req.getParameterMap().get("ingredients");
+        for (String ingredientID : ingredientsString) {
+            ingredients.add(new Ingredient(-1, Integer.parseInt(ingredientID)));
+        }
+        String image = req.getParameter("image");
+        Food food = new Food(-1, foodName, description, calories, price, true, category, ingredients, image);
         try {
             Database.FOODS.newFood(food);
         } catch (SQLException e) {
