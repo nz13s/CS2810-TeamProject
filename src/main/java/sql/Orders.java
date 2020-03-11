@@ -53,9 +53,10 @@ public class Orders {
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
                         "WHERE o.order_confirmed != ? AND o.order_served = ?");
-        ordersGetUnconfirmed = connection.prepareStatement("SELECT * " +
-                "FROM orders " +
-                "WHERE order_confirmed = 0 AND table_num = ?");
+        ordersGetUnconfirmed = connection.prepareStatement("SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o  " +
+                "JOIN food_orders AS i ON o.order_id = i.order_id " +
+                "JOIN food f on i.food_id = f.food_id " +
+                "WHERE o.order_confirmed = 0 AND o.table_num = ?");
         orderUpdateState = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_preparing = ?, order_ready = ?, order_served = ? " +
