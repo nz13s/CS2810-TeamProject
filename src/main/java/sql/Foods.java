@@ -118,7 +118,7 @@ public class Foods {
     }
 
     /**
-     * Method that gets a food based on the ID.
+     * Method that gets a food and its ingredients based on the ID.
      *
      * @param foodID foodID of the food.
      * @return Food object, based on the sql query output.
