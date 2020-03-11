@@ -8,6 +8,9 @@ import databaseInit.Database;
 import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -91,11 +94,10 @@ public class TableInfo extends HttpServlet {
             resp.sendError(400, "Invalid tableNum");
         }
         if (table != null) {
-            Notification n = new Notification(table, NotificationTypes.NEED);
-            success = ActiveStaff.notifyAll(n);
             TableState.addNeedWaiter(table);
-
-
+            Notification notif = new Notification(table, NotificationTypes.NEED);
+            NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
+            success = ActiveStaff.notifyAll(notif);
         }
         if (!success) {
             resp.sendError(500, "Failed to send waiters notification");
