@@ -6,7 +6,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
 import entities.Order;
+import entities.Queue;
+import entities.StaffInstance;
+import entities.Table;
 import entities.serialisers.OrderSerialiser;
+import entities.serialisers.QueueSerialiser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Endpoint for the frontend to call to allow staff to confirm a users {@link Order}
@@ -36,11 +42,33 @@ public class AcceptOrder extends HttpServlet {
     public void init() throws ServletException {
         om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         SimpleModule module =
-                new SimpleModule("OrderSerialiser", new Version(1, 0, 0, null, null, null));
-        module.addSerializer(Order.class, new OrderSerialiser());
+                new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
+        module.addSerializer(Queue.class, new QueueSerialiser());
         om.registerModule(module);
     }
 
+    public String queueToJSON(StaffInstance staff, HttpServletResponse resp) throws SQLException, IOException {
+        List<Table> staffTables = staff.getTables();
+        if (staffTables.isEmpty()) {
+            resp.sendError(500, "Staff Does not have any tables");
+        }
+
+        ArrayList<Order> unconfirmedOrders = new ArrayList<>();
+        for (Table t : staffTables) {
+            ArrayList<Order> tableUnconfirmed = new ArrayList<>();
+            try {
+                tableUnconfirmed = Database.ORDERS.getOrdersUnconfirmed(t.tableNum);
+            } catch (SQLException e) {
+                resp.sendError(500, "Unable to retrieve order from database.");
+            }
+            if (tableUnconfirmed != null) {
+                unconfirmedOrders.addAll(tableUnconfirmed);
+            }
+        }
+        Queue q = new Queue(unconfirmedOrders);
+
+        return om.writeValueAsString(q);
+    }
     /**
      * Returns the {@link Order} requested by the front end, specified by its orderID
      *
@@ -51,25 +79,16 @@ public class AcceptOrder extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int orderID;
-        try {
-            orderID = getOrderID(req, resp);
-        } catch (NumberFormatException e) {
-            return;
-        }
-        Order order = null;
-        try {
-            order = Database.ORDERS.getOrderByID(orderID);
-        } catch (SQLException e) {
-            resp.sendError(500, "Unable to retrieve order from database.");
-        }
-        if (order == null) {
-            resp.sendError(400, "No order for that ID.");
-        }
+        StaffInstance staff;
+        staff = getStaff(req);
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
-        pw.println(om.writeValueAsString(order));
+        try {
+            pw.println(queueToJSON(staff, resp));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         pw.flush();
     }
 
@@ -84,10 +103,19 @@ public class AcceptOrder extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int orderID;
+        Order order = new Order();
         try {
             orderID = getOrderID(req, resp);
         } catch (NumberFormatException e) {
             return;
+        }
+        try {
+            order = Database.ORDERS.getOrderByID(orderID);
+        } catch (SQLException e) {
+            resp.sendError(500, "Unable to find order.");
+        }
+        if (order.getOrderConfirmed() != 0) {
+            resp.sendError(500, "Order is Already Confirmed");
         }
         try {
             Database.ORDERS.confirmOrder(orderID);
@@ -117,5 +145,15 @@ public class AcceptOrder extends HttpServlet {
             throw new NumberFormatException();
         }
         return orderID;
+    }
+
+    /**
+     * The method to get a staff entity to be used in the post method.
+     *
+     * @param req Http Request
+     * @return a staff entity
+     */
+    private StaffInstance getStaff(HttpServletRequest req) {
+        return (StaffInstance) req.getSession().getAttribute("StaffEntity");
     }
 }
