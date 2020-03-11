@@ -22,7 +22,7 @@ public class StaffInstance {
     public StaffInstance(int staffID) {
         this.staffID = staffID;
         allMessages = new ArrayList<>();
-        tables = new ArrayList<Table>();
+        managedTables = new ArrayList<Table>();
     }
 
     /**

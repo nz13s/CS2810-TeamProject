@@ -6,9 +6,14 @@ import entities.StaffInstance;
 import filters.HttpSessionCollector;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.naming.PartialResultException;
@@ -24,11 +29,15 @@ public class NotificationSocket {
     }
 
     static ObjectMapper objectMapper = new ObjectMapper();
+    static ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
     static List<NotificationSocket> registeredStaff = new ArrayList<>();
+    static final ByteBuffer pingData = ByteBuffer.wrap("ping".getBytes());
 
     String HTTPSessionID = "";
     StaffInstance instance;
     Session session;
+    ScheduledFuture<?> pong;
+
 
     @OnOpen
     public void onOpen(Session session) {
@@ -85,11 +94,17 @@ public class NotificationSocket {
         socket.instance = (StaffInstance) o;
         registeredStaff.add(socket);
         socket.session.getAsyncRemote().sendText("Auth accepted\n");
-
+        socket.pong = exec.scheduleAtFixedRate(() -> {
+            try {
+                socket.session.getAsyncRemote().sendPing(pingData);
+            } catch (IOException e) {
+            }
+        }, 5, 10, TimeUnit.SECONDS);
     }
 
     static void unregister(NotificationSocket socket) {
         registeredStaff.remove(socket);
+        socket.pong.cancel(true);
     }
 
     public static void pushNotification(SocketMessage message, StaffInstance... staff) {

@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 public class OrdersToFrontend extends HttpServlet {
 
-    private ObjectMapper mapper;
+    private static ObjectMapper mapper;
 
     /**
      * Constructor that initialises the mapper attribute.
@@ -58,8 +58,14 @@ public class OrdersToFrontend extends HttpServlet {
      * @throws SQLException
      */
 
-    public String queueToJSON() throws SQLException, IOException {
+    public static String queueToJSON() throws SQLException, IOException {
 
+        Queue q = new Queue(getOrderQueue());
+
+        return mapper.writeValueAsString(q);
+    }
+
+    public static ArrayList<Order> getOrderQueue() throws SQLException {
         ArrayList<Order> p = Database.ORDERS.getOrders(0L, 0L);
 
         //add some custom payloads to serve
@@ -73,10 +79,7 @@ public class OrdersToFrontend extends HttpServlet {
         for (Order order : orders) {
             ((IndexedOrder) order).setRank(rank++);
         }
-
-        Queue q = new Queue(orders);
-
-        return mapper.writeValueAsString(q);
+        return p;
     }
 
     /**
