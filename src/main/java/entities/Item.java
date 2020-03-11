@@ -9,7 +9,7 @@ import java.sql.SQLException;
  */
 
 //TODONE hold a entities.Food object rather than ID+name @cameron
-public class Item {
+public class Item implements ISerialisable {
 
     private Food food;
     private int amount;

@@ -45,12 +45,12 @@ public class Categories {
                         + "WHERE category_id = ?");
 
         foodByCatId = connection.prepareStatement(
-                "SELECT food_id, food_name, food_description, calories, price, available, category_id "
+                "SELECT food_id, food_name, food_description, calories, price, available, category_id, image_url "
                         + "FROM food "
                         + "WHERE category_id = ?");
 
         fetchMenu = connection.prepareStatement(
-                "SELECT food_id, food_name, food_description, calories, price, available, category, c.category_id " +
+                "SELECT food_id, food_name, food_description, calories, price, available, category, c.category_id, image_url " +
                         "FROM food " +
                         "JOIN categories c on food.category_id = c.category_id " +
                         "WHERE available = TRUE " +
@@ -105,7 +105,8 @@ public class Categories {
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
                     resultSet.getInt("category_id"),
-                    null));
+                    null,
+                    resultSet.getString("image_url")));
         }
         return list;
     }
@@ -149,7 +150,8 @@ public class Categories {
                     resultSet.getBigDecimal("price"),
                     resultSet.getBoolean("available"),
                     resultSet.getInt("category_id"),
-                    new ArrayList<Ingredient>());
+                    new ArrayList<Ingredient>(),
+                    resultSet.getString("image_url"));
             Category c = categories.stream().filter(cat -> cat.getCategoryNumber() == food.getCategoryID()).findFirst()
                     .orElse(new Category(resultSet.getInt("category_id"), resultSet.getString("category")));
             c.addFood(food);
