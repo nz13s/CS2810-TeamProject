@@ -66,6 +66,9 @@ public class CustomerNotifications extends HttpServlet {
 
         try {
             tableNum = Integer.parseInt(req.getParameter("tableNum"));
+            if (tableNum < 0) {
+                throw new NumberFormatException();
+            }
         } catch (NumberFormatException e) {
             resp.sendError(400, "Invalid table number.");
         }
