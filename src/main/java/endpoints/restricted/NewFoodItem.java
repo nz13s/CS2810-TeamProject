@@ -39,7 +39,7 @@ public class NewFoodItem extends HttpServlet {
         String description = req.getParameter("description");
         BigDecimal price = new BigDecimal(req.getParameter("price"));
         //TODO Ingredients
-        Food food = new Food(-1, foodName, description, calories, price, true, category, null);
+        Food food = new Food(-1, foodName, description, calories, price, true, category, null, null);
         try {
             Database.FOODS.newFood(food);
         } catch (SQLException e) {

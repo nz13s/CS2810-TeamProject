@@ -152,6 +152,7 @@ public class Foods {
                     food.addIngredient(ingredient);
                 }
             }
+            return food;
         }
         return null;
     }

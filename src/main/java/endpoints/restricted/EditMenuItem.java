@@ -56,7 +56,7 @@ public class EditMenuItem extends HttpServlet {
         Food menuItem;
         try {
             //TODO Stop calling database here
-            menuItem = Database.FOODS.getFoodByID(foodID);
+            menuItem = Database.FOODS.getFoodByID(foodID, true);
         } catch (SQLException e) {
             resp.sendError(500, "Unable to retrieve menu item.");
             return;
@@ -90,7 +90,7 @@ public class EditMenuItem extends HttpServlet {
         }
         Food food = null;
         try {
-            food = Database.FOODS.getFoodByID(foodID);
+            food = Database.FOODS.getFoodByID(foodID, true);
             if (food == null) {
                 resp.sendError(500, "Unable to retrieve food item to update.");
                 return;

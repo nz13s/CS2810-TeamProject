@@ -33,7 +33,7 @@ public class Item implements ISerialisable {
      * @throws SQLException If an error occurs with the database
      */
     public Item(int ID, int amount) throws SQLException {
-        this.food = Database.FOODS.getFoodByID(ID); //todo remove database calls from this; should be left as a fake entity
+        this.food = Database.FOODS.getFoodByID(ID, false); //todo remove database calls from this; should be left as a fake entity
         this.amount = amount;
     }
 
