@@ -181,6 +181,14 @@ public class Orders {
 
     }
 
+    /**
+     * Selects unConfirmed orders from database for the table, populates each order
+     * with Array of Food items.
+     *
+     * @param tableNum the table we need to select.
+     * @return Array of Orders unconfirmed
+     * @throws SQLException if an error occurred
+     */
     public ArrayList<Order> getOrdersUnconfirmed(int tableNum) throws SQLException {
         HashMap<Integer, Order> orders = new HashMap<>();
         ordersGetUnconfirmed.setInt(1, tableNum);
