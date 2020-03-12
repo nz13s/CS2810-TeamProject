@@ -3,13 +3,10 @@ import {
   Button,
   Col,
   Container,
-  DropdownButton,
   Form,
-  FormControl,
   InputGroup,
   Navbar,
-  Row,
-  Dropdown
+  Row
 } from "react-bootstrap";
 import { WaiterEditStyle } from "./WaiterEdit.styled";
 import API from "../../client/api";
@@ -55,9 +52,9 @@ export default class WaiterEdit extends React.Component<any, any> {
     const itemCalories = form.elements.namedItem(
       "itemCalories"
     ) as HTMLInputElement;
-    // const itemIngredients = form.elements.namedItem(
-    //   "itemIngredients"
-    // ) as HTMLInputElement;
+    const itemIngredients = form.elements.namedItem(
+      "itemIngredients"
+    ) as HTMLInputElement;
     const itemPrice = form.elements.namedItem("itemPrice") as HTMLInputElement;
 
     const item = new MenuItem(
@@ -66,7 +63,9 @@ export default class WaiterEdit extends React.Component<any, any> {
       Number(itemCategory.value),
       itemDescription.value,
       Number(itemPrice.value),
-      [new Ingredient(1, "", false), new Ingredient(2, "", true)],
+      itemIngredients.value
+        .split(",")
+        .map(x => new Ingredient(Number(x.trim()), "", false)),
       Number(itemCalories.value),
       ""
     );
@@ -135,25 +134,11 @@ export default class WaiterEdit extends React.Component<any, any> {
                         Category
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl
-                      aria-label="Category"
-                      aria-describedby="basic-addon2"
+                    <Form.Control
+                      type="number"
+                      aria-describedby="inputGroupPrepend"
+                      required
                     />
-
-                    <DropdownButton
-                      as={InputGroup.Append}
-                      variant="primary"
-                      title="Select"
-                      id="input-group-dropdown-2">
-                      {[1, 2, 3, 4, 5].map((cat, idx) => (
-                        <Dropdown.Item
-                          key={idx}
-                          as="button"
-                          onClick={() => console.log(cat)}>
-                          {cat}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
                   </InputGroup>
                 </Form.Group>
 
@@ -194,32 +179,11 @@ export default class WaiterEdit extends React.Component<any, any> {
                         Ingredients
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl
-                      aria-label="Ingredients"
-                      aria-describedby="basic-addon2"
+                    <Form.Control
+                      type="string"
+                      aria-describedby="inputGroupPrepend"
+                      required
                     />
-
-                    <DropdownButton
-                      as={InputGroup.Append}
-                      variant="primary"
-                      title="+"
-                      id="input-group-dropdown-2">
-                      {[
-                        "Black Beans",
-                        "Chicken",
-                        "Tomato",
-                        "Cord",
-                        "Doritos",
-                        "Wheat"
-                      ].map((ingredient, idx) => (
-                        <Dropdown.Item
-                          key={idx}
-                          as="button"
-                          onClick={() => console.log(ingredient)}>
-                          {ingredient}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
                   </InputGroup>
                 </Form.Group>
 
