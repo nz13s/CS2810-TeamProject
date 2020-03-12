@@ -200,4 +200,13 @@
         <url-pattern>/restricted/customernotifications</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AllTables</servlet-name>
+        <servlet-class>endpoints.restricted.AllTables</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AllTables</servlet-name>
+        <url-pattern>/restricted/tableinfo</url-pattern>
+    </servlet-mapping>
+
 </web-app>

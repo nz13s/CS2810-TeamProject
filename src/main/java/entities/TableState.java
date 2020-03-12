@@ -131,15 +131,19 @@ public class TableState {
      * @param ID The table ID
      */
     public static Table getTableByID(int ID) throws SQLException {
-        if (tables.isEmpty()) {
-            Database.TABLES.fetchTables();
-        }
+        updateTables();
         for (Table table : tables) {
             if (table.getTableNum() == ID) {
                 return table;
             }
         }
         return null;
+    }
+
+    public static void updateTables() throws SQLException {
+        if (tables.isEmpty()) {
+            Database.TABLES.fetchTables();
+        }
     }
 
 

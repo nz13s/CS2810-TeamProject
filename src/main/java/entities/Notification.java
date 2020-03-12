@@ -11,6 +11,7 @@ public class Notification implements ISerialisable {
     private String message;
     private Long time;
     private Boolean completed;
+    private Object extraData;
 
     private int orderID = -1;
 
@@ -186,5 +187,13 @@ public class Notification implements ISerialisable {
      */
     public void setType(NotificationTypes type) {
         this.type = type;
+    }
+
+    public void setExtraData(Object extraData) {
+        this.extraData = extraData;
+    }
+
+    public Object getExtraData() {
+        return extraData;
     }
 }

@@ -7,6 +7,7 @@ import websockets.SocketMessageType;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Stores a list of active {@link StaffInstance} so that they can be referenced to be notified of events
@@ -41,7 +42,7 @@ public class ActiveStaff {
     }
 
     public static StaffInstance[] findStaffForTable(int tableNum) {
-        return (StaffInstance[]) staff.stream().filter(member -> member.getTable(tableNum) != null).toArray();
+        return staff.stream().filter(member -> member.getTable(tableNum) != null).toArray(StaffInstance[]::new);
     }
 
     /**
