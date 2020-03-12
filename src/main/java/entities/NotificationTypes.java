@@ -8,7 +8,9 @@ public enum NotificationTypes {
     CONFIRMED("Order Has been confirmed"),
     CUSTOM(""),
     ASSIGN("Table number assigned successfully"),
-    NEED("Table needs a waiter.");
+    NEED("Table needs a waiter."),
+    PREPARING("Order is being prepared"),
+    CONFIRMED("Order has been confirmed by the waiter/");
 
     private String notification;
 

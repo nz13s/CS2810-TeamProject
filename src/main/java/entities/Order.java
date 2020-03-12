@@ -9,13 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Order implements IFakeable, ISerialisable {
-    private int orderID;
-    private long timeOrdered = 0;
-    private long orderConfirmed = 0;
-    private long orderPreparing = 0;
-    private long orderReady = 0;
-    private long orderServed = 0;
-    private int tableNum;
+    protected int orderID;
+    protected long timeOrdered = 0;
+    protected long orderConfirmed = 0;
+    protected long orderPreparing = 0;
+    protected long orderReady = 0;
+    protected long orderServed = 0;
+    protected int tableNum;
     private ArrayList<Item> foodItems; //we should make this a Set<Item> as Items are (or, should be) unique
 
     private transient boolean isFake = true;
@@ -77,7 +77,7 @@ public class Order implements IFakeable, ISerialisable {
      */
     public void addFoodItem(int ID, int amount) throws SQLException{
         try {
-            Food food = Database.FOODS.getFoodByID(ID);
+            Food food = Database.FOODS.getFoodByID(ID, false);
             if (alreadyInOrder(food)) {
                 Item item = getItem(food);
                 if (item == null) {
@@ -100,7 +100,7 @@ public class Order implements IFakeable, ISerialisable {
      */
     public void removeFoodItem(int ID, int amount) {
         try {
-            Food food = Database.FOODS.getFoodByID(ID);
+            Food food = Database.FOODS.getFoodByID(ID, false);
             if (alreadyInOrder(food)) {
                 Item item = getItem(food);
                 if (item == null) {
