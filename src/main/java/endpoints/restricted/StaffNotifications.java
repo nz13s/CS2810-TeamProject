@@ -2,6 +2,7 @@ package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import databaseInit.Database;
+import entities.ActiveStaff;
 import entities.NotificationTypes;
 import entities.Order;
 import entities.StaffInstance;
@@ -61,10 +62,12 @@ public class StaffNotifications extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int ID;
         NotificationTypes type;
+        StaffInstance staff = getStaffMember(req);
         try {
             ID = Integer.parseInt(req.getParameter("notificationID"));
-            String tempType = req.getParameter("notificationType").toUpperCase();
-            type = NotificationTypes.valueOf(tempType.replaceAll("\\s",""));
+            type = staff.getNotificationByID(ID).getType();
+//            String tempType = req.getParameter("notificationType").toUpperCase();
+//            type = NotificationTypes.valueOf(tempType.replaceAll("\\s",""));
         } catch (NumberFormatException e) {
             resp.sendError(400, "Invalid ID.");
             return;
@@ -84,7 +87,6 @@ public class StaffNotifications extends HttpServlet {
                 resp.sendError(500, "Could not get Order.");
             }
         }
-        StaffInstance staff = getStaffMember(req);
         NotificationSocket.pushNotification(new SocketMessage(staff.getNotificationById(ID), SocketMessageType.DELETE), staff);
         staff.removeNotificationByID(ID);
     }
