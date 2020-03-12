@@ -56,6 +56,7 @@ export default class WaiterEdit extends React.Component<any, any> {
       "itemIngredients"
     ) as HTMLInputElement;
     const itemPrice = form.elements.namedItem("itemPrice") as HTMLInputElement;
+    const itemImage = form.elements.namedItem("itemImage") as HTMLInputElement;
 
     const item = new MenuItem(
       0,
@@ -67,7 +68,7 @@ export default class WaiterEdit extends React.Component<any, any> {
         .split(",")
         .map(x => new Ingredient(Number(x.trim()), "", false)),
       Number(itemCalories.value),
-      ""
+      itemImage.value
     );
 
     try {
@@ -180,7 +181,7 @@ export default class WaiterEdit extends React.Component<any, any> {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
-                      type="string"
+                      type="text"
                       aria-describedby="inputGroupPrepend"
                       required
                     />
@@ -196,6 +197,21 @@ export default class WaiterEdit extends React.Component<any, any> {
                     </InputGroup.Prepend>
                     <Form.Control
                       type="number"
+                      aria-describedby="inputGroupPrepend"
+                      required
+                    />
+                  </InputGroup>
+                </Form.Group>
+
+                <Form.Group controlId="itemImage">
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroupPrepend">
+                        Image URL
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      type="text"
                       aria-describedby="inputGroupPrepend"
                       required
                     />
