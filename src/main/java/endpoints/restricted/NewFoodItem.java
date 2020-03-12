@@ -41,9 +41,12 @@ public class NewFoodItem extends HttpServlet {
         String description = req.getParameter("description");
         BigDecimal price = new BigDecimal(req.getParameter("price"));
         ArrayList<Ingredient> ingredients = new ArrayList<>();
-        String[] ingredientsString = req.getParameterMap().get("ingredients");
-        for (String ingredientID : ingredientsString) {
-            ingredients.add(new Ingredient(-1, Integer.parseInt(ingredientID)));
+//        String[] ingredientsString = req.getParameterMap().get("ingredients");
+        String ingred = req.getParameter("ingredients");
+        if (ingred != null) {
+            for (String ingredientID : ingred.split(",")) {
+                ingredients.add(new Ingredient(-1, Integer.parseInt(ingredientID)));
+            }
         }
         String image = req.getParameter("image");
         Food food = new Food(foodName, description, calories, price, true, category, ingredients, image);
