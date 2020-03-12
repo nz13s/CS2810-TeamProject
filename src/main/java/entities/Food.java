@@ -5,8 +5,8 @@ import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class Food implements ISerialisable {
-  private int foodID;
+public class Food implements ISerialisable, IFakeable {
+  private int foodID = -1;
   private String foodName;
   private String foodDescription;
   private int calories;
@@ -19,6 +19,18 @@ public class Food implements ISerialisable {
   public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, BigDecimal price,
               boolean available, int categoryID, ArrayList<Ingredient> ingredients, @Nullable String imageURL) {
     this.foodID = foodID;
+    this.foodName = foodName;
+    this.foodDescription = foodDescription;
+    this.calories = calories;
+    this.price = price;
+    this.available = available;
+    this.categoryID = categoryID;
+    this.ingredients = ingredients;
+    this.imageURL = imageURL;
+  }
+
+  public Food(@Nonnull String foodName, @Nonnull String foodDescription, int calories, BigDecimal price,
+              boolean available, int categoryID, ArrayList<Ingredient> ingredients, @Nullable String imageURL) {
     this.foodName = foodName;
     this.foodDescription = foodDescription;
     this.calories = calories;
@@ -103,4 +115,8 @@ public class Food implements ISerialisable {
     ingredients.add(ingredient);
   }
 
+  @Override
+  public boolean isFake() {
+    return foodID < 0;
+  }
 }

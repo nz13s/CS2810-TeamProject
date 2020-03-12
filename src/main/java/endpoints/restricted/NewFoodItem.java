@@ -46,7 +46,7 @@ public class NewFoodItem extends HttpServlet {
             ingredients.add(new Ingredient(-1, Integer.parseInt(ingredientID)));
         }
         String image = req.getParameter("image");
-        Food food = new Food(-1, foodName, description, calories, price, true, category, ingredients, image);
+        Food food = new Food(foodName, description, calories, price, true, category, ingredients, image);
         try {
             Database.FOODS.newFood(food);
         } catch (SQLException e) {

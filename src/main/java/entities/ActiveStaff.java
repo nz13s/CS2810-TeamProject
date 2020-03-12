@@ -4,6 +4,7 @@ import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class ActiveStaff {
      * @param employee The staff member to send the notification to
      * @param message  The notification to pass to the specified staff member
      */
-    public static void addNotification(StaffInstance employee, Notification message) {
+    public static void addNotification(@Nullable StaffInstance employee, Notification message) {
+        if (employee == null) return;
         employee.addNotification(message);
     }
 

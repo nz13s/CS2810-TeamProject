@@ -72,7 +72,8 @@ public class OrderUpdate extends HttpServlet {
                         return;
                     }
                     Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
-                    NotificationSocket.pushNotification(new SocketMessage(nfReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
+                    //NotificationSocket.pushNotification(new SocketMessage(nfReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
+                    NotificationSocket.broadcastNotification(new SocketMessage(nfReady, SocketMessageType.CREATE));
 
                     // If there is no Waiter assigned to a table and No Waiter has the table in their list,
                     // table is assigned to random Waiter.
