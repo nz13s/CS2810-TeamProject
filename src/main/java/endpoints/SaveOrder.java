@@ -1,7 +1,10 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.Order;
+import entities.*;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,9 +15,9 @@ import java.sql.SQLException;
 
 /**
  * Class for handling the saving of a sessions {@link Order}
- *
+ * <p>
  * Spec:
- *  POST - int: table_num
+ * POST - int: table_num
  */
 public class SaveOrder extends HttpServlet {
 
@@ -37,31 +40,70 @@ public class SaveOrder extends HttpServlet {
             resp.sendError(400, "Order is empty!");
             return;
         }
+        //table Num validation
         String tableNum = req.getParameter("table_num");
         int table;
         try {
             table = Integer.parseInt(tableNum);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             resp.sendError(400, "invalid num");
             return;
         }
-        //todo check for a valid table
-        //TODOne @Oliver please
+
         order.setTimeOrdered(System.currentTimeMillis());
-        order.setOrderConfirmed(System.currentTimeMillis() + 100);
-        order.setTableNum(table);//todo patch tablenum through
-        boolean success;
+        //gets table from tables list, if cannot find table updates the list from database
+        //if still no table it sends an error for invalid table num
+        Table tableSeated = null;
         try {
-            success = Database.ORDERS.saveOrder(order);
-            req.getSession().setAttribute("order", null);
+            tableSeated = TableState.getTableByID(table);
         } catch (SQLException e) {
-            resp.sendError(500, "Unable to save Order. Database error");
-            e.printStackTrace();
+            resp.sendError(400, "Table not found, refresh table list");
             return;
         }
-        if (!success) {
-            resp.sendError(500, "Unable to save Order.");
+
+        if (tableSeated == null) {
+            resp.sendError(400, "Invalid Table Num");
             return;
+
+        } else {
+            //Notification sent to waiters that order is placed and needs to be confirmed
+            Notification n = new Notification(tableSeated, NotificationTypes.CONFIRM);
+            //Checks if table has been assigned to a waiter, if it has sends a notification to waiter
+            //If the table is not in any waiter list of tables table is put as need waiter.
+            //todo do we need the table to hold a staff instance?
+            //todo maybe need to assign a random water if waiter is not found rather than putting table into looking for staff
+
+            if (ActiveStaff.findTableWaiter(tableSeated) != null) {
+                tableSeated.setWaiter(ActiveStaff.findTableWaiter(tableSeated));
+            } else {
+                ActiveStaff.addTableToRandomStaff(tableSeated);
+
+                //Notification notif = new Notification(tableSeated, NotificationTypes.NEED);
+                // NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
+                // ActiveStaff.notifyAll(notif);
+                //  TableState.addNeedWaiter(tableSeated);
+                //ActiveStaff.notifyAll(n);
+            }
+
+            //Sends notification "order to be confirmed" to the waiter.
+            //Bug if no waiter is assigned will be a nullpointer need to decide wether to put a random waiter
+            ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
+            NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
+
+            order.setTableNum(table);
+            boolean success;
+            try {
+                success = Database.ORDERS.saveOrder(order);
+                req.getSession().setAttribute("order", null);
+            } catch (SQLException e) {
+                resp.sendError(500, "Unable to save Order. Database error");
+                e.printStackTrace();
+                return;
+            }
+            if (!success) {
+                resp.sendError(500, "Unable to save Order.");
+                return;
+            }
         }
     }
 

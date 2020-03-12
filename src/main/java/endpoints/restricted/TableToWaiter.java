@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import databaseInit.Database;
+import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -82,19 +85,21 @@ public class TableToWaiter extends HttpServlet {
         boolean success = false;
 
         try {
-            table = Database.TABLES.getTableByID(getTable(req, resp));
+            table = TableState.getTableByID(GlobalMethods.getTable(req, resp));
         } catch (SQLException e) {
             resp.sendError(400, "Invalid tableNum");
         }
+
         if (table != null) {
             assert staff != null;
             success = ActiveStaff.addTableToStaff(table, staff);
-            Notification n = new Notification(table, NotificationTypes.ASSIGN);
-            ActiveStaff.addNotification(staff, n);
+            Notification notif = new Notification(table, NotificationTypes.ASSIGN);
+            ActiveStaff.addNotification(staff, notif);
+            NotificationSocket.pushNotification(new SocketMessage(notif, SocketMessageType.CREATE), staff);
             TableState.removeNeedWaiter(table);
         }
         if (!success) {
-            resp.sendError(500, "Failed to send waiters notification");
+            resp.sendError(500, "Failed to waiters notification");
         }
     }
 

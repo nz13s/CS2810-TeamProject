@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 /**
  * Orders Class deals with all order related queries and methods.
@@ -30,6 +29,8 @@ public class Orders {
     private PreparedStatement updateOrderReadyByID;
     private PreparedStatement updateOrderServedByID;
     private PreparedStatement orderConfirm;
+    private PreparedStatement ordersGetUnconfirmed;
+
 
     /**
      * Constructor creates the prepared Statements to save time on execution
@@ -52,10 +53,14 @@ public class Orders {
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
                         "WHERE o.order_confirmed != ? AND o.order_served = ?");
+        ordersGetUnconfirmed = connection.prepareStatement("SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o  " +
+                "JOIN food_orders AS i ON o.order_id = i.order_id " +
+                "JOIN food f on i.food_id = f.food_id " +
+                "WHERE o.order_confirmed = 0 AND o.table_num = ?");
         orderUpdateState = connection.prepareStatement(
                 "UPDATE orders " +
-                "SET order_preparing = ?, order_ready = ?, order_served = ? " +
-                "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
+                        "SET order_preparing = ?, order_ready = ?, order_served = ? " +
+                        "WHERE order_id = ?", Statement.RETURN_GENERATED_KEYS);
         orderConfirm = connection.prepareStatement("UPDATE orders " +
                 "SET order_confirmed = ?" +
                 "WHERE order_id = ?");
@@ -156,9 +161,48 @@ public class Orders {
                     resultSet.getString("food_description"), resultSet.getInt("calories"),
                     null, true, resultSet.getInt("category_id"), null, null);
             int orderID = resultSet.getInt("order_id");
-            if(orders.containsKey(orderID)){
+            if (orders.containsKey(orderID)) {
                 orders.get(orderID).addFoodItem(new Item(food, resultSet.getInt("quantity")));
-            }else{
+            } else {
+                ArrayList<Item> items = new ArrayList<>();
+                items.add(new Item(food, resultSet.getInt("quantity")));
+                orders.put(orderID, new IndexedOrder(
+                        resultSet.getInt("order_id"),
+                        resultSet.getLong("time_ordered"),
+                        resultSet.getLong("order_confirmed"),
+                        resultSet.getLong("order_preparing"),
+                        resultSet.getLong("order_ready"),
+                        resultSet.getLong("order_served"),
+                        resultSet.getInt("table_num"),
+                        items));
+            }
+        }
+        return new ArrayList<>(orders.values());
+
+    }
+
+    /**
+     * Selects unConfirmed orders from database for the table, populates each order
+     * with Array of Food items.
+     *
+     * @param tableNum the table we need to select.
+     * @return Array of Orders unconfirmed
+     * @throws SQLException if an error occurred
+     */
+    public ArrayList<Order> getOrdersUnconfirmed(int tableNum) throws SQLException {
+        HashMap<Integer, Order> orders = new HashMap<>();
+        ordersGetUnconfirmed.setInt(1, tableNum);
+
+        ResultSet resultSet = ordersGetUnconfirmed.executeQuery();
+        while (resultSet.next()) {
+            //o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity
+            Food food = new Food(resultSet.getInt("food_id"), resultSet.getString("food_name"),
+                    resultSet.getString("food_description"), resultSet.getInt("calories"),
+                    null, true, resultSet.getInt("category_id"), null, null);
+            int orderID = resultSet.getInt("order_id");
+            if (orders.containsKey(orderID)) {
+                orders.get(orderID).addFoodItem(new Item(food, resultSet.getInt("quantity")));
+            } else {
                 ArrayList<Item> items = new ArrayList<>();
                 items.add(new Item(food, resultSet.getInt("quantity")));
                 orders.put(orderID, new IndexedOrder(

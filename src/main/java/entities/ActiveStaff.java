@@ -1,5 +1,9 @@
 package entities;
 
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,9 +149,10 @@ public class ActiveStaff {
             if (staffInstance.getTables().size() < 3
                     && !staffInstance.hasTable(table)
                     && table.getWaiter() == null) {
-
+                Notification nfAssign = new Notification(table, NotificationTypes.ASSIGN);
                 staffInstance.addTable(table);
-                staffInstance.addNotification(new Notification(table, NotificationTypes.ASSIGN));
+                staffInstance.addNotification(nfAssign);
+                NotificationSocket.pushNotification(new SocketMessage(nfAssign, SocketMessageType.CREATE), staffInstance);
                 table.setWaiter(staffInstance);
                 table.setOccupied(true);
                 TableState.removeNeedWaiter(table);
@@ -206,6 +211,15 @@ public class ActiveStaff {
             }
         }
         return null;
+    }
+
+    public static boolean hasWaiter(Table t) {
+        for (StaffInstance staffInstance : staff) {
+            if (staffInstance.hasTable(t)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

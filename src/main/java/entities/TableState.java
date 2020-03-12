@@ -1,5 +1,8 @@
 package entities;
 
+import databaseInit.Database;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -12,23 +15,6 @@ public class TableState {
 
     private static ArrayList<Table> tables = new ArrayList<>();
     private static ArrayList<Table> tableNeedWaiter = new ArrayList<>();
-
-
-    /*
-     * Constructor that initialises the list of tables.
-     */
-//    public TableState() {
-//        tables = new ArrayList<Table>();
-//    }
-
-
-    /*
-     * Constructor that initialises the list of tables, given by the parameter.
-     */
-//    public TableState(ArrayList<Table> tables) {
-//        this.tables = tables;
-//    }
-
 
     /**
      * Returns the number of tables in the restaurant.
@@ -132,8 +118,28 @@ public class TableState {
         tables.add(table);
     }
 
+    /**
+     * removes all tables.
+     */
     public static void removeAllTables() {
         tables.removeAll(tables);
+    }
+
+    /**
+     * Gets table by ID from list of tables.
+     *
+     * @param ID The table ID
+     */
+    public static Table getTableByID(int ID) throws SQLException {
+        if (tables.isEmpty()) {
+            Database.TABLES.fetchTables();
+        }
+        for (Table table : tables) {
+            if (table.getTableNum() == ID) {
+                return table;
+            }
+        }
+        return null;
     }
 
 
