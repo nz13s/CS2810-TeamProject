@@ -53,15 +53,14 @@ public class SaveOrder extends HttpServlet {
         order.setTimeOrdered(System.currentTimeMillis());
         //gets table from tables list, if cannot find table updates the list from database
         //if still no table it sends an error for invalid table num
-        Table tableSeated = TableState.getTableByID(table);
-        if (tableSeated == null && TableState.getTableList().size() == 0) {
-            try {
-                Database.TABLES.fetchTables();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        Table tableSeated = null;
+        try {
             tableSeated = TableState.getTableByID(table);
+        } catch (SQLException e) {
+            resp.sendError(400, "Table not found, refresh table list");
+            return;
         }
+
         if (tableSeated == null) {
             resp.sendError(400, "Invalid Table Num");
             return;
@@ -72,22 +71,25 @@ public class SaveOrder extends HttpServlet {
             //Checks if table has been assigned to a waiter, if it has sends a notification to waiter
             //If the table is not in any waiter list of tables table is put as need waiter.
             //todo do we need the table to hold a staff instance?
-            //todo maybe need to assign a random water if waiter is not found rather than putting table back into looking for waiter.
+            //todo maybe need to assign a random water if waiter is not found rather than putting table into looking for staff
+
             if (ActiveStaff.findTableWaiter(tableSeated) != null) {
                 tableSeated.setWaiter(ActiveStaff.findTableWaiter(tableSeated));
             } else {
-                Notification notif = new Notification(tableSeated, NotificationTypes.NEED);
-                NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
-                ActiveStaff.notifyAll(notif);
-                TableState.addNeedWaiter(tableSeated);
+                ActiveStaff.addTableToRandomStaff(tableSeated);
+
+                //Notification notif = new Notification(tableSeated, NotificationTypes.NEED);
+                // NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
+                // ActiveStaff.notifyAll(notif);
+                //  TableState.addNeedWaiter(tableSeated);
                 //ActiveStaff.notifyAll(n);
             }
 
             //Sends notification "order to be confirmed" to the waiter.
+            //Bug if no waiter is assigned will be a nullpointer need to decide wether to put a random waiter
             ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
             NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
 
-            //order.setOrderConfirmed(System.currentTimeMillis() + 100);
             order.setTableNum(table);
             boolean success;
             try {
@@ -103,8 +105,6 @@ public class SaveOrder extends HttpServlet {
                 return;
             }
         }
-
-
     }
 
     /**
