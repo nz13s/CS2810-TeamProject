@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import databaseInit.Database;
 import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
@@ -86,10 +85,11 @@ public class TableToWaiter extends HttpServlet {
         boolean success = false;
 
         try {
-            table = Database.TABLES.getTableByID(GlobalMethods.getTable(req, resp));
+            table = TableState.getTableByID(GlobalMethods.getTable(req, resp));
         } catch (SQLException e) {
             resp.sendError(400, "Invalid tableNum");
         }
+
         if (table != null) {
             assert staff != null;
             success = ActiveStaff.addTableToStaff(table, staff);
@@ -99,7 +99,7 @@ public class TableToWaiter extends HttpServlet {
             TableState.removeNeedWaiter(table);
         }
         if (!success) {
-            resp.sendError(500, "Failed to send waiters notification");
+            resp.sendError(500, "Failed to waiters notification");
         }
     }
 

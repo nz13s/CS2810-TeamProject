@@ -49,9 +49,15 @@ public class TableInfo extends HttpServlet {
      * @throws IOException
      */
 
-    public String tablesToJSON() throws SQLException, IOException {
+    public String tablesToJSON(int refresh) throws SQLException, IOException {
         //TODO The initial load of tables from DB into the list.
-        Database.TABLES.fetchTables();
+
+        if (TableState.getTableList().isEmpty()) {
+            Database.TABLES.fetchTables();
+        }
+        if (refresh == 1) {
+            Database.TABLES.fetchTables();
+        }
         return mapper.writeValueAsString(TableState.getTableList());
     }
 
@@ -64,11 +70,12 @@ public class TableInfo extends HttpServlet {
      */
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int refresh = getRefresh(req, resp);
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
         try {
-            pw.println(this.tablesToJSON());
+            pw.println(this.tablesToJSON(refresh));
         } catch (SQLException e) {
             pw.println(e.getMessage());
         }
@@ -89,18 +96,23 @@ public class TableInfo extends HttpServlet {
         boolean success = false;
 
         try {
-            table = Database.TABLES.getTableByID(GlobalMethods.getTable(req, resp));
+            table = TableState.getTableByID(GlobalMethods.getTable(req, resp));
         } catch (SQLException e) {
             resp.sendError(400, "Invalid tableNum");
         }
-        if (table != null) {
-            TableState.addNeedWaiter(table);
-            Notification notif = new Notification(table, NotificationTypes.NEED);
-            NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
-            success = ActiveStaff.notifyAll(notif);
-        }
-        if (!success) {
-            resp.sendError(500, "Failed to send waiters notification");
+        if (ActiveStaff.hasWaiter(table)) {
+            resp.sendError(500, "Table is already occupied");
+        } else {
+            if (table != null) {
+                TableState.addNeedWaiter(table);
+                Notification notif = new Notification(table, NotificationTypes.NEED);
+                NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
+                success = ActiveStaff.notifyAll(notif);
+            }
+
+            if (!success) {
+                resp.sendError(500, "Failed to send waiters notification");
+            }
         }
     }
 
@@ -122,5 +134,18 @@ public class TableInfo extends HttpServlet {
             resp.sendError(400, "Invalid tableNum integer.");
         }
         return table;
+    }
+
+    private int getRefresh(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int refresh = -1;
+        try {
+            refresh = Integer.parseInt(req.getParameter("refresh"));
+            if (refresh < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid refresh state.");
+        }
+        return refresh;
     }
 }
