@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
-import entities.Order;
-import entities.Queue;
-import entities.StaffInstance;
-import entities.Table;
-import entities.serialisers.OrderSerialiser;
+import entities.*;
 import entities.serialisers.QueueSerialiser;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,22 +23,20 @@ import java.util.List;
 
 /**
  * Endpoint for the frontend to call to allow staff to confirm a users {@link Order}
- *
+ * <p>
  * Spec:
- *  GET - int: id
- *  POST - int: id
+ * GET - Staff Entity
+ * POST - int: ID (Order)
  */
 public class AcceptOrder extends HttpServlet {
 
     private ObjectMapper om = new ObjectMapper();
 
     /**
-     * Configures the {@link ObjectMapper} before being used to serialise the {@link Order} for the frontend, uses the {@link OrderSerialiser}
-     *
-     * @throws ServletException
+     * Configures the {@link ObjectMapper} before being used to serialise the Orders Queue for the frontend, uses the {@link QueueSerialiser}
      */
     @Override
-    public void init() throws ServletException {
+    public void init() {
         om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         SimpleModule module =
                 new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
@@ -47,6 +44,15 @@ public class AcceptOrder extends HttpServlet {
         om.registerModule(module);
     }
 
+    /**
+     * Gets the waiter's tables and the orders for the tables that are Unconfirmed,
+     * Converts the queue of orders as JSON and returns as string.
+     *
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @return Queue value as string.
+     * @throws ServletException
+     * @throws IOException      If an input or output exception occurs
+     */
     public String queueToJSON(StaffInstance staff, HttpServletResponse resp) throws SQLException, IOException {
         List<Table> staffTables = staff.getTables();
         if (staffTables.isEmpty()) {
@@ -69,16 +75,16 @@ public class AcceptOrder extends HttpServlet {
 
         return om.writeValueAsString(q);
     }
+
     /**
-     * Returns the {@link Order} requested by the front end, specified by its orderID
+     * On GET it sends the waiter's unconfirmed orders to frontend as JSON.
      *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
-     * @throws ServletException
-     * @throws IOException      If an input or output exception occurs
+     * @throws IOException If an input or output exception occurs
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         StaffInstance staff;
         staff = getStaff(req);
         resp.reset();
@@ -93,17 +99,18 @@ public class AcceptOrder extends HttpServlet {
     }
 
     /**
-     * Sets the specified {@link Order} to be confirmed at teh current time
+     * On Post gets the orderID from Frontend, Validates and confirms the order in DB.
      *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
-     * @throws ServletException
      * @throws IOException      If an input or output exception occurs
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int orderID;
         Order order = new Order();
+        StaffInstance staff = getStaff(req);
+        //Instantiate first to avoid nullPointer errors.
         try {
             orderID = getOrderID(req, resp);
         } catch (NumberFormatException e) {
@@ -114,11 +121,23 @@ public class AcceptOrder extends HttpServlet {
         } catch (SQLException e) {
             resp.sendError(500, "Unable to find order.");
         }
+        assert order != null;
+        Table table = TableState.getTableByID(order.getTableNum());
+        Notification nfConfirmed = new Notification(table, NotificationTypes.CONFIRMED, orderID);
+
+        //checking if the table is part of staff tables.
+        if (!staff.hasTable(table)) {
+            assert table != null;
+            resp.sendError(500, table.tableNum + " is not part of your assigned tables");
+        }
+
         if (order.getOrderConfirmed() != 0) {
             resp.sendError(500, "Order is Already Confirmed");
         }
         try {
             Database.ORDERS.confirmOrder(orderID);
+            ActiveStaff.addNotification(staff, nfConfirmed);
+            NotificationSocket.pushNotification(new SocketMessage(nfConfirmed, SocketMessageType.CREATE), staff);
         } catch (SQLException e) {
             resp.sendError(500, "Unable to confirm order in Database.");
         }

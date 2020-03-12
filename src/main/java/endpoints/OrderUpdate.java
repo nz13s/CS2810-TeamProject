@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -53,7 +52,7 @@ public class OrderUpdate extends HttpServlet {
             resp.sendError(400, "Unexpected State Value.");
             return;
         }
-
+        //todo Tony Look at this method needs to be updated.
         try {
             success = Database.ORDERS.updateOrderState(order, state);
             NotificationSocket.broadcastNotification(new SocketMessage(order, SocketMessageType.UPDATE));
@@ -64,7 +63,7 @@ public class OrderUpdate extends HttpServlet {
                     return;
                 }
                 Notification nfReady = new Notification(orderTable, NotificationTypes.READY);
-                NotificationSocket.pushNotification(new SocketMessage(notifReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
+                NotificationSocket.pushNotification(new SocketMessage(nfReady, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(orderTable.tableNum));
                 assert orderTable != null;
                 // If there is no Waiter assigned to a table and No Waiter has the table in their list,
                 // table is assigned to random Waiter.
@@ -85,7 +84,6 @@ public class OrderUpdate extends HttpServlet {
 
         if (!success) {
             resp.sendError(500, "Unable to update order.");
-            return;
         }
     }
 
