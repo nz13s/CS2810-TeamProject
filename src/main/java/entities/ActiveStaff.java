@@ -208,4 +208,13 @@ public class ActiveStaff {
         return null;
     }
 
+    public static boolean hasWaiter(Table t) {
+        for (StaffInstance staffInstance : staff) {
+            if (staffInstance.hasTable(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
