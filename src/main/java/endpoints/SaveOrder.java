@@ -67,40 +67,43 @@ public class SaveOrder extends HttpServlet {
 
         } else {
             //Notification sent to waiters that order is placed and needs to be confirmed
-            Notification n = new Notification(tableSeated, NotificationTypes.CONFIRM);
-            //Checks if table has been assigned to a waiter, if it has sends a notification to waiter
-            //If the table is not in any waiter list of tables table is put as need waiter.
-            //todo do we need the table to hold a staff instance?
-            //todo maybe need to assign a random water if waiter is not found rather than putting table into looking for staff
-
-            if (ActiveStaff.findTableWaiter(tableSeated) != null) {
-                tableSeated.setWaiter(ActiveStaff.findTableWaiter(tableSeated));
-            } else {
-                ActiveStaff.addTableToRandomStaff(tableSeated);
-
-                //Notification notif = new Notification(tableSeated, NotificationTypes.NEED);
-                // NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
-                // ActiveStaff.notifyAll(notif);
-                //  TableState.addNeedWaiter(tableSeated);
-                //ActiveStaff.notifyAll(n);
-            }
-
-            //Sends notification "order to be confirmed" to the waiter.
-            //Bug if no waiter is assigned will be a nullpointer need to decide wether to put a random waiter
-            ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
-            NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
 
             order.setTableNum(table);
-            boolean success;
+            int success;
             try {
                 success = Database.ORDERS.saveOrder(order);
+                order.setOrderID(success);
+                Notification n = new Notification(tableSeated, NotificationTypes.CONFIRM);
+                n.setExtraData(order);
+                //Checks if table has been assigned to a waiter, if it has sends a notification to waiter
+                //If the table is not in any waiter list of tables table is put as need waiter.
+                //todo do we need the table to hold a staff instance?
+                //todo maybe need to assign a random water if waiter is not found rather than putting table into looking for staff
+
+                if (ActiveStaff.findTableWaiter(tableSeated) != null) {
+                    tableSeated.setWaiter(ActiveStaff.findTableWaiter(tableSeated));
+                } else {
+                    ActiveStaff.addTableToRandomStaff(tableSeated);
+
+                    //Notification notif = new Notification(tableSeated, NotificationTypes.NEED);
+                    // NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
+                    // ActiveStaff.notifyAll(notif);
+                    //  TableState.addNeedWaiter(tableSeated);
+                    //ActiveStaff.notifyAll(n);
+                }
+
+                //Sends notification "order to be confirmed" to the waiter.
+                //Bug if no waiter is assigned will be a nullpointer need to decide wether to put a random waiter
+                ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
+                NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
+
                 req.getSession().setAttribute("order", null);
             } catch (SQLException e) {
                 resp.sendError(500, "Unable to save Order. Database error");
                 e.printStackTrace();
                 return;
             }
-            if (!success) {
+            if (success < 0) {
                 resp.sendError(500, "Unable to save Order.");
                 return;
             }

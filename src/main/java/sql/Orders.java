@@ -114,7 +114,7 @@ public class Orders {
      * @return false if failure, else true
      * @throws SQLException if an error occurred
      */
-    public boolean saveOrder(@Nonnull Order o) throws SQLException {
+    public int saveOrder(@Nonnull Order o) throws SQLException {
         ArrayList<Item> foodList = o.getFoodItems();
         orderSave.setInt(1, o.getTableNum());
         orderSave.setLong(2, o.getTimeOrdered());
@@ -125,7 +125,7 @@ public class Orders {
         orderSave.execute();
         ResultSet set = orderSave.getGeneratedKeys();
         if (!set.next()) {
-            return false;
+            return -1;
         }
         int order_id = set.getInt("order_id");
 
@@ -136,7 +136,8 @@ public class Orders {
             foodSave.addBatch();
         }
         foodSave.executeBatch();
-        return true;
+
+        return order_id;
     }
 
     /**

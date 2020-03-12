@@ -125,8 +125,9 @@ public class AcceptOrder extends HttpServlet {
         Table table = null;
         try {
             table = TableState.getTableByID(order.getTableNum());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | NullPointerException e) {
+            resp.sendError(500);
+            return;
         }
         Notification nfConfirmed = new Notification(table, NotificationTypes.CONFIRMED, orderID);
 
