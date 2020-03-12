@@ -94,6 +94,11 @@ export default class Menu extends React.Component<any, State> {
     }
   }
 
+  async callWaiter(tableID: number): Promise<void> {
+    await API.callWaiter(tableID);
+    this.addNotification("Waiter called!", "Notification");
+  }
+
   addNotification(message: string, title = "Error"): void {
     const element = (
       <Toast
@@ -141,7 +146,14 @@ export default class Menu extends React.Component<any, State> {
           <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
             <Navbar.Brand href="/#/">Oaxaca Menu</Navbar.Brand>
             <Navbar.Collapse className="d-flex justify-content-center">
-              <Navbar.Brand>Table #{tableID}</Navbar.Brand>
+              {/*<Navbar.Brand>Table #{tableID}</Navbar.Brand>*/}
+              <Navbar.Brand>
+                <Button
+                  variant="warning"
+                  onClick={() => this.callWaiter(tableID)}>
+                  Call Waiter
+                </Button>
+              </Navbar.Brand>
             </Navbar.Collapse>
           </Navbar>
           <Row>

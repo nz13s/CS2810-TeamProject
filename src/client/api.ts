@@ -51,13 +51,14 @@ export default class API {
     const menu = new Map();
 
     categories.forEach((category: any) => {
-      const { categoryName, foods } = category;
+      const { categoryName, categoryNumber, foods } = category;
 
       const items = foods.map(
         (item: any) =>
           new MenuItem(
             item.foodID,
             item.foodName,
+            categoryNumber,
             item.foodDescription,
             item.price,
             item.ingredients.map(
@@ -80,6 +81,32 @@ export default class API {
     return menu;
   }
 
+  static async newMenuItem(item: MenuItem): Promise<void> {
+    await client.makeRequest("POST", "/restricted/newmenuitem", {
+      name: item.name,
+      calories: item.calories,
+      category: item.category,
+      description: item.description,
+      price: item.price,
+      ingredients: item.ingredients.map(x => x.id).join(","),
+      image: null
+    });
+  }
+
+  static async delMenuItem(itemID: number): Promise<void> {
+    await client.makeRequest("DELETE", "/restricted/editmenu", {
+      id: itemID
+    });
+  }
+
+  static async callWaiter(tableID: number): Promise<void> {
+    await client.makeRequest("POST", "/assist", { tableID });
+  }
+
+  static async confirmOrder(orderID: number): Promise<void> {
+    await client.makeRequest("POST", "/restricted/checkorder", { id: orderID });
+  }
+
   static async fetchBasket(): Promise<BasketType> {
     const response = await client.makeRequest("GET", "/order");
     const { items } = response.data;
@@ -89,6 +116,7 @@ export default class API {
       const menuItem = new MenuItem(
         food.foodID,
         food.foodName,
+        0,
         food.foodDescription,
         food.price,
         [],
@@ -132,6 +160,7 @@ export default class API {
           const menuItem = new MenuItem(
             food.foodID,
             food.foodName,
+            0,
             food.foodDescription,
             0,
             [],
@@ -185,7 +214,9 @@ export default class API {
             ? `Table #${notification.table.tableNum}`
             : "Attention",
           notification.message,
-          new Date(0)
+          new Date(notification.time),
+          notification.type,
+          notification.extraData ? notification.extraData.orderID : null
         )
     );
   }

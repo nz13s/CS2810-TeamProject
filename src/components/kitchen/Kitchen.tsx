@@ -45,6 +45,7 @@ export default class Kitchen extends React.Component<any, State> {
           const menuItem = new MenuItem(
             food.foodID,
             food.foodName,
+            0,
             food.foodDescription,
             0,
             [],

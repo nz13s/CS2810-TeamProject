@@ -20,7 +20,7 @@ interface State {
 }
 
 export default class Waiter extends React.Component<any, State> {
-  interval: number;
+  socket: WebSocket;
 
   constructor(props: any) {
     super(props);
@@ -32,17 +32,56 @@ export default class Waiter extends React.Component<any, State> {
     API.getNotifications().then(notifications =>
       this.setState({ notifications })
     );
-    this.interval = setInterval(
-      () =>
-        API.getNotifications().then(notifications =>
-          this.setState({ notifications })
-        ),
-      1000
-    );
+
+    this.socket = API.getSocket();
+    this.socket.onmessage = e => {
+      const { messageType, content } = JSON.parse(e.data);
+      if (messageType === "UPDATE") return;
+
+      console.log(content);
+
+      const notif = new Notification(
+        content.notificationID,
+        "",
+        content.message,
+        new Date(content.time),
+        content.type,
+        null
+      );
+
+      if (messageType === "DELETE") {
+        this.setState({
+          notifications: this.state.notifications.filter(
+            x => x.id !== content.notificationID
+          )
+        });
+        return;
+      }
+
+      switch (content.type) {
+        case "READY":
+          console.log("READY");
+          break;
+        case "ASSIST":
+          console.log("ASSIST");
+          break;
+        case "CONFIRM":
+          console.log("CONFIRM PLS");
+          notif.extra = content.extraData.orderID;
+          break;
+      }
+
+      this.setState({ notifications: [...this.state.notifications, notif] });
+    };
+  }
+
+  async confirmOrder(notificationID: number, orderID: number): Promise<void> {
+    await API.confirmOrder(orderID);
+    await API.delNotification(notificationID);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    this.socket.close();
   }
 
   render() {
@@ -73,6 +112,32 @@ export default class Waiter extends React.Component<any, State> {
                             <Card.Text>{notification.content}</Card.Text>
                           </Card.Body>
                           <Card.Footer>
+                            {(() => {
+                              switch (notification.kind) {
+                                case "READY":
+                                  console.log("READY");
+                                  return;
+                                case "ASSIST":
+                                  console.log("ASSIST");
+                                  return;
+                                case "CONFIRM":
+                                  return (
+                                    <Button
+                                      className="mr-3"
+                                      variant="success"
+                                      onClick={() =>
+                                        this.confirmOrder(
+                                          notification.id,
+                                          notification.extra
+                                        )
+                                      }>
+                                      Check Order
+                                    </Button>
+                                  );
+                                default:
+                                  return;
+                              }
+                            })()}
                             <Button
                               variant="success"
                               onClick={() =>
@@ -94,8 +159,7 @@ export default class Waiter extends React.Component<any, State> {
                       <Button
                         block
                         className="waiter_button"
-                        variant="outline-danger"
-                        onClick={() => clearInterval(this.interval)}>
+                        variant="outline-danger">
                         Edit Menu
                       </Button>
                     </Link>
@@ -105,8 +169,7 @@ export default class Waiter extends React.Component<any, State> {
                       <Button
                         block
                         className="waiter_button"
-                        variant="outline-warning"
-                        onClick={() => clearInterval(this.interval)}>
+                        variant="outline-warning">
                         Table Management
                       </Button>
                     </Link>
