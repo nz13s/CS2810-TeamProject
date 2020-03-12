@@ -38,8 +38,9 @@ public class NotifyWaiter extends HttpServlet {
         Table table = null;
         try {
             table = Database.TABLES.getTableByID(getTable(req, resp));
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             resp.sendError(500, "Error getting Table from database.");
+            return;
         }
 
 
@@ -60,6 +61,7 @@ public class NotifyWaiter extends HttpServlet {
 
         } else {
             resp.sendError(500, "Null value Table.");
+            return;
         }
     }
 
@@ -72,15 +74,11 @@ public class NotifyWaiter extends HttpServlet {
      * @return The table ID
      */
 
-    private int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private int getTable(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException {
         int tableID = -1;
-        try {
-            tableID = Integer.parseInt(req.getParameter("tableID"));
-            if (tableID < 0) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException e) {
-            resp.sendError(400, "Invalid tableID.");
+        tableID = Integer.parseInt(req.getParameter("tableID"));
+        if (tableID < 0) {
+            throw new NumberFormatException();
         }
         return tableID;
     }

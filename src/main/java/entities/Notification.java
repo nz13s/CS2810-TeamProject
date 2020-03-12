@@ -61,8 +61,18 @@ public class Notification implements ISerialisable {
      *
      * @return The table
      */
+    @JsonIgnore //otherwise we end up with infinite recursion
     public Table getTable() {
         return table;
+    }
+
+    /**
+     * Get the tableID for Jackson so that it doesn't have infinite recursion
+     *
+     * @return the tableNum
+     */
+    public int getTableNum() {
+        return table.getTableNum();
     }
 
     /**
