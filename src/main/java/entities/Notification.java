@@ -37,7 +37,7 @@ public class Notification implements ISerialisable {
      */
     public Notification(Table t, NotificationTypes type, int orderID) {
         this(t, type);
-        if (type != NotificationTypes.CONFIRM)
+        if (type != NotificationTypes.CONFIRM && type != NotificationTypes.CONFIRMED)
             throw new IllegalStateException("orderID given for a non-confirming notif");
         this.orderID = orderID;
     }
