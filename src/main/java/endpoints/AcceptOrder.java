@@ -122,13 +122,17 @@ public class AcceptOrder extends HttpServlet {
             resp.sendError(500, "Unable to find order.");
         }
         assert order != null;
-        Table table = TableState.getTableByID(order.getTableNum());
+        Table table = null;
+        try {
+            table = TableState.getTableByID(order.getTableNum());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Notification nfConfirmed = new Notification(table, NotificationTypes.CONFIRMED, orderID);
 
         //checking if the table is part of staff tables.
         if (!staff.hasTable(table)) {
-            assert table != null;
-            resp.sendError(500, table.tableNum + " is not part of your assigned tables");
+            resp.sendError(500, "Table is not part of your assigned tables");
         }
 
         if (order.getOrderConfirmed() != 0) {
