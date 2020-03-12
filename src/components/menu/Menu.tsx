@@ -229,7 +229,7 @@ export default class Menu extends React.Component<any, State> {
                         key={item.id}
                         className="mb-3 mr-2 menu_item">
                         <Card.Img
-                          className="img-fluid"
+                          className="img-fluid menu_image"
                           variant="top"
                           src={item.image}
                         />

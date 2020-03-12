@@ -10,17 +10,16 @@ const MenuStyle = styled.div`
 
   .section_button {
     min-width: 13vw;
-    // max-width: 15vw;
+  }
+
+  .menu_image {
+    height: 30vh;
   }
 
   @media only screen and (max-device-width: 812px) {
     .menu_item {
       max-width: 100%;
     }
-
-    //.section_button {
-    //  max-width: 100%;
-    //}
 
     #checkout_button {
       word-break: break-word;
