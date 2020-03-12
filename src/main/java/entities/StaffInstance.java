@@ -112,7 +112,7 @@ public class StaffInstance {
     public boolean hasTable(Table newTable) {
         if (!managedTables.isEmpty()) {
             for (Table t : managedTables) {
-                if (t == newTable) {
+                if (t.tableNum == newTable.tableNum) {
                     return true;
                 }
             }
