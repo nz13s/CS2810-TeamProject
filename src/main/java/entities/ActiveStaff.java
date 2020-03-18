@@ -7,7 +7,6 @@ import websockets.SocketMessageType;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Stores a list of active {@link StaffInstance} so that they can be referenced to be notified of events
@@ -156,7 +155,6 @@ public class ActiveStaff {
                 staffInstance.addTable(table);
                 staffInstance.addNotification(nfAssign);
                 NotificationSocket.pushNotification(new SocketMessage(nfAssign, SocketMessageType.CREATE), staffInstance);
-                table.setWaiter(staffInstance);
                 table.setOccupied(true);
                 TableState.removeNeedWaiter(table);
                 return true;
@@ -177,7 +175,6 @@ public class ActiveStaff {
                 && table.getWaiter() == null) {
             staff.addTable(table);
             staff.addNotification(new Notification(table, NotificationTypes.ASSIGN));
-            table.setWaiter(staff);
             table.setOccupied(true);
             TableState.removeNeedWaiter(table);
             return true;
