@@ -26,7 +26,7 @@ public class Tables {
 
     private PreparedStatement fetchTables;
     private PreparedStatement tableById;
-
+    private PreparedStatement updateTableOccupied;
     /**
      * Constructor that holds the SQL queries that are going to be used.
      *
@@ -44,6 +44,10 @@ public class Tables {
         tableById = connection.prepareStatement(
                 "SELECT table_num, seats_available, occupied\n" +
                         "FROM restaurant_table\n" +
+                        "WHERE table_num = ?");
+        updateTableOccupied = connection.prepareStatement(
+                "UPDATE restaurant_table " +
+                        "SET occupied = ? " +
                         "WHERE table_num = ?");
     }
 
@@ -135,5 +139,13 @@ public class Tables {
         }
         return null;
     }
+
+    public boolean updateTableOccupied(Boolean occupied) throws SQLException {
+        updateTableOccupied.setBoolean(1, occupied);
+        updateTableOccupied.execute();
+        ResultSet resultSet = updateTableOccupied.getGeneratedKeys();
+        return resultSet.next();
+    }
+
 
 }
