@@ -49,7 +49,7 @@ public class TableInfo extends HttpServlet {
      * @throws IOException
      */
 
-    public String tablesToJSON(int refresh) throws SQLException, IOException {
+    public String tablesToJSON(int refresh, HttpServletResponse resp) throws SQLException, IOException {
         //TODO The initial load of tables from DB into the list.
 
         if (TableState.getTableList().isEmpty()) {
@@ -58,7 +58,8 @@ public class TableInfo extends HttpServlet {
         if (refresh == 1) {
             Database.TABLES.fetchTables();
         }
-        return mapper.writeValueAsString(TableState.getTableList());
+
+        return mapper.writeValueAsString(TableState.getTableUnOccupied());
     }
 
     /**
@@ -75,7 +76,7 @@ public class TableInfo extends HttpServlet {
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
         try {
-            pw.println(this.tablesToJSON(refresh));
+            pw.println(this.tablesToJSON(refresh, resp));
         } catch (SQLException e) {
             pw.println(e.getMessage());
         }
