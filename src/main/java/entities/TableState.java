@@ -4,6 +4,7 @@ import databaseInit.Database;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Class that stores every table's state.
@@ -15,6 +16,8 @@ public class TableState {
 
     private static ArrayList<Table> tables = new ArrayList<>();
     private static ArrayList<Table> tableNeedWaiter = new ArrayList<>();
+    private static ArrayList<Table> tableOccupied = new ArrayList<>();
+    private static ArrayList<Table> tableUnOccupied = new ArrayList<>();
 
     /**
      * Returns the number of tables in the restaurant.
@@ -30,7 +33,7 @@ public class TableState {
      *
      * @return list of tables.
      */
-    public static ArrayList<Table> getTableList() {
+    public static ArrayList<Table> getTableList() throws SQLException {
         return tables;
     }
 
@@ -44,18 +47,22 @@ public class TableState {
     }
 
     /**
-     * Gets the list of all tables that are occupied.
+     * Gets the list of all tables that are unoccupied.
+     * Using Sets as sets don't allow duplicates.
      *
      * @return occupied the List of tables occupied.
      */
-    public static ArrayList<Table> getTableOccupied() {
-        ArrayList<Table> occupied = new ArrayList<>();
-        for (Table t : tables) {
-            if (t.isOccupied()) {
-                occupied.add(t);
-            }
-        }
-        return occupied;
+    public static ArrayList<Table> getTableUnOccupied() throws SQLException {
+        HashSet<Table> similar = new HashSet<>(getTableList());
+        HashSet<Table> different = new HashSet<>();
+        different.addAll(getTableList());
+        different.addAll(getTableOccupied());
+
+        similar.retainAll(getTableOccupied());
+        different.removeAll(similar);
+
+
+        return new ArrayList<>(different);
     }
 
     /**
@@ -92,6 +99,32 @@ public class TableState {
             tableNeedWaiter.add(t);
         }
     }
+
+    /**
+     * Adds a table to the NeedWaiter list.
+     *
+     * @param t The table
+     */
+    public static void addOccupied(Table t) {
+        if (!tableOccupied.contains(t)) {
+            tableOccupied.add(t);
+        }
+    }
+
+    public static ArrayList<Table> getTableOccupied() {
+        return tableOccupied;
+    }
+
+    public static void removeOccupied(Table t) {
+        Table remove = null;
+        for (Table table : tableNeedWaiter) {
+            if (table.equals(t)) {
+                remove = table;
+            }
+        }
+        tableNeedWaiter.remove(remove);
+    }
+
 
     /**
      * Removes a table from the NeedWaiter list.
