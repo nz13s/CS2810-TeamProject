@@ -62,6 +62,14 @@ public class TableManagement extends HttpServlet {
         pw.flush();
     }
 
+    /**
+     * Method that gets a StaffInstance, a table and removes this table from
+     * StaffInstance table List and from TableState needWaiter list.
+     *
+     * @param req  server request
+     * @param resp server response
+     * @throws IOException exception
+     */
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Table table = null;
         StaffInstance staff;
