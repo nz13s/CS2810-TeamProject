@@ -1,10 +1,12 @@
 package entities;
 
+import databaseInit.Database;
 import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
 
 import javax.annotation.Nullable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,7 +148,7 @@ public class ActiveStaff {
      * @param table The table that needs a waiter
      * @return true if successful
      */
-    public static boolean addTableToRandomStaff(Table table) {
+    public static boolean addTableToRandomStaff(Table table) throws SQLException {
         for (StaffInstance staffInstance : staff) {
             if (staffInstance.getTables().size() < 3
                     && !staffInstance.hasTable(table)
@@ -156,6 +158,7 @@ public class ActiveStaff {
                 staffInstance.addNotification(nfAssign);
                 NotificationSocket.pushNotification(new SocketMessage(nfAssign, SocketMessageType.CREATE), staffInstance);
                 table.setOccupied(true);
+                Database.TABLES.updateTableOccupied(true, table.tableNum);
                 TableState.removeNeedWaiter(table);
                 return true;
             }
@@ -170,12 +173,13 @@ public class ActiveStaff {
      * @param table The table that needs a waiter
      * @return true if successful
      */
-    public static boolean addTableToStaff(Table table, StaffInstance staff) {
+    public static boolean addTableToStaff(Table table, StaffInstance staff) throws SQLException {
         if (!staff.hasTable(table)
                 && table.getWaiter() == null) {
             staff.addTable(table);
             staff.addNotification(new Notification(table, NotificationTypes.ASSIGN));
             table.setOccupied(true);
+            Database.TABLES.updateTableOccupied(true, table.tableNum);
             TableState.removeNeedWaiter(table);
             return true;
         }

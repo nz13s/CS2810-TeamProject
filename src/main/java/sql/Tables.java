@@ -140,8 +140,9 @@ public class Tables {
         return null;
     }
 
-    public boolean updateTableOccupied(Boolean occupied) throws SQLException {
+    public boolean updateTableOccupied(Boolean occupied, int tableNum) throws SQLException {
         updateTableOccupied.setBoolean(1, occupied);
+        updateTableOccupied.setInt(2, tableNum);
         updateTableOccupied.execute();
         ResultSet resultSet = updateTableOccupied.getGeneratedKeys();
         return resultSet.next();
