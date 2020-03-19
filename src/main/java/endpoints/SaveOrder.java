@@ -81,10 +81,12 @@ public class SaveOrder extends HttpServlet {
                 //todo maybe need to assign a random water if waiter is not found rather than putting table into looking for staff
 
                 if (ActiveStaff.findTableWaiter(tableSeated) != null) {
-                    tableSeated.setWaiter(ActiveStaff.findTableWaiter(tableSeated));
-                } else {
                     ActiveStaff.addTableToRandomStaff(tableSeated);
-
+                } else {
+                    ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
+                    NotificationSocket.pushNotification(
+                            new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
+                    //     tableSeated.setWaiter(ActiveStaff.findTableWaiter(tableSeated));
                     //Notification notif = new Notification(tableSeated, NotificationTypes.NEED);
                     // NotificationSocket.broadcastNotification(new SocketMessage(notif, SocketMessageType.CREATE));
                     // ActiveStaff.notifyAll(notif);
@@ -94,8 +96,8 @@ public class SaveOrder extends HttpServlet {
 
                 //Sends notification "order to be confirmed" to the waiter.
                 //Bug if no waiter is assigned will be a nullpointer need to decide wether to put a random waiter
-                ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
-                NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
+                //   ActiveStaff.addNotification(ActiveStaff.findTableWaiter(tableSeated), n);
+                //   NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
 
                 req.getSession().setAttribute("order", null);
             } catch (SQLException e) {
