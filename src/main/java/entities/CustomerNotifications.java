@@ -62,4 +62,18 @@ public class CustomerNotifications {
         return null;
     }
 
+    /**
+     * Removes all notifications based on a given tableNum.
+     *
+     * @param tableNum given tableNum to remove all notifications for.
+     */
+
+    public void removeNotificationsByTableNum(int tableNum) {
+        for (Notification notification : notifications) {
+            if (notification.getTable().getTableNum() == tableNum) {
+                notifications.remove(notification);
+            }
+        }
+    }
+
 }
