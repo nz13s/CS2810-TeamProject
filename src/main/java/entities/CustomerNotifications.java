@@ -1,7 +1,5 @@
 package entities;
 
-import entities.Notification;
-
 import java.util.ArrayList;
 
 /**
@@ -46,6 +44,22 @@ public class CustomerNotifications {
 
     public void removeNotificationByID(int id) {
         notifications.removeIf(notification -> notification.getNotificationID() == id);
+    }
+
+    /**
+     * Returns a notification, based on a given notificationID.
+     *
+     * @param ID ID of the notification to be returned.
+     * @return matching Notification object based on the given ID.
+     */
+
+    public Notification getNotificationByID(int ID) {
+        for (Notification notification : notifications) {
+            if (notification.getNotificationID() == ID) {
+                return notification;
+            }
+        }
+        return null;
     }
 
 }
