@@ -39,10 +39,9 @@ public class TableToWaiter extends HttpServlet {
      * Method that converts the TableState into JSON.
      *
      * @return JSON String representing the state of all tables.
-     * @throws SQLException exception
-     * @throws IOException  exception
+     * @throws IOException exception
      */
-    public String tablesToJSON() throws SQLException, IOException {
+    public String tablesToJSON() throws IOException {
         //TODO The initial load of tables from DB into the list.
         return mapper.writeValueAsString(TableState.getNeedWaiter());
     }
@@ -60,7 +59,7 @@ public class TableToWaiter extends HttpServlet {
         PrintWriter pw = resp.getWriter();
         try {
             pw.println(this.tablesToJSON());
-        } catch (SQLException e) {
+        } catch (IOException e) {
             pw.println(e.getMessage());
         }
         pw.flush();

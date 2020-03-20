@@ -12,7 +12,7 @@ public class StaffInstance {
     private List<Notification> allMessages;//TODO Discuss making a notification class
     private List<Notification> activeMessages;
     private int staffID;
-    private List<Table> managedTables;//TODO Remove if other method is decided better
+    private static List<Table> managedTables;//TODO Remove if other method is decided better
 
     /**
      * Creates a new staff instance for a session used by a staff member
@@ -120,7 +120,7 @@ public class StaffInstance {
         return false;
     }
 
-    public List<Table> getTables() {
+    public static List<Table> getTables() {
         return managedTables;
     }
 
