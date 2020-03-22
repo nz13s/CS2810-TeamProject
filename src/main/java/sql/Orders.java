@@ -31,6 +31,7 @@ public class Orders {
     private PreparedStatement orderConfirm;
     private PreparedStatement ordersGetUnconfirmed;
     private PreparedStatement setOrderCancelled;
+    private PreparedStatement getAllCancelledOrders;
 
 
     /**
@@ -85,6 +86,12 @@ public class Orders {
                 "UPDATE orders " +
                         "SET order_cancelled = true " +
                         "WHERE order_id = ?");
+        getAllCancelledOrders = connection.prepareStatement(
+                    "SELECT food.food_id, food.food_name, food.price, food.available, orders.order_id, orders.table_num " +
+                            "FROM food, orders " +
+                            "JOIN food_orders fo on orders.order_id = fo.order_id " +
+                            "WHERE orders.order_cancelled = true " +
+                            "ORDER BY orders.order_id");
     }
 
     /**
