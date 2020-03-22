@@ -169,7 +169,13 @@ public class Orders {
         setOrderCancelled.executeQuery();
     }
 
-
+    /**
+     * Selects cancelled orders from database and attaches
+     * necessary details to return.
+     *
+     * @return Array of Orders
+     * @throws SQLException if an error occurred
+     */
     public ArrayList<Order> getCancelledOrders() throws SQLException {
         HashMap<Integer, Order> cancelledOrders = new HashMap<>();
         ResultSet set = getAllCancelledOrders.executeQuery();
