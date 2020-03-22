@@ -15,13 +15,15 @@ public class Order implements IFakeable, ISerialisable {
     protected long orderPreparing = 0;
     protected long orderReady = 0;
     protected long orderServed = 0;
+    protected boolean orderCancelled;
     protected int tableNum;
     private ArrayList<Item> foodItems; //we should make this a Set<Item> as Items are (or, should be) unique
 
     private transient boolean isFake = true;
 
     public Order(int orderID, long timeOrdered, long orderConfirmed, long orderPreparing, long orderReady,
-                 long orderServed, int tableNum, @Nonnull ArrayList<Item> foodItems) {
+                 long orderServed, int tableNum,
+                 @Nonnull ArrayList<Item> foodItems) {
         isFake = false; //as we have used the orderID to create this object, it is not fake
         this.orderID = orderID;
         this.timeOrdered = timeOrdered;
@@ -29,6 +31,7 @@ public class Order implements IFakeable, ISerialisable {
         this.orderPreparing = orderPreparing;
         this.orderReady = orderReady;
         this.orderServed = orderServed;
+        this.orderCancelled = false;
         this.tableNum = tableNum;
         this.foodItems = foodItems;
     }
@@ -37,6 +40,7 @@ public class Order implements IFakeable, ISerialisable {
                  long orderServed, int tableNum) {
         new Order(orderID, timeOrdered, orderConfirmed, orderPreparing, orderReady, orderServed, tableNum, new ArrayList<>());
         isFake = false;
+        orderCancelled = false;
     }
 
     public Order(long timeOrdered, int tableNum, ArrayList<Item> foodItems) {
@@ -75,7 +79,7 @@ public class Order implements IFakeable, ISerialisable {
      * @param ID     The ID of the Food to add, as stored in the database
      * @param amount The amount of the Food to add to the Order
      */
-    public void addFoodItem(int ID, int amount) throws SQLException{
+    public void addFoodItem(int ID, int amount) throws SQLException {
         try {
             Food food = Database.FOODS.getFoodByID(ID, false);
             if (alreadyInOrder(food)) {
@@ -173,16 +177,16 @@ public class Order implements IFakeable, ISerialisable {
     }
 
     public long getOrderPreparing() {
-    return orderPreparing;
-  }
+        return orderPreparing;
+    }
 
-  public void setOrderPreparing(long orderPreparing) {
-    this.orderPreparing = orderPreparing;
-  }
+    public void setOrderPreparing(long orderPreparing) {
+        this.orderPreparing = orderPreparing;
+    }
 
-  public long getOrderReady() {
-    return orderReady;
-  }
+    public long getOrderReady() {
+        return orderReady;
+    }
 
     public void setOrderReady(long orderReady) {
         this.orderReady = orderReady;

@@ -30,6 +30,7 @@ public class Orders {
     private PreparedStatement updateOrderServedByID;
     private PreparedStatement orderConfirm;
     private PreparedStatement ordersGetUnconfirmed;
+    private PreparedStatement setOrderCancelled;
 
 
     /**
@@ -79,6 +80,10 @@ public class Orders {
         updateOrderServedByID = connection.prepareStatement(
                 "UPDATE orders " +
                         "SET order_served = ? " +
+                        "WHERE order_id = ?");
+        setOrderCancelled = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_cancelled = true " +
                         "WHERE order_id = ?");
     }
 
@@ -139,6 +144,18 @@ public class Orders {
 
         return order_id;
     }
+
+
+    public void cancelOrder(int orderID) throws SQLException {
+        setOrderCancelled.setInt(1, orderID);
+        setOrderCancelled.executeQuery();
+    }
+
+    //TODO
+    public void getCancelledOrders() throws SQLException {
+
+    }
+
 
     /**
      * Selects confirmed orders from database, populates each order

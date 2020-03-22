@@ -6,7 +6,6 @@ import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,13 +23,14 @@ public class SaveOrder extends HttpServlet {
     /**
      * Saves the sessions {@link Order} to the database
      *
-     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
-     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
-     * @throws ServletException
-     * @throws IOException      If an input or output exception occurs
+     * @param req  The {@link HttpServletRequest} object that contains the request
+     *             the client made of the servlet
+     * @param resp The {@link HttpServletResponse} object that contains the response
+     *             the servlet returns to the client
+     * @throws IOException If an input or output exception occurs
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Order order = getOrder(req);
         if (order == null) {
             resp.sendError(500, "No Order exists for this session.");
@@ -63,8 +63,6 @@ public class SaveOrder extends HttpServlet {
 
         if (tableSeated == null) {
             resp.sendError(400, "Invalid Table Num");
-            return;
-
         } else {
             //Notification sent to waiters that order is placed and needs to be confirmed
 
@@ -105,7 +103,6 @@ public class SaveOrder extends HttpServlet {
             }
             if (success < 0) {
                 resp.sendError(500, "Unable to save Order.");
-                return;
             }
         }
     }

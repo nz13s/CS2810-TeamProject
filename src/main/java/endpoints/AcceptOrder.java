@@ -11,7 +11,6 @@ import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,10 +49,9 @@ public class AcceptOrder extends HttpServlet {
      *
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
      * @return Queue value as string.
-     * @throws ServletException
-     * @throws IOException      If an input or output exception occurs
+     * @throws IOException If an input or output exception occurs
      */
-    public String queueToJSON(StaffInstance staff, HttpServletResponse resp) throws SQLException, IOException {
+    public String queueToJSON(StaffInstance staff, HttpServletResponse resp) throws IOException {
         List<Table> staffTables = staff.getTables();
         if (staffTables.isEmpty()) {
             resp.sendError(500, "Staff Does not have any tables");
@@ -90,11 +88,7 @@ public class AcceptOrder extends HttpServlet {
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
-        try {
-            pw.println(queueToJSON(staff, resp));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        pw.println(queueToJSON(staff, resp));
         pw.flush();
     }
 
@@ -103,7 +97,7 @@ public class AcceptOrder extends HttpServlet {
      *
      * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
-     * @throws IOException      If an input or output exception occurs
+     * @throws IOException If an input or output exception occurs
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
