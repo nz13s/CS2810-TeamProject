@@ -4,14 +4,23 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import databaseInit.Database;
 import entities.Order;
 import entities.serialisers.OrderSerialiser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /*
-*
+* Endpoint for the frontend to call to cancel orders {@link Order}
+ * Spec:
+ *  GET - No params
 * */
 public class CancelOrder extends HttpServlet {
     private ObjectMapper om = new ObjectMapper();
@@ -30,5 +39,28 @@ public class CancelOrder extends HttpServlet {
         om.registerModule(module);
     }
 
+    /**
+     * GETs all cancelled orders.
+     *
+     * @param req servlet request.
+     * @param resp servlet response.
+     * @throws ServletException
+     * @throws IOException if input/output error occurs.
+     */
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ArrayList<Order> list = null;
+        try {
+            list = Database.ORDERS.getCancelledOrders();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        resp.reset();
+        resp.setContentType("application/json");
+        PrintWriter pw = resp.getWriter();
+        pw.println(om.writeValueAsString(list));
+        pw.flush();
+    }
 }
+
