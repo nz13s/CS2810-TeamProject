@@ -87,16 +87,12 @@ public class Orders {
                         "SET order_cancelled = true " +
                         "WHERE order_id = ?");
         getAllCancelledOrders = connection.prepareStatement(
-                "SELECT food.food_id, " +
-                        "food.food_name, " +
-                        "food.price, " +
-                        "food.available, " +
-                        "orders.order_id, " +
-                        "orders.table_num " +
-                        "FROM food, orders " +
-                        "JOIN food_orders fo on orders.order_id = fo.order_id " +
-                        "WHERE orders.order_cancelled = true " +
-                        "ORDER BY orders.order_id");
+                "SELECT food.food_id, food.food_name,food.price,food.available,orders.order_id,orders.table_num,food_orders.quantity " +
+                "FROM food, orders, food_orders " +
+                "WHERE orders.order_cancelled = true AND " +
+                "food_orders.order_id = orders.order_id AND " +
+                "food_orders.food_id = food.food_id " +
+                "ORDER BY orders.order_id");
     }
 
     /**
@@ -183,26 +179,32 @@ public class Orders {
         while (set.next()) {
             Food food = new Food(set.getInt("food_id"),
                     set.getString("food_name"),
-                    "null",
+                    null,
                     0,
                     set.getBigDecimal("price"),
                     set.getBoolean("available"),
                     0,
                     null,
                     null);
+
             int orderID = set.getInt("order_id");
-            int tableNum = set.getInt("table_num");
-            ArrayList<Item> items = new ArrayList<>();
-            items.add(new Item(food, set.getInt("quantity")));
-            cancelledOrders.put(orderID, new IndexedOrder(
-                    set.getInt("order_id"),
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    set.getInt("table_num"),
-                    items));
+            int quantity = set.getInt("quantity");
+
+            if (cancelledOrders.containsKey(orderID)) {
+                cancelledOrders.get(orderID).addFoodItem(new Item(food, quantity));
+            } else {
+                ArrayList<Item> items = new ArrayList<>();
+                items.add(new Item(food, quantity));
+                cancelledOrders.put(orderID, new IndexedOrder(
+                        orderID,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        set.getInt("table_num"),
+                        items));
+            }
         }
         return new ArrayList<>(cancelledOrders.values());
     }
