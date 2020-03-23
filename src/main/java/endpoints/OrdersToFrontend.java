@@ -54,7 +54,6 @@ public class OrdersToFrontend extends HttpServlet {
      * @throws IOException  exception
      * @throws SQLException exception
      */
-
     public static String queueToJSON() throws SQLException, IOException {
 
         Queue q = new Queue(getOrderQueue());

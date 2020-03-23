@@ -55,7 +55,7 @@ public class CancelOrder extends HttpServlet {
         try {
             list = Database.ORDERS.getCancelledOrders();
         } catch (SQLException e) {
-            e.printStackTrace();
+            resp.sendError(500, "Unable to get orders.");
         }
         resp.reset();
         resp.setContentType("application/json");
