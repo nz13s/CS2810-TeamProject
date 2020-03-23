@@ -2,7 +2,7 @@ package entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import databaseInit.Database;
-import endpoints.AddToOrder;
+import endpoints.restricted.AddToOrder;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;

@@ -2,7 +2,10 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.*;
+import entities.Notification;
+import entities.NotificationTypes;
+import entities.Table;
+import entities.TableState;
 import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
@@ -14,15 +17,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 
-
-
 /**
  * Class for customer to call for assistance from waiter, adds notification to waiter.
  *
  * @author Tony
  */
 
-public class NotifyWaiter extends HttpServlet {
+public class AssistTable extends HttpServlet {
     /**
      * Validates that there is Active staff and that there is a table for this TableID.
      * Creates a new notification type ASSIST to a random Active Staff member from the ActiveStaff List.
