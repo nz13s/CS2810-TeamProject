@@ -209,4 +209,13 @@
         <url-pattern>/restricted/tableinfo</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CancelOrder</servlet-name>
+        <servlet-class>endpoints.CancelOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CancelOrder</servlet-name>
+        <url-pattern>/cancelorder</url-pattern>
+    </servlet-mapping>
+
 </web-app>
