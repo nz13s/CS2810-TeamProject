@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
 import entities.Order;
+import entities.serialisers.CancelledOrdersSerialiser;
 import entities.serialisers.OrderSerialiser;
 
 import javax.servlet.ServletException;
@@ -34,8 +35,8 @@ public class CancelOrder extends HttpServlet {
     public void init() throws ServletException {
         om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         SimpleModule module =
-                new SimpleModule("OrderSerialiser", new Version(1, 0, 0, null, null, null));
-        module.addSerializer(Order.class, new OrderSerialiser());
+                new SimpleModule("CancelledOrdersSerialiser", new Version(1, 0, 0, null, null, null));
+        module.addSerializer(Order.class, new CancelledOrdersSerialiser());
         om.registerModule(module);
     }
 
