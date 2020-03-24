@@ -51,8 +51,8 @@ public class OrdersToFrontend extends HttpServlet {
      * Method that converts the objects in Queue into JSON.
      *
      * @return String that represents the Queue in JSON.
-     * @throws IOException  exception
-     * @throws SQLException exception
+     * @throws IOException
+     * @throws SQLException if there is an error with ordersGet statement.
      */
     public static String queueToJSON() throws SQLException, IOException {
 
