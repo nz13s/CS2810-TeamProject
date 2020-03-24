@@ -1,7 +1,6 @@
 package endpoints.restricted;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.ActiveStaff;
 import entities.Table;
 import entities.TableState;
 
@@ -30,7 +29,12 @@ public class AllTables extends HttpServlet {
             resp.sendError(500, "SQL exception");
             return;
         }
-        List<Table> tables = TableState.getTableList();
+        List<Table> tables = null;
+        try {
+            tables = TableState.getTableList();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
         pw.println(om.writeValueAsString(tables));
