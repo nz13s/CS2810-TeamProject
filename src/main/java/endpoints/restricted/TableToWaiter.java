@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import endpoints.GlobalMethods;
 import entities.*;
+import entities.CustomerNotifications;
 import entities.serialisers.TablesInfoSerialiser;
 import websockets.NotificationSocket;
 import websockets.SocketMessage;
@@ -23,6 +24,7 @@ import java.sql.SQLException;
  */
 public class TableToWaiter extends HttpServlet {
     private ObjectMapper mapper;
+    private CustomerNotifications cNotifications;
 
     /**
      * Instantiates a new Table to waiter.
@@ -33,6 +35,8 @@ public class TableToWaiter extends HttpServlet {
         SimpleModule module = new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
         module.addSerializer(TableState.class, new TablesInfoSerialiser());
         mapper.registerModule(module);
+
+        cNotifications = new CustomerNotifications();
     }
 
     /**
@@ -96,6 +100,10 @@ public class TableToWaiter extends HttpServlet {
             ActiveStaff.addNotification(staff, notif);
             NotificationSocket.pushNotification(new SocketMessage(notif, SocketMessageType.CREATE), staff);
             TableState.removeNeedWaiter(table);
+
+            //after the waiter has been assigned to a table, all previous notifications for the table need to be removed.
+            cNotifications.removeNotificationsByTableNum(table.getTableNum());
+
         }
         if (!success) {
             resp.sendError(500, "Failed to waiters notification");
