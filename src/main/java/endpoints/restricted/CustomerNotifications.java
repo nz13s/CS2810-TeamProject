@@ -46,7 +46,6 @@ public class CustomerNotifications extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ArrayList<Notification> list = getNotificationsByTableNum(req,resp);
-        resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
         pw.println(mapper.writeValueAsString(list));
