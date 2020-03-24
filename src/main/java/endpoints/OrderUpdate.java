@@ -86,6 +86,10 @@ public class OrderUpdate extends HttpServlet {
                     }
                     //Sends notification "order is ready" to the waiter.
                     ActiveStaff.addNotification(orderTable.getWaiter(), nfReady);
+
+                    // add notification to the customer's order
+                    cNotifications.addNotification(nfReady);
+
                 } else if (state == 0) {
                     Table orderTable = Database.TABLES.getTableByID(order.getTableNum());
                     Notification nfConfirmed = new Notification(orderTable, NotificationTypes.CONFIRMED);
