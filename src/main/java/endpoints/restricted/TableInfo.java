@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import databaseInit.Database;
 import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
@@ -20,9 +19,9 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
- * Class that converts all tables from the database to JSON, and allows it to be acquired by the frontend.
+ * Class that converts Occupied/UnOccupied tables to JSON, and allows it to be acquired by the frontend.
  *
- * @author Jatin
+ * @author Tony, Jatin
  */
 
 public class TableInfo extends HttpServlet {
@@ -42,28 +41,26 @@ public class TableInfo extends HttpServlet {
     }
 
     /**
-     * Method that converts the TableState into JSON.
+     * Method that depending on which data is requested
+     * converts the tables list to JSON.
      *
-     * @return JSON String representing the state of all tables.
+     * @param occupied 1 - Occupied tables , Else Unoccupied.
+     * @param resp     The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @return JSON String representing the Occupied/Unoccupied.
      * @throws SQLException
      * @throws IOException
      */
 
-    public String tablesToJSON(int refresh, HttpServletResponse resp) throws SQLException, IOException {
-        //TODO The initial load of tables from DB into the list.
-
-        if (TableState.getTableList().isEmpty()) {
-            Database.TABLES.fetchTables();
+    public String tablesToJSON(int occupied, HttpServletResponse resp) throws SQLException, IOException {
+        if (occupied == 1) {
+            return mapper.writeValueAsString(TableState.getTableOccupied());
+        } else {
+            return mapper.writeValueAsString(TableState.getTableUnOccupied());
         }
-        if (refresh == 1) {
-            Database.TABLES.fetchTables();
-        }
-
-        return mapper.writeValueAsString(TableState.getTableUnOccupied());
     }
 
     /**
-     * Method that GETs the JSON object.
+     * Requested table list sent to frontend..
      *
      * @param req  server request.
      * @param resp server response.
@@ -71,12 +68,12 @@ public class TableInfo extends HttpServlet {
      */
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int refresh = getRefresh(req, resp);
+        int occupied = getOccupied(req, resp);
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
         try {
-            pw.println(this.tablesToJSON(refresh, resp));
+            pw.println(this.tablesToJSON(occupied, resp));
         } catch (SQLException e) {
             pw.println(e.getMessage());
         }
@@ -137,16 +134,23 @@ public class TableInfo extends HttpServlet {
         return table;
     }
 
-    private int getRefresh(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int refresh = -1;
+    /**
+     * Gets Occupied as Parameter, parse to Integer and send an error for any exceptions.
+     *
+     * @param req  The {@link HttpServletRequest} object that contains the request the client made of the servlet
+     * @param resp The {@link HttpServletResponse} object that contains the response the servlet returns to the client
+     * @throws IOException If an input or output exception occurs
+     */
+    private int getOccupied(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int occupied = -1;
         try {
-            refresh = Integer.parseInt(req.getParameter("refresh"));
-            if (refresh < 0) {
+            occupied = Integer.parseInt(req.getParameter("occupied"));
+            if (occupied < 0) {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            resp.sendError(400, "Invalid refresh state.");
+            resp.sendError(400, "Invalid occupied state.");
         }
-        return refresh;
+        return occupied;
     }
 }
