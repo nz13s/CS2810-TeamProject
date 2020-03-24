@@ -148,6 +148,7 @@ public class ActiveStaff {
      * @param table The table that needs a waiter
      * @return true if successful
      */
+    //todo Replace this method by a call to addTableToStaff for the Random staff.
     public static boolean addTableToRandomStaff(Table table) throws SQLException {
         for (StaffInstance staffInstance : staff) {
             if (staffInstance.getTables().size() < 3
@@ -177,10 +178,35 @@ public class ActiveStaff {
         if (!staff.hasTable(table)
                 && table.getWaiter() == null) {
             staff.addTable(table);
-            staff.addNotification(new Notification(table, NotificationTypes.ASSIGN));
+            Notification nfAssign = new Notification(table, NotificationTypes.ASSIGN);
+            staff.addNotification(nfAssign);
+            NotificationSocket.pushNotification(new SocketMessage(nfAssign, SocketMessageType.CREATE), staff);
+
             table.setOccupied(true);
             Database.TABLES.updateTableOccupied(true, table.tableNum);
             TableState.removeNeedWaiter(table);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method removes the table to a Specified staff from the currently Active Staff,
+     * Sets table to not occupied and removes from Occupied List.
+     *
+     * @param table The table that needs a waiter
+     * @return true if successful
+     */
+    public static boolean removeTableFromStaff(Table table, StaffInstance staff) throws SQLException {
+        if (staff.hasTable(table)
+                && table.getWaiter() == null) {
+            staff.removeTable(table);
+            Notification nfRemove = new Notification(table, NotificationTypes.REMOVE);
+            staff.addNotification(nfRemove);
+            NotificationSocket.pushNotification(new SocketMessage(nfRemove, SocketMessageType.CREATE), staff);
+            table.setOccupied(false);
+            Database.TABLES.updateTableOccupied(false, table.tableNum);
+            TableState.removeOccupied(table);
             return true;
         }
         return false;
