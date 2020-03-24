@@ -17,16 +17,6 @@ public class TableState {
     private static ArrayList<Table> tables = new ArrayList<>();
     private static ArrayList<Table> tableNeedWaiter = new ArrayList<>();
     private static ArrayList<Table> tableOccupied = new ArrayList<>();
-    private static ArrayList<Table> tableUnOccupied = new ArrayList<>();
-
-    /**
-     * Returns the number of tables in the restaurant.
-     *
-     * @return number of tables in the restaurant.
-     */
-    public static int size() {
-        return tables.size();
-    }
 
     /**
      * Returns a list of tables.
@@ -34,6 +24,9 @@ public class TableState {
      * @return list of tables.
      */
     public static ArrayList<Table> getTableList() throws SQLException {
+        if (tables.isEmpty()) {
+            Database.TABLES.fetchTables();
+        }
         return tables;
     }
 
@@ -48,9 +41,10 @@ public class TableState {
 
     /**
      * Gets the list of all tables that are unoccupied.
-     * Using Sets as sets don't allow duplicates.
+     * Using the tables and the occupied tables,
+     * creates a set of the difference.
      *
-     * @return occupied the List of tables occupied.
+     * @return occupied the List of tables unoccupied.
      */
     public static ArrayList<Table> getTableUnOccupied() throws SQLException {
         HashSet<Table> similar = new HashSet<>(getTableList());
@@ -61,23 +55,55 @@ public class TableState {
         similar.retainAll(getTableOccupied());
         different.removeAll(similar);
 
-
         return new ArrayList<>(different);
     }
 
     /**
-     * Gets the list of all tables that are occupied.
+     * Gets list of occupied tables.
+     * IF the server has been restarted it looks through,
+     * all the tables and re-populates the occupied list.
      *
-     * @return freeTables the List of tables that are free.
+     * @return occupied the List of tables occupied.
      */
-    public static ArrayList<Table> getTableFree() {
-        ArrayList<Table> freeTables = new ArrayList<>();
-        for (Table t : tables) {
-            if (!t.isOccupied()) {
-                freeTables.add(t);
+    public static ArrayList<Table> getTableOccupied() throws SQLException {
+        if (tableOccupied.isEmpty()) {
+            for (Table t : getTableList()) {
+                boolean hasT = ActiveStaff.hasWaiter(t);
+                if (t.isOccupied() && hasT) {
+                    addOccupied(t);
+                } else if (t.isOccupied() && !hasT) {
+                    addOccupied(t);
+                    addNeedWaiter(t);
+                }
             }
         }
-        return freeTables;
+        return tableOccupied;
+    }
+
+    /**
+     * Adds a table to the NeedWaiter list.
+     *
+     * @param t The table
+     */
+    public static void addOccupied(Table t) {
+        if (!tableOccupied.contains(t)) {
+            tableOccupied.add(t);
+        }
+    }
+
+    /**
+     * Removes a table from the Occupied list.
+     *
+     * @param t The table
+     */
+    public static void removeOccupied(Table t) {
+        Table remove = null;
+        for (Table table : tableOccupied) {
+            if (table.equals(t)) {
+                remove = table;
+            }
+        }
+        tableOccupied.remove(remove);
     }
 
     /**
@@ -99,32 +125,6 @@ public class TableState {
             tableNeedWaiter.add(t);
         }
     }
-
-    /**
-     * Adds a table to the NeedWaiter list.
-     *
-     * @param t The table
-     */
-    public static void addOccupied(Table t) {
-        if (!tableOccupied.contains(t)) {
-            tableOccupied.add(t);
-        }
-    }
-
-    public static ArrayList<Table> getTableOccupied() {
-        return tableOccupied;
-    }
-
-    public static void removeOccupied(Table t) {
-        Table remove = null;
-        for (Table table : tableNeedWaiter) {
-            if (table.equals(t)) {
-                remove = table;
-            }
-        }
-        tableNeedWaiter.remove(remove);
-    }
-
 
     /**
      * Removes a table from the NeedWaiter list.
@@ -164,8 +164,8 @@ public class TableState {
      * @param ID The table ID
      */
     public static Table getTableByID(int ID) throws SQLException {
-        updateTables();
-        for (Table table : tables) {
+        // updateTables();
+        for (Table table : getTableList()) {
             if (table.getTableNum() == ID) {
                 return table;
             }
@@ -179,5 +179,28 @@ public class TableState {
         }
     }
 
+    /**
+     * Gets the list of all tables that are occupied.
+     *
+     * @return freeTables the List of tables that are free.
+     */
+    public static ArrayList<Table> getTableFree() {
+        ArrayList<Table> freeTables = new ArrayList<>();
+        for (Table t : tables) {
+            if (!t.isOccupied()) {
+                freeTables.add(t);
+            }
+        }
+        return freeTables;
+    }
+
+    /**
+     * Returns the number of tables in the restaurant.
+     *
+     * @return number of tables in the restaurant.
+     */
+    public static int size() {
+        return tables.size();
+    }
 
 }
