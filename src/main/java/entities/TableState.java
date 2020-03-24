@@ -9,7 +9,7 @@ import java.util.HashSet;
 /**
  * Class that stores every table's state.
  *
- * @author Jatin
+ * @author Tony, Jatin
  */
 
 public class TableState {
@@ -61,7 +61,8 @@ public class TableState {
     /**
      * Gets list of occupied tables.
      * IF the server has been restarted it looks through,
-     * all the tables and re-populates the occupied list.
+     * all the tables and re-populates the occupied list.E
+     * Every occupied table is added to need waiter list.
      *
      * @return occupied the List of tables occupied.
      */
