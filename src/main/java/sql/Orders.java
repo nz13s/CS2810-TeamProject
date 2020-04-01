@@ -87,11 +87,11 @@ public class Orders {
                         "SET order_cancelled = true " +
                         "WHERE order_id = ?");
         getAllCancelledOrders = connection.prepareStatement(
-                "SELECT food.food_id, food.food_name,food.price,food.available,orders.order_id,orders.table_num,food_orders.quantity\n" +
-                        "FROM food_orders\n" +
-                        "JOIN orders ON food_orders.order_id = orders.order_id\n" +
-                        "JOIN food ON food_orders.food_id = food.food_id\n" +
-                        "WHERE orders.order_cancelled = true\n" +
+                "SELECT food.food_id, food.food_name,food.price,food.available,orders.order_id,orders.table_num,food_orders.quantity " +
+                        "FROM food_orders " +
+                        "JOIN orders ON food_orders.order_id = orders.order_id " +
+                        "JOIN food ON food_orders.food_id = food.food_id " +
+                        "WHERE orders.order_cancelled = true " +
                         "ORDER BY orders.order_id");
     }
 
