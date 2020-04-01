@@ -30,6 +30,8 @@ public class Orders {
     private PreparedStatement updateOrderServedByID;
     private PreparedStatement orderConfirm;
     private PreparedStatement ordersGetUnconfirmed;
+    private PreparedStatement setOrderCancelled;
+    private PreparedStatement getAllCancelledOrders;
 
 
     /**
@@ -80,6 +82,17 @@ public class Orders {
                 "UPDATE orders " +
                         "SET order_served = ? " +
                         "WHERE order_id = ?");
+        setOrderCancelled = connection.prepareStatement(
+                "UPDATE orders " +
+                        "SET order_cancelled = true " +
+                        "WHERE order_id = ?");
+        getAllCancelledOrders = connection.prepareStatement(
+                "SELECT food.food_id, food.food_name,food.price,food.available,orders.order_id,orders.table_num,food_orders.quantity " +
+                        "FROM food_orders " +
+                        "JOIN orders ON food_orders.order_id = orders.order_id " +
+                        "JOIN food ON food_orders.food_id = food.food_id " +
+                        "WHERE orders.order_cancelled = true " +
+                        "ORDER BY orders.order_id");
     }
 
     /**
@@ -140,6 +153,63 @@ public class Orders {
         return order_id;
     }
 
+
+    /**
+     * Sets a given order as cancelled on the database.
+     *
+     * @param orderID of the order
+     * @throws SQLException exception
+     */
+    public void cancelOrder(int orderID) throws SQLException {
+        setOrderCancelled.setInt(1, orderID);
+        setOrderCancelled.executeQuery();
+    }
+
+    /**
+     * Selects cancelled orders from database and attaches
+     * necessary details to return.
+     *
+     * @return Array of Orders
+     * @throws SQLException if an error occurred
+     */
+    public ArrayList<Order> getCancelledOrders() throws SQLException {
+        HashMap<Integer, Order> cancelledOrders = new HashMap<>();
+        ResultSet set = getAllCancelledOrders.executeQuery();
+
+        while (set.next()) {
+            Food food = new Food(set.getInt("food_id"),
+                    set.getString("food_name"),
+                    null,
+                    0,
+                    set.getBigDecimal("price"),
+                    set.getBoolean("available"),
+                    0,
+                    null,
+                    null);
+
+            int orderID = set.getInt("order_id");
+            int quantity = set.getInt("quantity");
+
+            if (cancelledOrders.containsKey(orderID)) {
+                cancelledOrders.get(orderID).addFoodItem(new Item(food, quantity));
+            } else {
+                ArrayList<Item> items = new ArrayList<>();
+                items.add(new Item(food, quantity));
+                cancelledOrders.put(orderID, new IndexedOrder(
+                        orderID,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        set.getInt("table_num"),
+                        items));
+            }
+        }
+        return new ArrayList<>(cancelledOrders.values());
+    }
+
+
     /**
      * Selects confirmed orders from database, populates each order
      * with Array of Food items.
@@ -158,9 +228,15 @@ public class Orders {
 
         while (resultSet.next()) {
             //o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity
-            Food food = new Food(resultSet.getInt("food_id"), resultSet.getString("food_name"),
-                    resultSet.getString("food_description"), resultSet.getInt("calories"),
-                    null, true, resultSet.getInt("category_id"), null, null);
+            Food food = new Food(resultSet.getInt("food_id"),
+                    resultSet.getString("food_name"),
+                    resultSet.getString("food_description"),
+                    resultSet.getInt("calories"),
+                    null,
+                    true,
+                    resultSet.getInt("category_id"),
+                    null,
+                    null);
             int orderID = resultSet.getInt("order_id");
             if (orders.containsKey(orderID)) {
                 orders.get(orderID).addFoodItem(new Item(food, resultSet.getInt("quantity")));

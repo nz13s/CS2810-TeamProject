@@ -10,11 +10,8 @@ import databaseInit.Database;
 import entities.IndexedOrder;
 import entities.Order;
 import entities.Queue;
-import entities.serialisers.OrderSerialiser;
 import entities.serialisers.QueueSerialiser;
-import sql.Orders;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,9 +52,8 @@ public class OrdersToFrontend extends HttpServlet {
      *
      * @return String that represents the Queue in JSON.
      * @throws IOException
-     * @throws SQLException
+     * @throws SQLException if there is an error with ordersGet statement.
      */
-
     public static String queueToJSON() throws SQLException, IOException {
 
         Queue q = new Queue(getOrderQueue());
@@ -87,17 +83,15 @@ public class OrdersToFrontend extends HttpServlet {
      *
      * @param req  server request.
      * @param resp server response.
-     * @throws ServletException
-     * @throws IOException
+     * @throws IOException exception
      */
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.reset();
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
-        OrdersToFrontend o = this;
         try {
-            pw.println(o.queueToJSON());
+            pw.println(queueToJSON());
         } catch (SQLException e) {
             e.printStackTrace();
             pw.println(e.getMessage());

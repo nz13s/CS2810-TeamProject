@@ -41,7 +41,7 @@
 
     <servlet>
         <servlet-name>Order</servlet-name>
-        <servlet-class>endpoints.AddToOrder</servlet-class>
+        <servlet-class>endpoints.restricted.AddToOrder</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Order</servlet-name>
@@ -158,7 +158,7 @@
 
     <servlet>
         <servlet-name>AcceptOrder</servlet-name>
-        <servlet-class>endpoints.AcceptOrder</servlet-class>
+        <servlet-class>endpoints.restricted.AcceptOrder</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AcceptOrder</servlet-name>
@@ -166,7 +166,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>AssistTable</servlet-name>
-        <servlet-class>endpoints.NotifyWaiter</servlet-class>
+        <servlet-class>endpoints.AssistTable</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AssistTable</servlet-name>
@@ -207,6 +207,15 @@
     <servlet-mapping>
         <servlet-name>AllTables</servlet-name>
         <url-pattern>/restricted/tableinfo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CancelOrder</servlet-name>
+        <servlet-class>endpoints.restricted.CancelOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CancelOrder</servlet-name>
+        <url-pattern>/cancelorder</url-pattern>
     </servlet-mapping>
 
 </web-app>
