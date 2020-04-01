@@ -64,5 +64,31 @@ public class CancelOrder extends HttpServlet {
         pw.println(om.writeValueAsString(list));
         pw.flush();
     }
+
+    /**
+     * With a given orderID, the cancelled order checkbox is updated inside the database.
+     *
+     * @param req servlet request.
+     * @param resp servlet response.
+     * @throws IOException if input/output error occurs.
+     */
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int orderID = -1;
+        try {
+            orderID = Integer.parseInt(req.getParameter("orderID"));
+            if (orderID < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(400, "Invalid orderID.");
+        }
+
+        try {
+            Database.ORDERS.cancelOrder(orderID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
