@@ -82,12 +82,14 @@ public class CancelOrder extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             resp.sendError(400, "Invalid orderID.");
+            return;
         }
 
         try {
             Database.ORDERS.cancelOrder(orderID);
         } catch (SQLException e) {
-            e.printStackTrace();
+            resp.sendError(400, "SQL error.");
+            return;
         }
     }
 }
