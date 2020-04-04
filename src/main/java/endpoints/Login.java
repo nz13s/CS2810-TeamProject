@@ -13,8 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Login class
+ */
 public class Login extends HttpServlet {
 
+    /**
+     * Sends POST request to authorise login credentials, containing error handling
+     * Validates with database values
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //workflow is deny on empty credentials
