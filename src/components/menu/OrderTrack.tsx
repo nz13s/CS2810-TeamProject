@@ -2,7 +2,7 @@ import React from "react";
 import API from "../../client/api";
 import Notification from "../../entities/Notification";
 import { Button, Card, ListGroup } from "react-bootstrap";
-import { Switch, Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 interface State {
   notifications: Array<Notification>;
@@ -53,6 +53,9 @@ export default class OrderTrack extends React.Component<any, State> {
                     <Card.Text style={{ fontSize: 15 }}>
                       {notification.content}
                     </Card.Text>
+                    <Card.Subtitle>
+                      {notification.time.toLocaleTimeString()}
+                    </Card.Subtitle>
                   </Card.Body>
                   <Card.Footer>
                     <Button
