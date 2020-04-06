@@ -221,20 +221,20 @@ export default class API {
     );
   }
 
-  static async getCustomerNotifications(tableNum: number): Promise<Array<Notification>> {
+  static async getCustomerNotifications(
+    tableNum: number
+  ): Promise<Array<Notification>> {
     const response = await client.makeRequest(
       "GET",
       "/restricted/customernotifications",
-      {tableNum: tableNum}
+      { tableNum: tableNum }
     );
 
     return response.data.map(
       (notification: any) =>
         new Notification(
           notification.notificationID,
-          notification.table
-            ? `Table #${notification.table.tableNum}`
-            : "Attention",
+          "Order update",
           notification.message,
           new Date(notification.time),
           notification.type,
