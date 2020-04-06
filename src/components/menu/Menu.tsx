@@ -28,6 +28,7 @@ interface State {
 }
 
 export default class Menu extends React.Component<any, State> {
+  private disabled = true;
   constructor(props: any) {
     super(props);
 
@@ -86,9 +87,10 @@ export default class Menu extends React.Component<any, State> {
       await API.saveBasket(this.state.tableID);
       await this.fetchBasket();
       this.addNotification(
-        "Successful checkout, your order is being prepared!",
+        "Successful checkout, your order is being prepared! You can track your order by pressing the 'TrackOrder' button.",
         "Notification"
       );
+      this.disabled = false;
     } catch (e) {
       this.addNotification(`${e.message}: Couldn't checkout your order`);
     }
@@ -198,6 +200,16 @@ export default class Menu extends React.Component<any, State> {
                       variant="success"
                       block>
                       Checkout
+                    </Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item className="bg-dark text-white">
+                    <Button
+                      id="order_track_button"
+                      //onClick={() => this.saveBasket()}
+                      variant="success"
+                      block
+                      disabled={this.disabled}>
+                      Track Order
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
