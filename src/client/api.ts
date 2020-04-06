@@ -221,8 +221,36 @@ export default class API {
     );
   }
 
+  static async getCustomerNotifications(tableNum: number): Promise<Array<Notification>> {
+    const response = await client.makeRequest(
+      "GET",
+      "/restricted/customernotifications",
+      {tableNum: tableNum}
+    );
+
+    return response.data.map(
+      (notification: any) =>
+        new Notification(
+          notification.notificationID,
+          notification.table
+            ? `Table #${notification.table.tableNum}`
+            : "Attention",
+          notification.message,
+          new Date(notification.time),
+          notification.type,
+          notification.extraData ? notification.extraData.orderID : null
+        )
+    );
+  }
+
   static async delNotification(notificationID: number): Promise<void> {
     await client.makeRequest("DELETE", "/restricted/staffnotifications", {
+      notificationID: notificationID
+    });
+  }
+
+  static async delCustomerNotification(notificationID: number): Promise<void> {
+    await client.makeRequest("DELETE", "/restricted/customernotifications", {
       notificationID: notificationID
     });
   }

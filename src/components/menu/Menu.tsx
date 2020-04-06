@@ -19,6 +19,8 @@ import MenuType from "../../entities/MenuType";
 import BasketType from "../../entities/BasketType";
 import API from "../../client/api";
 import { IoIosWarning } from "react-icons/all";
+import { Link, Route, Switch } from "react-router-dom";
+import OrderTrack from "./OrderTrack";
 
 interface State {
   tableID: number;
@@ -138,162 +140,172 @@ export default class Menu extends React.Component<any, State> {
     const { tableID, menu, basket, notifications } = this.state;
 
     return (
-      <MenuStyle>
-        <div
-          className="pr-3 mr-3"
-          style={{ zIndex: 2000, position: "fixed", top: 0, right: 0 }}>
-          {notifications}
-        </div>
-        <Container fluid className="mx-2">
-          <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
-            <Navbar.Brand href="/#/">Oaxaca Menu</Navbar.Brand>
-            <Navbar.Collapse className="d-flex justify-content-center">
-              {/*<Navbar.Brand>Table #{tableID}</Navbar.Brand>*/}
-              <Navbar.Brand>
-                <Button
-                  variant="warning"
-                  onClick={() => this.callWaiter(tableID)}>
-                  Call Waiter
-                </Button>
-              </Navbar.Brand>
-            </Navbar.Collapse>
-          </Navbar>
-          <Row>
-            <Col xs="3">
-              <div className="sticky-top">
-                <h2>Your Order</h2>
-                <ListGroup variant="flush" className="d-inline-block w-100">
-                  {Object.entries(_.groupBy(basket, x => x.id)).map(
-                    ([, items]) => (
-                      <ListGroup.Item
-                        key={items[0].id}
-                        className="bg-dark text-white"
-                        style={{ overflow: "hidden" }}>
-                        {items[0].name} x{items.length}
-                        <ButtonGroup
-                          className="ml-2"
-                          style={{ float: "right" }}>
-                          <Button
-                            onClick={() => this.addToBasket(items[0])}
-                            variant="secondary">
-                            +
-                          </Button>
-                          <Button
-                            onClick={() => this.delFromBasket(items[0])}
-                            variant="secondary">
-                            —
-                          </Button>
-                        </ButtonGroup>
+      <Switch>
+        <Route exact path="/menu">
+          <MenuStyle>
+            <div
+              className="pr-3 mr-3"
+              style={{ zIndex: 2000, position: "fixed", top: 0, right: 0 }}>
+              {notifications}
+            </div>
+            <Container fluid className="mx-2">
+              <Navbar className="mb-5 mt-1" variant="dark" bg="dark">
+                <Navbar.Brand href="/#/">Oaxaca Menu</Navbar.Brand>
+                <Navbar.Collapse className="d-flex justify-content-center">
+                  {/*<Navbar.Brand>Table #{tableID}</Navbar.Brand>*/}
+                  <Navbar.Brand>
+                    <Button
+                      variant="warning"
+                      onClick={() => this.callWaiter(tableID)}>
+                      Call Waiter
+                    </Button>
+                  </Navbar.Brand>
+                </Navbar.Collapse>
+              </Navbar>
+              <Row>
+                <Col xs="3">
+                  <div className="sticky-top">
+                    <h2>Your Order</h2>
+                    <ListGroup variant="flush" className="d-inline-block w-100">
+                      {Object.entries(_.groupBy(basket, x => x.id)).map(
+                        ([, items]) => (
+                          <ListGroup.Item
+                            key={items[0].id}
+                            className="bg-dark text-white"
+                            style={{ overflow: "hidden" }}>
+                            {items[0].name} x{items.length}
+                            <ButtonGroup
+                              className="ml-2"
+                              style={{ float: "right" }}>
+                              <Button
+                                onClick={() => this.addToBasket(items[0])}
+                                variant="secondary">
+                                +
+                              </Button>
+                              <Button
+                                onClick={() => this.delFromBasket(items[0])}
+                                variant="secondary">
+                                —
+                              </Button>
+                            </ButtonGroup>
+                          </ListGroup.Item>
+                        )
+                      )}
+                      <ListGroup.Item className="bg-dark text-white">
+                        Total: £
+                        {basket
+                          .reduce((acc, curr) => acc + curr.price, 0.0)
+                          .toFixed(2)}
                       </ListGroup.Item>
-                    )
-                  )}
-                  <ListGroup.Item className="bg-dark text-white">
-                    Total: £
-                    {basket
-                      .reduce((acc, curr) => acc + curr.price, 0.0)
-                      .toFixed(2)}
-                  </ListGroup.Item>
-                  <ListGroup.Item className="bg-dark text-white">
-                    <Button
-                      id="checkout_button"
-                      onClick={() => this.saveBasket()}
-                      variant="success"
-                      block>
-                      Checkout
-                    </Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item className="bg-dark text-white">
-                    <Button
-                      id="order_track_button"
-                      //onClick={() => this.saveBasket()}
-                      variant="success"
-                      block
-                      disabled={this.disabled}>
-                      Track Order
-                    </Button>
-                  </ListGroup.Item>
-                </ListGroup>
-              </div>
-            </Col>
-            <Col xs="9">
-              <div
-                id="sections"
-                className="sticky-top mb-2 text-white rounded"
-                style={{ backgroundColor: "#1d1d1d" }}>
-                <ButtonGroup className="d-flex flex-wrap justify-content-center">
-                  {Array.from(menu.keys()).map((category, idx) => (
-                    <Button
-                      key={idx}
-                      className="section_button rounded mx-1 my-1"
-                      variant="secondary"
-                      onClick={() =>
-                        this.scrollToTarget(`section_${category}`)
-                      }>
-                      {category}
-                    </Button>
-                  ))}
-                </ButtonGroup>
-              </div>
-
-              {Array.from(menu.entries()).map(([category, items]) => (
-                <React.Fragment key={category}>
-                  <div
-                    id={`section_${category}`}
-                    style={{
-                      position: "relative",
-                      top: "-12vh"
-                    }}
-                  />
-                  <h1>{category}</h1>
-                  <CardGroup>
-                    {items.map(item => (
-                      <Card
-                        bg="dark"
-                        text="white"
-                        key={item.id}
-                        className="mb-3 mr-2 menu_item">
-                        <Card.Img
-                          className="img-fluid menu_image"
-                          variant="top"
-                          src={item.image}
-                        />
-
-                        <Card.Body>
-                          <Card.Title>
-                            <strong>{item.name}</strong>
-                          </Card.Title>
-                          <Card.Text>{item.description}</Card.Text>
-                          <Card.Text>
-                            {item.ingredients.map((ingredient, idx) => (
-                              <React.Fragment key={idx}>
-                                {ingredient.allergen ? <IoIosWarning /> : ""}{" "}
-                                {ingredient.name}
-                                {idx === item.ingredients.length - 1
-                                  ? ""
-                                  : ", "}
-                              </React.Fragment>
-                            ))}
-                          </Card.Text>
-                          <Card.Text>{item.calories}kcal</Card.Text>
-                        </Card.Body>
-
-                        <Card.Footer className="d-flex justify-content-between">
-                          <h4 className="mt-1">£{item.price.toFixed(2)}</h4>
+                      <ListGroup.Item className="bg-dark text-white">
+                        <Button
+                          id="checkout_button"
+                          onClick={() => this.saveBasket()}
+                          variant="success"
+                          block>
+                          Checkout
+                        </Button>
+                      </ListGroup.Item>
+                      <ListGroup.Item className="bg-dark text-white">
+                        <Link to="/menu/ordertrack">
                           <Button
+                            id="order_track_button"
                             variant="success"
-                            onClick={() => this.addToBasket(item)}>
-                            Add
+                            block
+                            disabled={this.disabled}>
+                            Track Order
                           </Button>
-                        </Card.Footer>
-                      </Card>
-                    ))}
-                  </CardGroup>
-                </React.Fragment>
-              ))}
-            </Col>
-          </Row>
-        </Container>
-      </MenuStyle>
+                        </Link>
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </div>
+                </Col>
+                <Col xs="9">
+                  <div
+                    id="sections"
+                    className="sticky-top mb-2 text-white rounded"
+                    style={{ backgroundColor: "#1d1d1d" }}>
+                    <ButtonGroup className="d-flex flex-wrap justify-content-center">
+                      {Array.from(menu.keys()).map((category, idx) => (
+                        <Button
+                          key={idx}
+                          className="section_button rounded mx-1 my-1"
+                          variant="secondary"
+                          onClick={() =>
+                            this.scrollToTarget(`section_${category}`)
+                          }>
+                          {category}
+                        </Button>
+                      ))}
+                    </ButtonGroup>
+                  </div>
+
+                  {Array.from(menu.entries()).map(([category, items]) => (
+                    <React.Fragment key={category}>
+                      <div
+                        id={`section_${category}`}
+                        style={{
+                          position: "relative",
+                          top: "-12vh"
+                        }}
+                      />
+                      <h1>{category}</h1>
+                      <CardGroup>
+                        {items.map(item => (
+                          <Card
+                            bg="dark"
+                            text="white"
+                            key={item.id}
+                            className="mb-3 mr-2 menu_item">
+                            <Card.Img
+                              className="img-fluid menu_image"
+                              variant="top"
+                              src={item.image}
+                            />
+
+                            <Card.Body>
+                              <Card.Title>
+                                <strong>{item.name}</strong>
+                              </Card.Title>
+                              <Card.Text>{item.description}</Card.Text>
+                              <Card.Text>
+                                {item.ingredients.map((ingredient, idx) => (
+                                  <React.Fragment key={idx}>
+                                    {ingredient.allergen ? (
+                                      <IoIosWarning />
+                                    ) : (
+                                      ""
+                                    )}{" "}
+                                    {ingredient.name}
+                                    {idx === item.ingredients.length - 1
+                                      ? ""
+                                      : ", "}
+                                  </React.Fragment>
+                                ))}
+                              </Card.Text>
+                              <Card.Text>{item.calories}kcal</Card.Text>
+                            </Card.Body>
+
+                            <Card.Footer className="d-flex justify-content-between">
+                              <h4 className="mt-1">£{item.price.toFixed(2)}</h4>
+                              <Button
+                                variant="success"
+                                onClick={() => this.addToBasket(item)}>
+                                Add
+                              </Button>
+                            </Card.Footer>
+                          </Card>
+                        ))}
+                      </CardGroup>
+                    </React.Fragment>
+                  ))}
+                </Col>
+              </Row>
+            </Container>
+          </MenuStyle>
+        </Route>
+        <Route exact path="/menu/ordertrack" component={OrderTrack} />
+      </Switch>
     );
   }
 }
