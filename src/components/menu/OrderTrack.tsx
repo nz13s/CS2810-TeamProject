@@ -73,7 +73,5 @@ export default class OrderTrack extends React.Component<any, State> {
         </Route>
       </Switch>
     );
-
-    //return <h1>Order Tracking stuff</h1>;
   }
 }
