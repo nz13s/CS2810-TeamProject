@@ -128,10 +128,11 @@ export default class API {
   }
 
   static async saveBasket(tableID: number): Promise<number> {
-    const save = await client.makeRequest("POST", "/save", {
+    return (
+      await client.makeRequest("POST", "/save", {
       table_num: tableID // eslint-disable-line
-    });
-    return save.data;
+      })
+    ).data;
   }
 
   static async addToBasket(item: MenuItem): Promise<void> {
