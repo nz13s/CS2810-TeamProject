@@ -14,6 +14,7 @@ import WaiterManagement from "./WaiterManagement";
 import WaiterEdit from "./WaiterEdit";
 import Notification from "../../entities/Notification";
 import API from "../../client/api";
+import NeedWaiter from "./NeedWaiter";
 
 interface State {
   notifications: Array<Notification>;
@@ -174,6 +175,16 @@ export default class Waiter extends React.Component<any, State> {
                       </Button>
                     </Link>
                   </div>
+                  <div className="mb-1">
+                    <Link to="/waiter/needwaiter">
+                      <Button
+                        block
+                        className="waiter_button"
+                        variant="outline-info">
+                        Tables that need a waiter
+                      </Button>
+                    </Link>
+                  </div>
                 </Col>
               </Row>
             </Container>
@@ -182,6 +193,7 @@ export default class Waiter extends React.Component<any, State> {
 
         <Route exact path="/waiter/management" component={WaiterManagement} />
         <Route exact path="/waiter/edit" component={WaiterEdit} />
+        <Route exact path="/waiter/needwaiter" component={NeedWaiter} />
       </Switch>
     );
   }
