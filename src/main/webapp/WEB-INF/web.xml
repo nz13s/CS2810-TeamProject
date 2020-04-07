@@ -215,7 +215,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CancelOrder</servlet-name>
-        <url-pattern>/cancelorder</url-pattern>
+        <url-pattern>/restricted/cancelorder</url-pattern>
     </servlet-mapping>
 
 </web-app>
