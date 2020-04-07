@@ -16,7 +16,8 @@ public class Hello extends HttpServlet {
      * @param servlet request
      * @param servlet response
      * @throws ServletException
-     * @throws IOException
+     * @throws IOException, if input/output error occurs
+     * @throws ServletException, if exception occurs within the servlet
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

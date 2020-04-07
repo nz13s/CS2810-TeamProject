@@ -16,8 +16,8 @@ public class ExampleRestricted extends HttpServlet {
      * Gets a response printing "Access Granted" for authorisation
      * @param servlet request
      * @param servlet response
-     * @throws ServletException
-     * @throws IOException
+     * @throws ServletException, if exception occurs within the servlet
+     * @throws IOException, if input/output error occurs
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -31,8 +31,8 @@ public class AllTables extends HttpServlet {
      * Prints the list of tables as String
      * @param servlet request
      * @param servlet response
-     * @throws ServletException
-     * @throws IOException
+     * @throws ServletException, if exception occurs within the servlet
+     * @throws IOException, if input/output error occurs
      */
 
     @Override

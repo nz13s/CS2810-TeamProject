@@ -14,8 +14,8 @@ public class GlobalMethods {
      * Gets the tableID parameter from frontend and is returned
      * @param servlet request
      * @param servlet response
-     * @return
-     * @throws IOException
+     * @return tableID, of the table
+     * @throws IOException, if input/output error occurs
      */
     public static int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int tableID = -1;
