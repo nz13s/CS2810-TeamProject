@@ -14,15 +14,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Login class
+ * Login class, handling authorisation for login details
  */
 public class Login extends HttpServlet {
 
     /**
      * Sends POST request to authorise login credentials, containing error handling
      * Validates with database values
-     * @param req
-     * @param resp
+     * @param servlet request
+     * @param servlet response
      * @throws ServletException
      * @throws IOException
      */

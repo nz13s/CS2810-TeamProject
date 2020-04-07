@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * ExampleRestricted class
+ * ExampleRestricted class, for when accessing restricted information
  */
 
 public class ExampleRestricted extends HttpServlet {
 
     /**
      * Gets a response printing "Access Granted" for authorisation
-     * @param req
-     * @param resp
+     * @param servlet request
+     * @param servlet response
      * @throws ServletException
      * @throws IOException
      */

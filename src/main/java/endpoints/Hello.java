@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Hello class
+ * Hello class, which gets new session
  */
 public class Hello extends HttpServlet {
 
     /**
      * Gets a valid X-session-ID after sending request
-     * @param req
-     * @param resp
+     * @param servlet request
+     * @param servlet response
      * @throws ServletException
      * @throws IOException
      */

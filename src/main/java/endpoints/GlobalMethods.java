@@ -5,15 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * GlobalMethods class
+ * GlobalMethods class that stores methods that are used multiple times
  */
 
 public class GlobalMethods {
 
     /**
-     * Gets table ID as a parameter and returns it
-     * @param req
-     * @param resp
+     * Gets the tableID parameter from frontend and returns is returned
+     * @param servlet request
+     * @param servlet response
      * @return
      * @throws IOException
      */
