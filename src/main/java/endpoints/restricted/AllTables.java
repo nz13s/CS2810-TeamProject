@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * AllTables class, for getting all tables
+ * AllTables class for getting all tables
  */
 
 public class AllTables extends HttpServlet {
@@ -31,8 +31,8 @@ public class AllTables extends HttpServlet {
      * Prints the list of tables as String
      * @param servlet request
      * @param servlet response
-     * @throws ServletException, if exception occurs within the servlet
-     * @throws IOException, if input/output error occurs
+     * @throws ServletException if exception occurs within the servlet
+     * @throws IOException if input/output error occurs
      */
 
     @Override

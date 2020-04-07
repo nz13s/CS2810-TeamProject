@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Hello class, which gets new session
+ * Hello class which gets new session
  */
 public class Hello extends HttpServlet {
 
@@ -16,8 +16,8 @@ public class Hello extends HttpServlet {
      * @param servlet request
      * @param servlet response
      * @throws ServletException
-     * @throws IOException, if input/output error occurs
-     * @throws ServletException, if exception occurs within the servlet
+     * @throws IOException if input/output error occurs
+     * @throws ServletException if exception occurs within the servlet
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Login class, handling authorisation for login details
+ * Login class handling authorisation for login details
  */
 public class Login extends HttpServlet {
 
@@ -23,8 +23,8 @@ public class Login extends HttpServlet {
      * Validates with database values
      * @param servlet request
      * @param servlet response
-     * @throws ServletException, if exception occurs within the servlet
-     * @throws IOException, , if input/output error occurs
+     * @throws ServletException if exception occurs within the servlet
+     * @throws IOException if input/output error occurs
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

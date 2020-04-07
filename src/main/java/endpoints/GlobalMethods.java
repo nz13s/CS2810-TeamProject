@@ -11,11 +11,11 @@ import java.io.IOException;
 public class GlobalMethods {
 
     /**
-     * Gets the tableID parameter from frontend and is returned
+     * Gets the tableID parameter from frontend and returns it
      * @param servlet request
      * @param servlet response
-     * @return tableID, of the table
-     * @throws IOException, if input/output error occurs
+     * @return tableID of the table
+     * @throws IOException if input/output error occurs
      */
     public static int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int tableID = -1;
