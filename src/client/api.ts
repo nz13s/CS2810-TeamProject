@@ -228,7 +228,7 @@ export default class API {
   ): Promise<Array<Notification>> {
     const response = await client.makeRequest(
       "GET",
-      "/restricted/customernotifications",
+      "/customernotifications",
       { tableNum: tableNum }
     );
 
@@ -252,7 +252,7 @@ export default class API {
   }
 
   static async delCustomerNotification(notificationID: number): Promise<void> {
-    await client.makeRequest("DELETE", "/restricted/customernotifications", {
+    await client.makeRequest("DELETE", "/customernotifications", {
       notificationID: notificationID
     });
   }
