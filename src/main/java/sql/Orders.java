@@ -162,7 +162,7 @@ public class Orders {
      */
     public void cancelOrder(int orderID) throws SQLException {
         setOrderCancelled.setInt(1, orderID);
-        setOrderCancelled.executeQuery();
+        setOrderCancelled.executeUpdate();
     }
 
     /**

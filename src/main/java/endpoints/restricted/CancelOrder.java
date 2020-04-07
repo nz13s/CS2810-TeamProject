@@ -88,7 +88,7 @@ public class CancelOrder extends HttpServlet {
         try {
             Database.ORDERS.cancelOrder(orderID);
         } catch (SQLException e) {
-            resp.sendError(500, "SQL Error: Failed to cancel the order.");
+            resp.sendError(500, "SQL Error: Failed to cancel the order." + e.getMessage());
             return;
         }
     }
