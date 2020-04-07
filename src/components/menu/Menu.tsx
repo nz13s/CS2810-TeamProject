@@ -89,7 +89,7 @@ export default class Menu extends React.Component<any, State> {
       await API.saveBasket(this.state.tableID);
       await this.fetchBasket();
       this.addNotification(
-        "Successful checkout, your order is being prepared! You can track your order by pressing the 'TrackOrder' button.",
+        "Successful checkout, your order is being prepared! You can track your order by pressing the 'Track Order' button.",
         "Notification"
       );
       this.disabled = false;
@@ -134,6 +134,10 @@ export default class Menu extends React.Component<any, State> {
       block: "start",
       behavior: "smooth"
     });
+  }
+
+  cancelOrder() {
+
   }
 
   render() {
@@ -216,6 +220,16 @@ export default class Menu extends React.Component<any, State> {
                           Track Order
                         </Button>
                       </Link>
+                    </ListGroup.Item>
+                    <ListGroup.Item className="bg-dark text-white">
+                      <Button
+                        id="cancel_order_button"
+                        onClick={() => this.cancelOrder()}
+                        variant="success"
+                        block
+                        disabled={this.disabled}>
+                        Cancel Order
+                      </Button>
                     </ListGroup.Item>
                   </ListGroup>
                 </div>
