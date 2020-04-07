@@ -11,7 +11,7 @@ import java.io.IOException;
 public class GlobalMethods {
 
     /**
-     * Gets the tableID parameter from frontend and returns is returned
+     * Gets the tableID parameter from frontend and is returned
      * @param servlet request
      * @param servlet response
      * @return
