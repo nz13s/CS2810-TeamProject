@@ -31,6 +31,7 @@ interface State {
 
 export default class Menu extends React.Component<any, State> {
   private disabled = true;
+  private orderID = -1;
   constructor(props: any) {
     super(props);
 
@@ -86,7 +87,8 @@ export default class Menu extends React.Component<any, State> {
       return this.addNotification("Cannot checkout empty order");
 
     try {
-      await API.saveBasket(this.state.tableID);
+      const orderID = await API.saveBasket(this.state.tableID);
+      this.orderID = orderID;
       await this.fetchBasket();
       this.addNotification(
         "Successful checkout, your order is being prepared! You can track your order by pressing the 'Track Order' button.",
@@ -136,8 +138,9 @@ export default class Menu extends React.Component<any, State> {
     });
   }
 
-  cancelOrder() {
-
+  async cancelOrder(orderID: number): Promise<void> {
+    await API.cancelOrder(orderID);
+    this.addNotification("Your order has been cancelled.", "Alert");
   }
 
   render() {
@@ -224,7 +227,7 @@ export default class Menu extends React.Component<any, State> {
                     <ListGroup.Item className="bg-dark text-white">
                       <Button
                         id="cancel_order_button"
-                        onClick={() => this.cancelOrder()}
+                        onClick={() => this.cancelOrder(this.orderID)}
                         variant="success"
                         block
                         disabled={this.disabled}>
