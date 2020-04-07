@@ -4,7 +4,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * GlobalMethods class that stores methods that are used multiple times
+ */
+
 public class GlobalMethods {
+
+    /**
+     * Gets the tableID parameter from frontend and returns it
+     * @param servlet request
+     * @param servlet response
+     * @return tableID of the table
+     * @throws IOException if input/output error occurs
+     */
     public static int getTable(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int tableID = -1;
         try {

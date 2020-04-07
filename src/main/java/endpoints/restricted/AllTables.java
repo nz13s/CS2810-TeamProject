@@ -14,6 +14,10 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * AllTables class for getting all tables
+ */
+
 public class AllTables extends HttpServlet {
 
     ObjectMapper om;
@@ -21,6 +25,15 @@ public class AllTables extends HttpServlet {
     public AllTables() {
         om = new ObjectMapper();
     }
+
+    /**
+     * Gets all the tables as a list of type Table
+     * Prints the list of tables as String
+     * @param servlet request
+     * @param servlet response
+     * @throws ServletException if exception occurs within the servlet
+     * @throws IOException if input/output error occurs
+     */
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
