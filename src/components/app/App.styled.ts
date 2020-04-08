@@ -7,4 +7,12 @@ const AppStyle = styled.div`
   align-items: center;
 `;
 
-export { AppStyle };
+const HeadingStyle = styled.h1`
+  font-family: "LuloCleanW01-OneBold";
+  text-align: center;
+  color: white;
+  letter-spacing: 0.11em;
+  text-align: center;
+`;
+
+export { AppStyle, HeadingStyle };

@@ -1,15 +1,13 @@
 import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
+import {Button, Col, Container, Row} from "react-bootstrap";
 
-import { Button, Col, Container, Row } from "react-bootstrap";
-
-import { AppStyle } from "./App.styled";
+import {AppStyle, HeadingStyle} from "./App.styled";
 import Menu from "../menu/Menu";
 import Waiter from "../waiter/Waiter";
 import Kitchen from "../kitchen/Kitchen";
 import API from "../../client/api";
 import Login from "../login/Login";
-import WelcomingStaff from "../WelcomingStaff/WelcomingStaff";
 
 interface State {
   authenticated: boolean;
@@ -39,7 +37,9 @@ export default class App extends React.Component<any, State> {
           <AppStyle>
             <Container>
               <Row className="d-flex mb-5 justify-content-center">
-                <h2>Oaxaca Restaurant</h2>
+                <HeadingStyle>
+                  Oaxaca Restaurant
+                </HeadingStyle>
               </Row>
               <Row className="d-flex justify-content-center">
                 <Col xs="auto">
@@ -66,13 +66,6 @@ export default class App extends React.Component<any, State> {
                         </Button>
                       </Link>
                     </Col>
-                    <Col xs="auto">
-                      <Link to="/welcomingstaff">
-                        <Button variant="outline-primary" size="lg">
-                          Welcoming Staff
-                        </Button>
-                      </Link>
-                    </Col>
                   </>
                 ) : (
                   <Col xs="auto">
@@ -92,7 +85,6 @@ export default class App extends React.Component<any, State> {
         <Route path="/login" component={Login} />
         <Route path="/waiter" component={Waiter} />
         <Route path="/kitchen" component={Kitchen} />
-        <Route path="/welcomingstaff" component={WelcomingStaff} />
       </Switch>
     );
   }
