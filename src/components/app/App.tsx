@@ -67,7 +67,6 @@ export default class App extends React.Component<any, State> {
                     <Col xs="auto">
                       <Link to="/login">
                         <LoginButtonStyle>
-
                         </LoginButtonStyle>
                       </Link>
                     </Col>

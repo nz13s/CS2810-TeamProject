@@ -5,7 +5,6 @@ const AppStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -1;
   background-size: 100% 100%;
   background-image: url(https://i.pinimg.com/originals/67/1c/fd/671cfd5e840afd6dd9dcf2a41060faa6.jpg);
 `;
@@ -15,7 +14,6 @@ const CenterStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 0;
 `;
 
 const LoginStyle = styled.div`
@@ -23,7 +21,6 @@ const LoginStyle = styled.div`
   position:absolute;
   top:5%;
   right:5%;
-  z-index: 1;
 `;
 
 const HeadingStyle = styled.h1`
@@ -45,6 +42,7 @@ const MenuButtonStyle = styled.button`
   transition: all 0.3s ease 0s;
   box-shadow: 0px 0px 45px 45px rgba(0, 0, 0, 0.89);
   width: auto;
+  overflow: hidden;
 
   font-family: "LuloCleanW01-OneBold";
   text-align: center;
