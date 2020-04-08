@@ -54,7 +54,7 @@ public class Orders {
                 "SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o " +
                         "JOIN food_orders AS i ON o.order_id = i.order_id " +
                         "JOIN food f on i.food_id = f.food_id " +
-                        "WHERE o.order_confirmed != ? AND o.order_served = ?");
+                        "WHERE o.order_confirmed != ? AND o.order_served = ? AND o.order_cancelled = false");
         ordersGetUnconfirmed = connection.prepareStatement("SELECT o.*, i.food_id, i.order_id, f.food_name, f.food_description, f.calories, f.category_id,  i.quantity FROM orders AS o  " +
                 "JOIN food_orders AS i ON o.order_id = i.order_id " +
                 "JOIN food f on i.food_id = f.food_id " +
@@ -162,7 +162,7 @@ public class Orders {
      */
     public void cancelOrder(int orderID) throws SQLException {
         setOrderCancelled.setInt(1, orderID);
-        setOrderCancelled.executeQuery();
+        setOrderCancelled.executeUpdate();
     }
 
     /**

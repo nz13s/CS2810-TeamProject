@@ -2,10 +2,7 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.Notification;
-import entities.NotificationTypes;
-import entities.Table;
-import entities.TableState;
+import entities.*;
 import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;

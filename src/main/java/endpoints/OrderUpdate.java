@@ -6,12 +6,10 @@ import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.List;
  */
 public class OrderUpdate extends HttpServlet {
 
-    private CustomerNotifications cNotifications = new CustomerNotifications();
+    private entities.CustomerNotifications cNotifications = new entities.CustomerNotifications();
 
     /**
      * Validates the orderID and depending on the State(0-3), calls update method

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
@@ -96,6 +97,11 @@ public class SaveOrder extends HttpServlet {
                 NotificationSocket.pushNotification(new SocketMessage(n, SocketMessageType.CREATE), ActiveStaff.findStaffForTable(tableSeated.tableNum));
 
                 req.getSession().setAttribute("order", null);
+
+                PrintWriter pw = resp.getWriter();
+                pw.print(order.getOrderID());
+                pw.flush();
+
             } catch (SQLException e) {
                 resp.sendError(500, "Unable to save Order. Database error");
                 e.printStackTrace();

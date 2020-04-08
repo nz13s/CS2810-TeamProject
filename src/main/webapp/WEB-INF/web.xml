@@ -193,11 +193,11 @@
 
     <servlet>
         <servlet-name>CustomerNotifications</servlet-name>
-        <servlet-class>endpoints.restricted.CustomerNotifications</servlet-class>
+        <servlet-class>endpoints.CustomerNotifications</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CustomerNotifications</servlet-name>
-        <url-pattern>/restricted/customernotifications</url-pattern>
+        <url-pattern>/customernotifications</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -215,7 +215,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CancelOrder</servlet-name>
-        <url-pattern>/cancelorder</url-pattern>
+        <url-pattern>/restricted/cancelorder</url-pattern>
     </servlet-mapping>
 
 </web-app>
