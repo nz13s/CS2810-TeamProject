@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class Client {
-  static servlet = `testt`;
+  static servlet = `api`;
   static baseURL = `tomcat.xhex.uk/${Client.servlet}`;
 
   static makeRequest(
