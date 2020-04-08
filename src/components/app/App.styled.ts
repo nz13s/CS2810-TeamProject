@@ -34,13 +34,13 @@ const HeadingStyle = styled.h1`
 
 const MenuButtonStyle = styled.button`
   border: none;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.5);
   color: #ffffff !important;
   padding: 20px;
   border-radius: 6px;
   display: inline-block;
   transition: all 0.3s ease 0s;
-  box-shadow: 0px 0px 45px 45px rgba(0, 0, 0, 0.89);
+  box-shadow: 0px 0px 45px 45px rgba(0, 0, 0, 0.83);
   width: auto;
   overflow: hidden;
 
@@ -70,16 +70,18 @@ const LoginButtonStyle = styled.button`
   border-radius: 6px;
   display: inline-block;
   transition: all 0.3s ease 0s;
-  box-shadow: 0px 0px 45px 45px rgba(0, 0, 0, 0.89);
+  box-shadow: 0px 0px 25px 25px rgba(0, 0, 0, 0.83);
   width: auto;
   border-radius: 50%;
   background-image: url(https://library.kissclipart.com/20180830/cge/kissclipart-padlock-clipart-padlock-clip-art-5f140843fc866a30.jpg);
   background-size: 100% 100%;
+  opacity: 0.7;
   &:hover {
     color: black !important;
     -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
     -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
     transition: all 0.3s ease 0s;
+    opacity: 1;
   }
 `;
 
