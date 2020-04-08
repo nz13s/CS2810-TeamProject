@@ -2,7 +2,7 @@ import React from "react";
 import {Link, Route, Switch} from "react-router-dom";
 import {Button, Col, Container, Row} from "react-bootstrap";
 
-import {AppStyle, HeadingStyle} from "./App.styled";
+import {AppStyle, ButtonStyle, HeadingStyle} from "./App.styled";
 import Menu from "../menu/Menu";
 import Waiter from "../waiter/Waiter";
 import Kitchen from "../kitchen/Kitchen";
@@ -44,9 +44,9 @@ export default class App extends React.Component<any, State> {
               <Row className="d-flex justify-content-center">
                 <Col xs="auto">
                   <Link to="/menu">
-                    <Button variant="outline-danger" size="lg">
+                    <ButtonStyle>
                       Menu
-                    </Button>
+                    </ButtonStyle>
                   </Link>
                 </Col>
 
