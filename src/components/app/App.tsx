@@ -1,8 +1,8 @@
 import React from "react";
 import {Link, Route, Switch} from "react-router-dom";
-import {Button, Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 
-import {AppStyle, ButtonStyle, HeadingStyle} from "./App.styled";
+import {AppStyle, CenterStyle, HeadingStyle, LoginButtonStyle, LoginStyle, MenuButtonStyle} from "./App.styled";
 import Menu from "../menu/Menu";
 import Waiter from "../waiter/Waiter";
 import Kitchen from "../kitchen/Kitchen";
@@ -36,59 +36,59 @@ export default class App extends React.Component<any, State> {
       <Switch>
         <Route exact path="/">
           <AppStyle>
-            <Container>
-
+            <LoginStyle>
+              <Container>
                 <Row className="d-flex flex-row-reverse bd-highlight mb-3">
                   {authenticated ? (
                     <>
                       <Col xs="auto">
                         <Link to="/waiter">
-                          <Button variant="outline-secondary" size="lg">
+                          <MenuButtonStyle>
                             Waiter
-                          </Button>
+                          </MenuButtonStyle>
                         </Link>
                       </Col>
                       <Col xs="auto">
                         <Link to="/kitchen">
-                          <Button variant="outline-info" size="lg">
+                          <MenuButtonStyle>
                             Kitchen
-                          </Button>
+                          </MenuButtonStyle>
                         </Link>
                       </Col>
                       <Col xs="auto">
                         <Link to="/welcomingstaff">
-                          <Button variant="outline-primary" size="lg">
+                          <MenuButtonStyle>
                             Welcoming Staff
-                          </Button>
+                          </MenuButtonStyle>
                         </Link>
                       </Col>
                     </>
                   ) : (
                     <Col xs="auto">
                       <Link to="/login">
-                        <Button variant="outline-warning" size="lg">
-                          Login
-                        </Button>
+                        <LoginButtonStyle>
+
+                        </LoginButtonStyle>
                       </Link>
                     </Col>
                   )}
                 </Row>
-              <Row className="d-flex mb-5 align-content-center justify-content-center">
-                <HeadingStyle>
-                  Oaxaca Restaurant
-                </HeadingStyle>
-              </Row>
-              <Row className="d-flex mb-auto align-content-center justify-content-center">
-                <Col xs="auto">
-                  <Link to="/menu">
-                    <ButtonStyle>
-                      Menu
-                    </ButtonStyle>
-                  </Link>
-                </Col>
-              </Row>
-
-            </Container>
+              </Container>
+            </LoginStyle>
+            <CenterStyle>
+              <Container>
+                <Row className="d-flex mb-5 align-content-center justify-content-center">
+                  <HeadingStyle>Oaxaca Restaurant</HeadingStyle>
+                </Row>
+                <Row className="d-flex mb-auto align-content-center justify-content-center">
+                  <Col xs="auto">
+                    <Link to="/menu">
+                      <MenuButtonStyle>Click to Enter a world of magic</MenuButtonStyle>
+                    </Link>
+                  </Col>
+                </Row>
+              </Container>
+            </CenterStyle>
           </AppStyle>
         </Route>
 
