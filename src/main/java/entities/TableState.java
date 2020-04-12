@@ -139,17 +139,6 @@ public class TableState {
         tableNeedWaiter.remove(t);
     }
 
-    Table remove = null;
-       /* for (Table table : tableNeedWaiter) {
-            if (table.getTableNum() == t.getTableNum()) {
-                remove = table;
-            }
-        }
-        tableNeedWaiter.remove(remove);
-    }
-
-        */
-
     /**
      * Adds a table to the tables list.
      *
