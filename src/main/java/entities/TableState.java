@@ -98,13 +98,15 @@ public class TableState {
      * @param t The table
      */
     public static void removeOccupied(Table t) {
-        Table remove = null;
+        tableOccupied.remove(t);
+      /*  Table remove = null;
         for (Table table : tableOccupied) {
             if (table.equals(t)) {
                 remove = table;
             }
         }
         tableOccupied.remove(remove);
+        */
     }
 
     /**
@@ -134,14 +136,19 @@ public class TableState {
      */
     //TODO Tony Find better way for this:
     public static void removeNeedWaiter(Table t) {
-        Table remove = null;
-        for (Table table : tableNeedWaiter) {
+        tableNeedWaiter.remove(t);
+    }
+
+    Table remove = null;
+       /* for (Table table : tableNeedWaiter) {
             if (table.getTableNum() == t.getTableNum()) {
                 remove = table;
             }
         }
         tableNeedWaiter.remove(remove);
     }
+
+        */
 
     /**
      * Adds a table to the tables list.
