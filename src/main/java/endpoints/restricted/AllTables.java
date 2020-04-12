@@ -26,14 +26,15 @@ public class AllTables extends HttpServlet {
         try {
             TableState.updateTables();
         } catch (SQLException e) {
-            resp.sendError(500, "SQL exception");
+            resp.sendError(500, "SQL Error: Failed to update tables.");
             return;
         }
         List<Table> tables = null;
         try {
             tables = TableState.getTableList();
         } catch (SQLException e) {
-            e.printStackTrace();
+            resp.sendError(500, "SQL Error: Failed to get table list.");
+            return;
         }
         resp.setContentType("application/json");
         PrintWriter pw = resp.getWriter();
