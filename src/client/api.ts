@@ -127,10 +127,12 @@ export default class API {
     });
   }
 
-  static async saveBasket(tableID: number): Promise<void> {
-    await client.makeRequest("POST", "/save", {
+  static async saveBasket(tableID: number): Promise<number> {
+    return (
+      await client.makeRequest("POST", "/save", {
       table_num: tableID // eslint-disable-line
-    });
+      })
+    ).data;
   }
 
   static async addToBasket(item: MenuItem): Promise<void> {
@@ -221,9 +223,41 @@ export default class API {
     );
   }
 
+  static async getCustomerNotifications(
+    tableNum: number
+  ): Promise<Array<Notification>> {
+    const response = await client.makeRequest("GET", "/customernotifications", {
+      tableNum: tableNum
+    });
+
+    return response.data.map(
+      (notification: any) =>
+        new Notification(
+          notification.notificationID,
+          "Order update",
+          notification.message,
+          new Date(notification.time),
+          notification.type,
+          notification.extraData ? notification.extraData.orderID : null
+        )
+    );
+  }
+
   static async delNotification(notificationID: number): Promise<void> {
     await client.makeRequest("DELETE", "/restricted/staffnotifications", {
       notificationID: notificationID
+    });
+  }
+
+  static async delCustomerNotification(notificationID: number): Promise<void> {
+    await client.makeRequest("DELETE", "/customernotifications", {
+      notificationID: notificationID
+    });
+  }
+
+  static async cancelOrder(orderID: number): Promise<void> {
+    await client.makeRequest("POST", "/restricted/cancelorder", {
+      orderID: orderID
     });
   }
 }

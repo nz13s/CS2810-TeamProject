@@ -1,14 +1,14 @@
 import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
+import {Col, Container, Row} from "react-bootstrap";
 
-import { Button, Col, Container, Row } from "react-bootstrap";
-
-import { AppStyle } from "./App.styled";
+import {AppStyle, CenterStyle, HeadingStyle, LoginButtonStyle, LoginStyle, MenuButtonStyle} from "./App.styled";
 import Menu from "../menu/Menu";
 import Waiter from "../waiter/Waiter";
 import Kitchen from "../kitchen/Kitchen";
 import API from "../../client/api";
 import Login from "../login/Login";
+import WelcomingStaff from "../WelcomingStaff/WelcomingStaff";
 
 interface State {
   authenticated: boolean;
@@ -36,47 +36,58 @@ export default class App extends React.Component<any, State> {
       <Switch>
         <Route exact path="/">
           <AppStyle>
-            <Container>
-              <Row className="d-flex mb-5 justify-content-center">
-                <h2>Oaxaca Restaurant</h2>
-              </Row>
-              <Row className="d-flex justify-content-center">
-                <Col xs="auto">
-                  <Link to="/menu">
-                    <Button variant="outline-danger" size="lg">
-                      Menu
-                    </Button>
-                  </Link>
-                </Col>
-
-                {authenticated ? (
-                  <>
+            <LoginStyle>
+              <Container>
+                <Row className="d-flex flex-row-reverse bd-highlight mb-3">
+                  {authenticated ? (
+                    <>
+                      <Col xs="auto">
+                        <Link to="/waiter">
+                          <MenuButtonStyle>
+                            Waiter
+                          </MenuButtonStyle>
+                        </Link>
+                      </Col>
+                      <Col xs="auto">
+                        <Link to="/kitchen">
+                          <MenuButtonStyle>
+                            Kitchen
+                          </MenuButtonStyle>
+                        </Link>
+                      </Col>
+                      <Col xs="auto">
+                        <Link to="/welcomingstaff">
+                          <MenuButtonStyle>
+                            Welcoming Staff
+                          </MenuButtonStyle>
+                        </Link>
+                      </Col>
+                    </>
+                  ) : (
                     <Col xs="auto">
-                      <Link to="/waiter">
-                        <Button variant="outline-secondary" size="lg">
-                          Waiter
-                        </Button>
+                      <Link to="/login">
+                        <LoginButtonStyle>
+                        </LoginButtonStyle>
                       </Link>
                     </Col>
-                    <Col xs="auto">
-                      <Link to="/kitchen">
-                        <Button variant="outline-info" size="lg">
-                          Kitchen
-                        </Button>
-                      </Link>
-                    </Col>
-                  </>
-                ) : (
+                  )}
+                </Row>
+              </Container>
+            </LoginStyle>
+            <CenterStyle>
+              <Container>
+                <Row className="d-flex mb-5 align-content-center justify-content-center">
+                  <HeadingStyle>Oaxaca Restaurant</HeadingStyle>
+                </Row>
+                <Row className="d-flex mb-auto align-content-center justify-content-center">
                   <Col xs="auto">
-                    <Link to="/login">
-                      <Button variant="outline-warning" size="lg">
-                        Login
-                      </Button>
+                    <Link to="/menu">
+                      <MenuButtonStyle>Click to Enter a world of magic</MenuButtonStyle>
                     </Link>
                   </Col>
-                )}
-              </Row>
-            </Container>
+                </Row>
+              </Container>
+            </CenterStyle>
           </AppStyle>
         </Route>
 
@@ -84,6 +95,7 @@ export default class App extends React.Component<any, State> {
         <Route path="/login" component={Login} />
         <Route path="/waiter" component={Waiter} />
         <Route path="/kitchen" component={Kitchen} />
+        <Route path="/welcomingstaff" component={WelcomingStaff} />
       </Switch>
     );
   }
