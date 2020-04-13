@@ -2,9 +2,6 @@ package endpoints;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Notification;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -74,7 +71,6 @@ public class CustomerNotifications extends HttpServlet {
             resp.sendError(400, "Invalid ID entered.");
         }
 
-        NotificationSocket.broadcastNotification(new SocketMessage(cNotifications.getNotificationByID(notificationID), SocketMessageType.DELETE));
         cNotifications.removeNotificationByID(notificationID);
     }
 
