@@ -25,7 +25,7 @@ public class TableState {
      */
     public static ArrayList<Table> getTableList() throws SQLException {
         if (tables.isEmpty()) {
-            Database.TABLES.fetchTables();
+            tables = Database.TABLES.fetchTables();
         }
         return tables;
     }
