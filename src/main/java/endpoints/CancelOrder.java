@@ -1,4 +1,4 @@
-package endpoints.restricted;
+package endpoints;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -219,11 +219,11 @@
 
     <servlet>
         <servlet-name>CancelOrder</servlet-name>
-        <servlet-class>endpoints.restricted.CancelOrder</servlet-class>
+        <servlet-class>endpoints.CancelOrder</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CancelOrder</servlet-name>
-        <url-pattern>/restricted/cancelorder</url-pattern>
+        <url-pattern>/cancelorder</url-pattern>
     </servlet-mapping>
 
 </web-app>
