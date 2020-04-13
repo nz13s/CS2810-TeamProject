@@ -18,9 +18,9 @@ const CenterStyle = styled.div`
 
 const LoginStyle = styled.div`
   height: 100%;
-  position:absolute;
-  top:5%;
-  right:5%;
+  position: absolute;
+  top: 5%;
+  right: 5%;
 `;
 
 const HeadingStyle = styled.h1`
@@ -34,7 +34,7 @@ const HeadingStyle = styled.h1`
 
 const MenuButtonStyle = styled.button`
   border: none;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: #ffffff !important;
   padding: 20px;
   border-radius: 6px;
@@ -64,7 +64,7 @@ const MenuButtonStyle = styled.button`
 
 const LoginButtonStyle = styled.button`
   border: none;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   color: #ffffff !important;
   padding: 20px;
   border-radius: 6px;
@@ -85,4 +85,11 @@ const LoginButtonStyle = styled.button`
   }
 `;
 
-export { AppStyle, LoginButtonStyle, CenterStyle, HeadingStyle, MenuButtonStyle, LoginStyle };
+export {
+  AppStyle,
+  LoginButtonStyle,
+  CenterStyle,
+  HeadingStyle,
+  MenuButtonStyle,
+  LoginStyle
+};

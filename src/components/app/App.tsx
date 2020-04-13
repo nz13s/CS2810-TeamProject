@@ -43,31 +43,24 @@ export default class App extends React.Component<any, State> {
                     <>
                       <Col xs="auto">
                         <Link to="/waiter">
-                          <MenuButtonStyle>
-                            Waiter
-                          </MenuButtonStyle>
+                          <MenuButtonStyle>Waiter</MenuButtonStyle>
                         </Link>
                       </Col>
                       <Col xs="auto">
                         <Link to="/kitchen">
-                          <MenuButtonStyle>
-                            Kitchen
-                          </MenuButtonStyle>
+                          <MenuButtonStyle>Kitchen</MenuButtonStyle>
                         </Link>
                       </Col>
                       <Col xs="auto">
                         <Link to="/welcomingstaff">
-                          <MenuButtonStyle>
-                            Welcoming Staff
-                          </MenuButtonStyle>
+                          <MenuButtonStyle>Welcoming Staff</MenuButtonStyle>
                         </Link>
                       </Col>
                     </>
                   ) : (
                     <Col xs="auto">
                       <Link to="/login">
-                        <LoginButtonStyle>
-                        </LoginButtonStyle>
+                        <LoginButtonStyle></LoginButtonStyle>
                       </Link>
                     </Col>
                   )}
@@ -82,7 +75,9 @@ export default class App extends React.Component<any, State> {
                 <Row className="d-flex mb-auto align-content-center justify-content-center">
                   <Col xs="auto">
                     <Link to="/menu">
-                      <MenuButtonStyle>Click to Enter a world of magic</MenuButtonStyle>
+                      <MenuButtonStyle>
+                        Click to Enter a world of magic
+                      </MenuButtonStyle>
                     </Link>
                   </Col>
                 </Row>
