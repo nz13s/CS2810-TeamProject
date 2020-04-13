@@ -256,7 +256,7 @@ export default class API {
   }
 
   static async cancelOrder(orderID: number): Promise<void> {
-    await client.makeRequest("POST", "/restricted/cancelorder", {
+    await client.makeRequest("POST", "/cancelorder", {
       orderID: orderID
     });
   }
