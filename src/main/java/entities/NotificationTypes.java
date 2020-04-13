@@ -9,7 +9,9 @@ public enum NotificationTypes {
     CUSTOM(""),
     ASSIGN("Table number assigned successfully"),
     NEED("Table needs a waiter."),
-    PREPARING("Order is being prepared");
+    PREPARING("Order is being prepared"),
+    REMOVE("Table has been removed from your managed tables.");
+
     //CONFIRMED("Order has been confirmed by the waiter/");
 
     private String notification;

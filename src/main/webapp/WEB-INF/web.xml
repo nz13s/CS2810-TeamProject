@@ -208,6 +208,14 @@
         <servlet-name>AllTables</servlet-name>
         <url-pattern>/restricted/tableinfo</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>TableManagement</servlet-name>
+        <servlet-class>endpoints.restricted.WaiterPanel</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableManagement</servlet-name>
+        <url-pattern>/restricted/tablemanagement</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>CancelOrder</servlet-name>

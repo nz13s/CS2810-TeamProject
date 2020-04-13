@@ -18,6 +18,7 @@ public class Table implements IFakeable {
     this.seatsAvailable = seatsAvailable;
     this.occupied = occupied;
     this.orders = orders;
+    waiter = null;
   }
 
   public int getTableNum() {

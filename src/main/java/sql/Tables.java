@@ -26,7 +26,7 @@ public class Tables {
 
     private PreparedStatement fetchTables;
     private PreparedStatement tableById;
-
+    private PreparedStatement updateTableOccupied;
     /**
      * Constructor that holds the SQL queries that are going to be used.
      *
@@ -45,6 +45,10 @@ public class Tables {
                 "SELECT table_num, seats_available, occupied\n" +
                         "FROM restaurant_table\n" +
                         "WHERE table_num = ?");
+        updateTableOccupied = connection.prepareStatement(
+                "UPDATE restaurant_table " +
+                        "SET occupied = ? " +
+                        "WHERE table_num = ?");
     }
 
     /**
@@ -54,8 +58,8 @@ public class Tables {
      * @throws SQLException thrown if sql logic is incorrect.
      */
 
-    public void fetchTables() throws SQLException {
-       // TableState tableState = new TableState();
+    public ArrayList<Table> fetchTables() throws SQLException {
+        // TableState tableState = new TableState();
         ResultSet resultSet = fetchTables.executeQuery();
         Set<Table> tables = new HashSet<>();
         TableState.removeAllTables();
@@ -79,7 +83,8 @@ public class Tables {
             }
             tables.add(t);
         }
-        tables.forEach(TableState::addTable);
+        return new ArrayList<>(tables);
+        //tables.forEach(TableState::addTable);
 
     }
 
@@ -135,5 +140,14 @@ public class Tables {
         }
         return null;
     }
+
+    public boolean updateTableOccupied(Boolean occupied, int tableNum) throws SQLException {
+        updateTableOccupied.setBoolean(1, occupied);
+        updateTableOccupied.setInt(2, tableNum);
+        updateTableOccupied.execute();
+        ResultSet resultSet = updateTableOccupied.getGeneratedKeys();
+        return resultSet.next();
+    }
+
 
 }

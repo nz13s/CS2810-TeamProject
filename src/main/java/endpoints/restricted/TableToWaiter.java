@@ -95,10 +95,15 @@ public class TableToWaiter extends HttpServlet {
 
         if (table != null) {
             assert staff != null;
-            success = ActiveStaff.addTableToStaff(table, staff);
+            try {
+                success = ActiveStaff.addTableToStaff(table, staff);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             Notification notif = new Notification(table, NotificationTypes.ASSIGN);
             ActiveStaff.addNotification(staff, notif);
             NotificationSocket.pushNotification(new SocketMessage(notif, SocketMessageType.CREATE), staff);
+            TableState.addOccupied(table);
             TableState.removeNeedWaiter(table);
 
             //after the waiter has been assigned to a table, all previous notifications for the table need to be removed.

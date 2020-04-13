@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import entities.TableState;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Class to serialise the table state, to pass to the Frontend.
@@ -26,7 +27,11 @@ public class TablesInfoSerialiser extends StdSerializer<TableState> {
     @Override
     public void serialize(TableState tableState, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("table_state", TableState.getTableList());
+        try {
+            jsonGenerator.writeObjectField("table_state", TableState.getTableUnOccupied());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         jsonGenerator.writeEndObject();
     }
 }
