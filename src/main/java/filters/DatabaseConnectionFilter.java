@@ -10,44 +10,50 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
 
+/**
+ * A class to filter database connections.
+ *
+ * @author Oliver Graham
+ */
 public class DatabaseConnectionFilter implements Filter {
 
-    private String cachedError;
-    private boolean checked = false;
+  private String cachedError;
+  private boolean checked = false;
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+          throws IOException, ServletException {
 
-        HttpServletResponse resp = (HttpServletResponse) response;
-        HttpServletRequest req = (HttpServletRequest) request;
+    HttpServletResponse resp = (HttpServletResponse) response;
+    HttpServletRequest req = (HttpServletRequest) request;
 
-        if (req.getMethod().equals("OPTIONS")){
-            resp.setHeader("Allow", "POST, GET, HEAD, OPTIONS, DELETE");
-            resp.setHeader("Access-Control-Allow-Methods", "POST, GET, HEAD, OPTIONS, DELETE");
-            return;
-        }
-
-        if (cachedError == null) {
-            if (!checked) {
-                SQLException ex = Database.getException();
-                if (ex == null) {
-                    checked = true;
-                } else {
-                    StringWriter stringWriter = new StringWriter();
-                    ex.printStackTrace(new PrintWriter(stringWriter));
-                    stringWriter.flush();
-                    cachedError = stringWriter.toString();
-                    stringWriter.close();
-                }
-            }
-        }
-
-        if (cachedError != null) {
-            resp.sendError(500, cachedError);
-            return;
-        }
-
-        chain.doFilter(request, response);
-
+    if (req.getMethod().equals("OPTIONS")) {
+      resp.setHeader("Allow", "POST, GET, HEAD, OPTIONS, DELETE");
+      resp.setHeader("Access-Control-Allow-Methods", "POST, GET, HEAD, OPTIONS, DELETE");
+      return;
     }
+
+    if (cachedError == null) {
+      if (!checked) {
+        SQLException ex = Database.getException();
+        if (ex == null) {
+          checked = true;
+        } else {
+          StringWriter stringWriter = new StringWriter();
+          ex.printStackTrace(new PrintWriter(stringWriter));
+          stringWriter.flush();
+          cachedError = stringWriter.toString();
+          stringWriter.close();
+        }
+      }
+    }
+
+    if (cachedError != null) {
+      resp.sendError(500, cachedError);
+      return;
+    }
+
+    chain.doFilter(request, response);
+
+  }
 }

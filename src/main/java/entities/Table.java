@@ -5,6 +5,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to initialise a Table object.
+ *
+ * @author Nick Bogachev, Oliver Graham, Jatin Khatra, Tony Delchev
+ */
 public class Table implements IFakeable {
   public int tableNum;
   private int seatsAvailable;
@@ -13,7 +18,9 @@ public class Table implements IFakeable {
   private StaffInstance waiter;
 
   public Table(int tableNum, int seatsAvailable, boolean occupied, @Nullable List<Order> orders) {
-    if (orders == null) orders = new ArrayList<>();
+    if (orders == null) {
+      orders = new ArrayList<>();
+    }
     this.tableNum = tableNum;
     this.seatsAvailable = seatsAvailable;
     this.occupied = occupied;
@@ -29,14 +36,6 @@ public class Table implements IFakeable {
     this.tableNum = tableNum;
   }
 
-  public int getSeatsAvailable() {
-    return seatsAvailable;
-  }
-
-  public void setSeatsAvailable(int seatsAvailable) {
-    this.seatsAvailable = seatsAvailable;
-  }
-
   public boolean isOccupied() {
     return occupied;
   }
@@ -50,18 +49,12 @@ public class Table implements IFakeable {
     return orders;
   }
 
-  public void addOrder(Order order) { orders.add(order); }
+  public void addOrder(Order order) {
+    orders.add(order);
+  }
 
   public void setOrders(List<Order> orders) {
     this.orders = orders;
-  }
-
-  public void newGuest() {
-    setSeatsAvailable(seatsAvailable--);
-  }
-
-  public void guestLeave() {
-    setSeatsAvailable(seatsAvailable++);
   }
 
   public StaffInstance getWaiter() {
@@ -72,6 +65,7 @@ public class Table implements IFakeable {
   public boolean isFake() {
     return orders == null;
   }
+
   public void setWaiter(StaffInstance waiter) {
     this.waiter = waiter;
   }

@@ -1,5 +1,10 @@
 package websockets;
 
+/**
+ * Enums for socket message types.
+ *
+ * @author Oliver Graham
+ */
 public enum SocketMessageType {
 
     UPDATE(0) /*for updating an already existing order */,
@@ -12,7 +17,4 @@ public enum SocketMessageType {
         this.typeNum = type;
     }
 
-    public int getTypeNum() {
-        return typeNum;
-    }
 }

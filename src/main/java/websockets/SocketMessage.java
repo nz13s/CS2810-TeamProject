@@ -2,6 +2,11 @@ package websockets;
 
 import entities.ISerialisable;
 
+/**
+ * A class to initialise a socket message.
+ *
+ * @author Oliver Graham
+ */
 public class SocketMessage implements ISerialisable {
 
     ISerialisable content;
@@ -12,11 +17,4 @@ public class SocketMessage implements ISerialisable {
         this.messageType = messageType;
     }
 
-    public ISerialisable getContent() {
-        return content;
-    }
-
-    public SocketMessageType getMessageType() {
-        return messageType;
-    }
 }

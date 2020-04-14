@@ -1,7 +1,6 @@
 package databaseInit;
 
 import sql.*;
-import sql.Tables;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -10,6 +9,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
+/**
+ * The class to initialise the Database.
+ *
+ * @author Jatin Khatra, Oliver Graham
+ */
 @WebListener
 public class Database implements ServletContextListener {
 
@@ -25,12 +30,19 @@ public class Database implements ServletContextListener {
   public static Categories CATEGORIES;
   public static Tables TABLES;
 
-  public Database(){
+  public Database() {
     instance = instance == null ? this : null; //preserve the current instance if it is not null
   }
 
+  /**
+   * Establishes a connection to the database using preset url, username and pwd.
+   *
+   * @throws SQLException if connection fails.
+   */
   private void connect() throws SQLException {
-    if (instance != this) return; //prevent this from running multiple times
+    if (instance != this) {
+      return; //prevent this from running multiple times
+    }
     String url = "jdbc:postgresql://localhost/tomcat?tcpKeepAlive=true";
     String username = "tomcat";
     String password = "Us17eEXAIkBs2fhZRtQr";
@@ -43,7 +55,7 @@ public class Database implements ServletContextListener {
       e.printStackTrace();
     }
 
-    if (connection == null){
+    if (connection == null) {
       System.out.println("Error.");
       return;
     }
@@ -57,11 +69,11 @@ public class Database implements ServletContextListener {
     TABLES = new Tables(connection);
   }
 
-  public static SQLException getException(){
+  public static SQLException getException() {
     return sqlException;
   }
 
-  private void disconnect() throws SQLException{
+  private void disconnect() throws SQLException {
     connection.close();
   }
 

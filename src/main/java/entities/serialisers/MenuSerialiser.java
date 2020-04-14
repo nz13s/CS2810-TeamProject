@@ -10,24 +10,24 @@ import java.io.IOException;
 /**
  * Class that serialises the Menu objects.
  *
- * @author Jatin
- * @author Cameron
+ * @author Jatin Khatra, Cameron Jones
  */
 
 public class MenuSerialiser extends StdSerializer<Menu> {
 
-    public MenuSerialiser() {
-        this(null);
-    }
+  public MenuSerialiser() {
+    this(null);
+  }
 
-    public MenuSerialiser(Class<Menu> varName) {
-        super(varName);
-    }
+  public MenuSerialiser(Class<Menu> varName) {
+    super(varName);
+  }
 
-    @Override
-    public void serialize(Menu varName, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("categories", varName.getCategoryList());
-        jsonGenerator.writeEndObject();
-    }
+  @Override
+  public void serialize(Menu varName, JsonGenerator jsonGenerator, SerializerProvider serializer)
+          throws IOException {
+    jsonGenerator.writeStartObject();
+    jsonGenerator.writeObjectField("categories", varName.getCategoryList());
+    jsonGenerator.writeEndObject();
+  }
 }

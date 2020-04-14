@@ -26,77 +26,78 @@ import java.util.stream.Collectors;
  * Class that converts a Queue of Orders from a database, to JSON and GETs it
  * to the frontend.
  *
- * @author Jatin
- * @author Cameron
- * @author Bhavik
+ * @author Jatin Khatra, Cameron Jones, Bhavik Narang
  */
-
 public class OrdersToFrontend extends HttpServlet {
+  private static ObjectMapper mapper;
 
-    private static ObjectMapper mapper;
+  /**
+   * Constructor that initialises the mapper attribute.
+   */
+  public OrdersToFrontend() {
+    mapper = new ObjectMapper();
+    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    SimpleModule module = new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
+    module.addSerializer(Queue.class, new QueueSerialiser());
+    mapper.registerModule(module);
+  }
 
-    /**
-     * Constructor that initialises the mapper attribute.
-     */
+  /**
+   * Method that converts the objects in Queue into JSON.
+   *
+   * @return String that represents the Queue in JSON.
+   * @throws IOException
+   * @throws SQLException if there is an error with ordersGet statement.
+   */
+  public static String queueToJson() throws SQLException, IOException {
 
-    public OrdersToFrontend() {
-        mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        SimpleModule module = new SimpleModule("Serialiser", new Version(1, 0, 0, null, null, null));
-        module.addSerializer(Queue.class, new QueueSerialiser());
-        mapper.registerModule(module);
+    Queue q = new Queue(getOrderQueue());
+
+    return mapper.writeValueAsString(q);
+  }
+
+  /**
+   * Method that gets a queue of orders to send to frontend.
+   *
+   * @return ArrayList of orders
+   * @throws SQLException
+   */
+  public static ArrayList<Order> getOrderQueue() throws SQLException {
+    ArrayList<Order> p = Database.ORDERS.getOrders(0L, 0L);
+
+    //add some custom payloads to serve
+    List<IndexedOrder> orders = p.stream()
+            .map(o -> (IndexedOrder) o)
+            .sorted(
+                    (o1, o2) -> (int) Math.signum(o1.findLatestTime() - o2.findLatestTime())
+            )
+            .collect(Collectors.toList());
+    int rank = 0;
+    for (Order order : orders) {
+      ((IndexedOrder) order).setRank(rank++);
     }
+    return p;
+  }
 
-    /**
-     * Method that converts the objects in Queue into JSON.
-     *
-     * @return String that represents the Queue in JSON.
-     * @throws IOException
-     * @throws SQLException if there is an error with ordersGet statement.
-     */
-    public static String queueToJSON() throws SQLException, IOException {
+  /**
+   * Method that GETs the JSON objects.
+   *
+   * @param req  server request.
+   * @param resp server response.
+   * @throws IOException exception
+   */
 
-        Queue q = new Queue(getOrderQueue());
-
-        return mapper.writeValueAsString(q);
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    resp.reset();
+    resp.setContentType("application/json");
+    PrintWriter pw = resp.getWriter();
+    try {
+      pw.println(queueToJson());
+    } catch (SQLException e) {
+      e.printStackTrace();
+      pw.println(e.getMessage());
     }
-
-    public static ArrayList<Order> getOrderQueue() throws SQLException {
-        ArrayList<Order> p = Database.ORDERS.getOrders(0L, 0L);
-
-        //add some custom payloads to serve
-        List<IndexedOrder> orders = p.stream()
-                .map(o -> (IndexedOrder) o)
-                .sorted(
-                        (o1, o2) -> (int) Math.signum(o1.findLatestTime() - o2.findLatestTime())
-                )
-                .collect(Collectors.toList());
-        int rank = 0;
-        for (Order order : orders) {
-            ((IndexedOrder) order).setRank(rank++);
-        }
-        return p;
-    }
-
-    /**
-     * Method that GETs the JSON objects.
-     *
-     * @param req  server request.
-     * @param resp server response.
-     * @throws IOException exception
-     */
-
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.reset();
-        resp.setContentType("application/json");
-        PrintWriter pw = resp.getWriter();
-        try {
-            pw.println(queueToJSON());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            pw.println(e.getMessage());
-        }
-        pw.flush();
-    }
+    pw.flush();
+  }
 
 }

@@ -6,9 +6,8 @@ import java.util.ArrayList;
 /**
  * Class that stores all categories of the food menu.
  *
- * @author Jatin
+ * @author Jatin Khatra, Nick Bogachev, Oliver Graham
  */
-
 public class Menu implements ISerialisable {
 
   private ArrayList<Category> menu;
@@ -16,7 +15,6 @@ public class Menu implements ISerialisable {
   /**
    * Constructor initialises the menu ArrayList.
    */
-
   public Menu() {
     this(new ArrayList<>());
   }
@@ -26,8 +24,7 @@ public class Menu implements ISerialisable {
    *
    * @param category ArrayList containing information about a category.
    */
-
-  public Menu(@Nonnull ArrayList<Category> category){
+  public Menu(@Nonnull ArrayList<Category> category) {
     this.menu = category;
   }
 
@@ -36,30 +33,8 @@ public class Menu implements ISerialisable {
    *
    * @param category of type Category
    */
-
   public void addCat(Category category) {
     menu.add(category);
-  }
-
-  /**
-   * Returns the size of the menu ArrayList.
-   *
-   * @return size of menu.
-   */
-
-  public int size() {
-    return menu.size();
-  }
-
-  /**
-   * Returns a category from a given index.
-   *
-   * @param i representing the index.
-   * @return category from given i.
-   */
-
-  public Category getCat(int i) {
-    return menu.get(i);
   }
 
   /**
@@ -67,7 +42,6 @@ public class Menu implements ISerialisable {
    *
    * @return menu list.
    */
-
   @Nonnull
   public ArrayList<Category> getCategoryList() {
     return menu;

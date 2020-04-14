@@ -7,73 +7,47 @@ import java.util.ArrayList;
  *
  * @author Jatin Khatra
  */
-
 public class CustomerNotifications {
+  private static ArrayList<Notification> notifications;
 
-    private static ArrayList<Notification> notifications;
+  public CustomerNotifications() {
+    notifications = new ArrayList<>();
+  }
 
-    public CustomerNotifications() {
-        notifications = new ArrayList<Notification>();
-    }
+  /**
+   * Getter for the notifications list.
+   *
+   * @return notifications list.
+   */
+  public ArrayList<Notification> getNotifications() {
+    return notifications;
+  }
 
-    /**
-     * Getter for the notifications list
-     *
-     * @return notifications list.
-     */
+  /**
+   * Adds a notification object to the list.
+   *
+   * @param notification the notification to be added to the list.
+   */
+  public void addNotification(Notification notification) {
+    notifications.add(notification);
+  }
 
-    public ArrayList<Notification> getNotifications() {
-        return notifications;
-    }
+  /**
+   * Removes a notification from the list, based on a given ID.
+   *
+   * @param id ID of the notification to be removed.
+   */
+  public void removeNotificationByID(int id) {
+    notifications.removeIf(notification -> notification.getNotificationID() == id);
+  }
 
-    /**
-     * Adds a notification object to the list.
-     *
-     * @param notification the notification to be added to the list.
-     */
-
-    public void addNotification(Notification notification) {
-        notifications.add(notification);
-    }
-
-    /**
-     * Removes a notification from the list, based on a given ID.
-     *
-     * @param id ID of the notification to be removed.
-     */
-
-    public void removeNotificationByID(int id) {
-        notifications.removeIf(notification -> notification.getNotificationID() == id);
-    }
-
-    /**
-     * Returns a notification, based on a given notificationID.
-     *
-     * @param ID ID of the notification to be returned.
-     * @return matching Notification object based on the given ID.
-     */
-
-    public Notification getNotificationByID(int ID) {
-        for (Notification notification : notifications) {
-            if (notification.getNotificationID() == ID) {
-                return notification;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes all notifications based on a given tableNum.
-     *
-     * @param tableNum given tableNum to remove all notifications for.
-     */
-
-    public void removeNotificationsByTableNum(int tableNum) {
-        for (Notification notification : notifications) {
-            if (notification.getTable().getTableNum() == tableNum) {
-                notifications.remove(notification);
-            }
-        }
-    }
+  /**
+   * Removes all notifications based on a given tableNum.
+   *
+   * @param tableNum given tableNum to remove all notifications for.
+   */
+  public void removeNotificationsByTableNum(int tableNum) {
+    notifications.removeIf(notification -> notification.getTable().getTableNum() == tableNum);
+  }
 
 }

@@ -6,55 +6,65 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Food implements ISerialisable, IFakeable {
+  private boolean available;
   private int foodID = -1;
   private String foodName;
   private String foodDescription;
   private int calories;
   private BigDecimal price;
-  private boolean available;
   private int categoryID;
   private ArrayList<Ingredient> ingredients;
-  private String imageURL;
+  private String imageUrl;
 
-  public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories, BigDecimal price,
-              boolean available, int categoryID, ArrayList<Ingredient> ingredients, @Nullable String imageURL) {
+  public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories,
+              BigDecimal price, int categoryID, ArrayList<Ingredient> ingredients,
+              @Nullable String imageUrl) {
     this.foodID = foodID;
     this.foodName = foodName;
     this.foodDescription = foodDescription;
     this.calories = calories;
     this.price = price;
-    this.available = available;
     this.categoryID = categoryID;
     this.ingredients = ingredients;
-    this.imageURL = imageURL;
+    this.imageUrl = imageUrl;
   }
 
-  public Food(@Nonnull String foodName, @Nonnull String foodDescription, int calories, BigDecimal price,
-              boolean available, int categoryID, ArrayList<Ingredient> ingredients, @Nullable String imageURL) {
+  public Food(@Nonnull String foodName, @Nonnull String foodDescription, int calories,
+              BigDecimal price, int categoryID, ArrayList<Ingredient> ingredients,
+              @Nullable String imageUrl) {
     this.foodName = foodName;
     this.foodDescription = foodDescription;
     this.calories = calories;
     this.price = price;
-    this.available = available;
     this.categoryID = categoryID;
     this.ingredients = ingredients;
-    this.imageURL = imageURL;
+    this.imageUrl = imageUrl;
   }
 
-  public String getImageURL() {
-    return imageURL;
+  public Food(int food_id, @Nonnull String food_name, @Nonnull String food_description, int calories,
+              BigDecimal price, boolean available, int category_id,
+              ArrayList<Ingredient> ingredients, @Nonnull String image_url) {
+    this.foodID = food_id;
+    this.foodName = food_name;
+    this.foodDescription = food_description;
+    this.calories = calories;
+    this.price = price;
+    this.available = available;
+    this.categoryID = category_id;
+    this.ingredients = ingredients;
+    this.imageUrl = image_url;
   }
 
-  public void setImageURL(String imageURL) {
-    this.imageURL = imageURL;
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 
   public int getFoodID() {
     return foodID;
-  }
-
-  public void setFoodID(int foodID) {
-    this.foodID = foodID;
   }
 
   @Nonnull
@@ -91,24 +101,12 @@ public class Food implements ISerialisable, IFakeable {
     this.price = price;
   }
 
-  public boolean isAvailable() {
-    return available;
-  }
-
-  public void setAvailable(boolean available) {
-    this.available = available;
-  }
-
   public int getCategoryID() { return categoryID; };
 
   public void setCategoryID(int categoryID) { this.categoryID = categoryID; }
 
   public ArrayList<Ingredient> getIngredients() {
     return ingredients;
-  }
-
-  public int size() {
-    return ingredients.size();
   }
 
   public void addIngredient(Ingredient ingredient) {

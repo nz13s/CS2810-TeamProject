@@ -10,25 +10,24 @@ import java.io.IOException;
 /**
  * Class that serialises the Queue objects.
  *
- * @author Bhavik
- * @author Jatin
- * @author Cameron
+ * @author Bhavik Narang, Jatin Khatra, Cameron Jones
  */
 
 public class QueueSerialiser extends StdSerializer<Queue> {
 
-    public QueueSerialiser() {
-        this(null);
-    }
+  public QueueSerialiser() {
+    this(null);
+  }
 
-    public QueueSerialiser(Class<Queue> varName) {
-        super(varName);
-    }
+  public QueueSerialiser(Class<Queue> varName) {
+    super(varName);
+  }
 
-    @Override
-    public void serialize(Queue varName, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("orders", varName.getList());
-        jsonGenerator.writeEndObject();
-    }
+  @Override
+  public void serialize(Queue varName, JsonGenerator jsonGenerator, SerializerProvider serializer)
+          throws IOException {
+    jsonGenerator.writeStartObject();
+    jsonGenerator.writeObjectField("orders", varName.getList());
+    jsonGenerator.writeEndObject();
+  }
 }
