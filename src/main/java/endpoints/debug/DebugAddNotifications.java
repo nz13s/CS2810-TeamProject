@@ -1,7 +1,6 @@
 package endpoints.debug;
 
-import entities.Notification;
-import entities.StaffInstance;
+import entities.*;
 import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
