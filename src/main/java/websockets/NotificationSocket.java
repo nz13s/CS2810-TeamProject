@@ -3,10 +3,6 @@ package websockets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.StaffInstance;
 import filters.HttpSessionCollector;
-
-import javax.servlet.http.HttpSession;
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -17,6 +13,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpSession;
+import javax.websocket.*;
+import javax.websocket.server.ServerEndpoint;
 
 /**
  * A class to implement notifications via sockets.

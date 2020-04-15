@@ -9,12 +9,12 @@ import entities.ISerialisable;
  */
 public class SocketMessage implements ISerialisable {
 
-    ISerialisable content;
-    SocketMessageType messageType;
+  ISerialisable content;
+  SocketMessageType messageType;
 
-    public SocketMessage(ISerialisable content, SocketMessageType messageType) {
-        this.content = content;
-        this.messageType = messageType;
-    }
+  public SocketMessage(ISerialisable content, SocketMessageType messageType) {
+    this.content = content;
+    this.messageType = messageType;
+  }
 
 }
