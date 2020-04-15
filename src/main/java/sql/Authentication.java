@@ -1,7 +1,5 @@
 package sql;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -10,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
 
 /**
  * Class to initialise authentication to frontend.
@@ -46,7 +47,7 @@ public class Authentication {
    * Attempt to log the user in. Returns userID if successful, else a negative, failure number.
    *
    * @return return >= 0 on success, return < 0 on failure - -1 for user not found
-   * or password incorrect. -2 for an SQL error
+   *         or password incorrect. -2 for an SQL error
    */
   public int login(String username, String password) {
     try {

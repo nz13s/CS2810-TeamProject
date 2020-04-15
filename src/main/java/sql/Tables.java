@@ -5,8 +5,6 @@ import entities.Item;
 import entities.Order;
 import entities.Table;
 import entities.TableState;
-
-import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
+import javax.annotation.Nullable;
 
 /**
  * Class that stores SQL queries related to the restaurant_table in the database.

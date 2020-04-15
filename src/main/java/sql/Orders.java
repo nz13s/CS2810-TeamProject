@@ -4,12 +4,12 @@ import entities.Food;
 import entities.IndexedOrder;
 import entities.Item;
 import entities.Order;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * Orders Class deals with all order related queries and methods.
