@@ -83,7 +83,7 @@ public class StaffInstance {
    *
    * @param tableNum The number of the table to get
    * @return The table specified by the table number, null if the staff member is not in
-   * charge of that table.
+   *         charge of that table.
    */
   public Table getTable(int tableNum) {
     return managedTables.stream().filter(table ->

@@ -1,8 +1,8 @@
 package entities;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Objects;
+import javax.annotation.Nonnull;
 
 /**
  * Class that contains all foods that are under the given category name.

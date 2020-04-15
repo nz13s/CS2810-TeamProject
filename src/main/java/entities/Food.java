@@ -1,10 +1,15 @@
 package entities;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+/**
+ * Class implementing a Food item.
+ *
+ * @author Nick Bogachev, Oliver Graham, Jatin Khatra
+ */
 public class Food implements ISerialisable, IFakeable {
   private boolean available;
   private int foodID = -1;
@@ -16,6 +21,19 @@ public class Food implements ISerialisable, IFakeable {
   private ArrayList<Ingredient> ingredients;
   private String imageUrl;
 
+
+  /**
+   * Standard Food constructor.
+   *
+   * @param foodID
+   * @param foodName
+   * @param foodDescription
+   * @param calories
+   * @param price
+   * @param categoryID
+   * @param ingredients
+   * @param imageUrl
+   */
   public Food(int foodID, @Nonnull String foodName, @Nonnull String foodDescription, int calories,
               BigDecimal price, int categoryID, ArrayList<Ingredient> ingredients,
               @Nullable String imageUrl) {
@@ -29,6 +47,17 @@ public class Food implements ISerialisable, IFakeable {
     this.imageUrl = imageUrl;
   }
 
+  /**
+   * Food constructor without assigning food ID.
+   *
+   * @param foodName
+   * @param foodDescription
+   * @param calories
+   * @param price
+   * @param categoryID
+   * @param ingredients
+   * @param imageUrl
+   */
   public Food(@Nonnull String foodName, @Nonnull String foodDescription, int calories,
               BigDecimal price, int categoryID, ArrayList<Ingredient> ingredients,
               @Nullable String imageUrl) {
@@ -41,8 +70,21 @@ public class Food implements ISerialisable, IFakeable {
     this.imageUrl = imageUrl;
   }
 
-  public Food(int food_id, @Nonnull String food_name, @Nonnull String food_description, int calories,
-              BigDecimal price, boolean available, int category_id,
+  /**
+   * Food constructor with an available boolean field.
+   *
+   * @param food_id
+   * @param food_name
+   * @param food_description
+   * @param calories
+   * @param price
+   * @param available
+   * @param category_id
+   * @param ingredients
+   * @param image_url
+   */
+  public Food(int food_id, @Nonnull String food_name, @Nonnull String food_description,
+              int calories, BigDecimal price, boolean available, int category_id,
               ArrayList<Ingredient> ingredients, @Nonnull String image_url) {
     this.foodID = food_id;
     this.foodName = food_name;
@@ -101,9 +143,13 @@ public class Food implements ISerialisable, IFakeable {
     this.price = price;
   }
 
-  public int getCategoryID() { return categoryID; };
+  public int getCategoryID() {
+    return categoryID;
+  }
 
-  public void setCategoryID(int categoryID) { this.categoryID = categoryID; }
+  public void setCategoryID(int categoryID) {
+    this.categoryID = categoryID;
+  }
 
   public ArrayList<Ingredient> getIngredients() {
     return ingredients;

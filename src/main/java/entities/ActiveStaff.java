@@ -1,14 +1,15 @@
 package entities;
 
 import databaseInit.Database;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
+import java.sql.SQLException;
+
 import websockets.NotificationSocket;
 import websockets.SocketMessage;
 import websockets.SocketMessageType;
-
-import javax.annotation.Nullable;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Stores a list of active {@link StaffInstance} so that they can be referenced

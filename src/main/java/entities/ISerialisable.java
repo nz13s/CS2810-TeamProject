@@ -1,7 +1,7 @@
 package entities;
 
 /**
- * Marks a class as serialisable
+ * Marks a class as serialisable.
  *
  * @author Oliver Graham
  */

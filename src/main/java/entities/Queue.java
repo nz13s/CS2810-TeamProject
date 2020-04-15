@@ -1,8 +1,8 @@
 package entities;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * Class that stores all Order objects inside an ArrayList.

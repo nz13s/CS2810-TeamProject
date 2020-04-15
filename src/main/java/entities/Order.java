@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import databaseInit.Database;
 import endpoints.restricted.AddToOrder;
 
-import javax.annotation.Nonnull;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.SQLException;
+import javax.annotation.Nonnull;
 
 /**
  * Class implementing logic for initialising Orders.

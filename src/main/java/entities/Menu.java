@@ -1,7 +1,7 @@
 package entities;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import javax.annotation.Nonnull;
 
 /**
  * Class that stores all categories of the food menu.
