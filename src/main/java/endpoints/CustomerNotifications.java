@@ -2,13 +2,13 @@ package endpoints;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Notification;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * Endpoint that handles notifications related to customer's order tracking.

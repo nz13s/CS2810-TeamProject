@@ -1,9 +1,9 @@
 package endpoints.restricted;
 
+import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * ExampleRestricted class for when accessing restricted information.

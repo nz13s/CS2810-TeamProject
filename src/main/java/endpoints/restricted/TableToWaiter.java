@@ -7,16 +7,15 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import endpoints.GlobalMethods;
 import entities.*;
 import entities.serialisers.TablesInfoSerialiser;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 /**
  * The class to assign a Table to waiter.

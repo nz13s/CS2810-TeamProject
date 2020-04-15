@@ -7,18 +7,17 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import databaseInit.Database;
 import entities.*;
 import entities.serialisers.QueueSerialiser;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 
 /**
@@ -161,7 +160,7 @@ public class AcceptOrder extends HttpServlet {
    * @param resp The {@link HttpServletResponse} object that contains
    *             the response the servlet returns to the client.
    * @return The order ID of the order, as stored in the database, for the staff member
-   * to check before it is validated.
+   *         to check before it is validated.
    * @throws IOException           IOException If an input or output exception occurs.
    * @throws NumberFormatException Thrown when an invalid number is passed by the frontend.
    */

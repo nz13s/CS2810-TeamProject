@@ -11,16 +11,16 @@ import entities.IndexedOrder;
 import entities.Order;
 import entities.Queue;
 import entities.serialisers.QueueSerialiser;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * Class that converts a Queue of Orders from a database, to JSON and GETs it

@@ -5,18 +5,18 @@ import databaseInit.Database;
 import entities.NotificationTypes;
 import entities.Order;
 import entities.StaffInstance;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
 
-import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 /**
  * Endpoint for the frontend to call to get the notifications for a sessions {@link StaffInstance}.

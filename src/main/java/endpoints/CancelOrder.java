@@ -8,14 +8,13 @@ import databaseInit.Database;
 import entities.Order;
 import entities.serialisers.CancelledOrdersSerialiser;
 import entities.serialisers.OrderSerialiser;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Endpoint for the frontend to call to cancel orders {@link Order}.

@@ -1,14 +1,13 @@
 package endpoints.debug;
 
 import entities.*;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
-
+import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 /**
  * Endpoint for the frontend to call to add notifications to the active {@link StaffInstance}.

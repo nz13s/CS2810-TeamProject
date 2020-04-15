@@ -2,16 +2,15 @@ package endpoints;
 
 import databaseInit.Database;
 import entities.*;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 /**
  * Class for handling the saving of a sessions {@link Order}.

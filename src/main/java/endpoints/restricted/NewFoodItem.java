@@ -4,14 +4,14 @@ import databaseInit.Database;
 import entities.Food;
 import entities.Ingredient;
 import entities.StaffInstance;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * Endpoint for the frontend to call to add a new {@link Food} items to the database.

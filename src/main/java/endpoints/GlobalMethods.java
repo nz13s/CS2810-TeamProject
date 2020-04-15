@@ -1,9 +1,8 @@
 package endpoints;
 
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 
 /**
  * GlobalMethods class that stores methods that are used multiple times.

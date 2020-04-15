@@ -1,21 +1,17 @@
 package endpoints;
 
 import databaseInit.Database;
-import entities.Notification;
-import entities.NotificationTypes;
-import entities.Order;
-import entities.Table;
-import websockets.NotificationSocket;
-import websockets.SocketMessage;
-import websockets.SocketMessageType;
-
+import entities.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
+import websockets.NotificationSocket;
+import websockets.SocketMessage;
+import websockets.SocketMessageType;
 
 /**
  * Class for handling the updating of order states. {@link Order}
